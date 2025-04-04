@@ -1,0 +1,7 @@
+{
+  "name": "cuidarnos",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
