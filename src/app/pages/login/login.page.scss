@@ -1,0 +1,76 @@
+ion-content {
+    --background: none; // Quitamos el degradado estático
+    background: linear-gradient(-50deg, #0f0f0f, #1a1a1a, #2a2a2a, #0f0f0f);
+    background-size: 400% 400%;
+    animation: gradientMove 6s ease infinite;
+  }
+//Movimiento del degradado de fondo  
+@keyframes gradientMove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+  
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 16px;
+}
+  
+ion-card {
+    width: 100%;
+    max-width: 400px;
+    background: rgb(255, 255, 255);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+  
+.card-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0;
+}
+  
+.logo {
+    width: 100px;
+    height: auto;
+}
+  
+//Clases creadas por Fer
+.btn-mio {
+    --background: #0F172A;
+    --border-radius: 10px;
+    --color: #fff;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    margin-top: 12px;
+}
+
+ion-item.inp {
+    --background: #ffffff;
+    --color: #000000;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --border-radius: 10px;
+    --border-color: #59d2a8;
+    --border-width: 2px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.custom-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+svg {
+    width: 30px;
+    height: 30px;
+}
