@@ -6,6 +6,10 @@ const routes: Routes = [
   { path: '', redirectTo: 'welcome', pathMatch: 'full'},
   { path: 'login', loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)},
   { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then( m => m.WelcomePageModule)},
+  {
+    path: 'admin-view',
+    loadChildren: () => import('./pages/admin-view/admin-view.module').then( m => m.AdminViewPageModule)
+  },
 ];
 
 @NgModule({
