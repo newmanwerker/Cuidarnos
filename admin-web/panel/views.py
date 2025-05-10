@@ -12,7 +12,7 @@ def login_admin(request):
         print("📩 Email recibido:", email)
         print("🔒 Password recibido:", password)
 
-        # Cargar variables de entorno
+        # Aca podemos agregar variables para el entorno pero por ahora no lo estoy usando
         load_dotenv()
 
         try:
