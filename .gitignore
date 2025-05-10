@@ -1,0 +1,18 @@
+# Django
+admin-web/__pycache__/
+admin-web/*.pyc
+admin-web/db.sqlite3
+admin-web/static/css/dist/
+admin-web/theme/node_modules/
+
+# Node
+backend/node_modules/
+backend/.env
+
+# Ionic
+cuidarnos/node_modules/
+cuidarnos/www/
+
+# General
+*.log
+.env
