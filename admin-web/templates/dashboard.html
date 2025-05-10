@@ -6,20 +6,112 @@
   <title>Admin Panel - Dashboard</title>
   <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
 </head>
-<body class="ds">
-  <h1 class="tittle">Panel de Super Administrador</h1>
-  <div class="ds-container">
-    <aside class="sidebar">
-      <nav>
-        <ul>
-          <li><span>🏠</span> Dashboard</li>
-          <li><span>🏢</span> Sucursales</li>
-          <li><span>👥</span> Usuarios</li>
-        </ul>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Topbar -->
+  <header class="bg-white shadow px-6 py-4 flex justify-between items-center border-b border-gray-200">
+    <h1 class="text-lg font-bold">Panel de Super Administrador</h1>
+    <img src="" class="rounded-full w-10 h-10" alt="User"/>
+  </header>
+
+  <div class="flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 min-h-screen p-4">
+      <nav class="space-y-4">
+        <button class="flex items-center gap-2 text-left text-gray-700 hover:text-teal-600 font-medium">
+          🧭 Dashboard
+        </button>
+        <button class="flex items-center gap-2 text-left text-gray-700 hover:text-teal-600 font-medium">
+          🏢 Sucursales
+        </button>
+        <button class="flex items-center gap-2 text-left text-gray-700 hover:text-teal-600 font-medium">
+          👥 Usuarios
+        </button>
       </nav>
     </aside>
-    <main class="main-content">
-      <h3>Contenido Principal aquí</h3>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold">Dashboard</h2>
+        <p class="text-gray-500">Bienvenido al panel de control de super administrador.</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <h3 class="text-sm text-gray-500">Total de Sucursales</h3>
+          <p class="text-2xl font-bold">12</p>
+          <p class="text-sm text-green-600 mt-1">+2 en el último mes</p>
+          <a href="#" class="text-sm text-teal-600 mt-2 block">Ver todas →</a>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <h3 class="text-sm text-gray-500">Total de Usuarios</h3>
+          <p class="text-2xl font-bold">48</p>
+          <p class="text-sm text-green-600 mt-1">+5 en el último mes</p>
+          <a href="#" class="text-sm text-teal-600 mt-2 block">Ver todos →</a>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <h3 class="text-sm text-gray-500">Actividad Reciente</h3>
+          <p class="text-2xl font-bold">24</p>
+          <p class="text-sm text-gray-500 mt-1">Acciones en las últimas 24 horas</p>
+          <a href="#" class="text-sm text-teal-600 mt-2 block">Ver actividad →</a>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Sucursales -->
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <h3 class="text-lg font-bold">Sucursales Recientes</h3>
+          <p class="text-sm text-gray-500 mb-2">Las últimas sucursales creadas en el sistema</p>
+          <ul class="divide-y divide-gray-200">
+            <li class="py-2 flex justify-between">
+              <span>
+                <strong>Sucursal Central</strong><br><small>Ciudad de México</small>
+              </span>
+              <span class="text-sm text-gray-500">👥 8 usuarios</span>
+            </li>
+            <li class="py-2 flex justify-between">
+              <span>
+                <strong>Sucursal Norte</strong><br><small>Monterrey</small>
+              </span>
+              <span class="text-sm text-gray-500">👥 5 usuarios</span>
+            </li>
+            <li class="py-2 flex justify-between">
+              <span>
+                <strong>Sucursal Oeste</strong><br><small>Guadalajara</small>
+              </span>
+              <span class="text-sm text-gray-500">👥 6 usuarios</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Usuarios -->
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <h3 class="text-lg font-bold">Usuarios Recientes</h3>
+          <p class="text-sm text-gray-500 mb-2">Los últimos usuarios agregados al sistema</p>
+          <ul class="divide-y divide-gray-200">
+            <li class="py-2 flex justify-between">
+              <span>
+                <strong>Carlos Méndez</strong><br><small>carlos@example.com</small>
+              </span>
+              <span class="text-sm text-gray-500">Sucursal Central</span>
+            </li>
+            <li class="py-2 flex justify-between">
+              <span>
+                <strong>Ana López</strong><br><small>ana@example.com</small>
+              </span>
+              <span class="text-sm text-gray-500">Sucursal Norte</span>
+            </li>
+            <li class="py-2 flex justify-between">
+              <span>
+                <strong>Roberto García</strong><br><small>roberto@example.com</small>
+              </span>
+              <span class="text-sm text-gray-500">Sucursal Oeste</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </main>
   </div>
 </body>

@@ -4,6 +4,7 @@ admin-web/*.pyc
 admin-web/db.sqlite3
 admin-web/static/css/dist/
 admin-web/theme/node_modules/
+admin-web/.env
 
 # Node
 backend/node_modules/
