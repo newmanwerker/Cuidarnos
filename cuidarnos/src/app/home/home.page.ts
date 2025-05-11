@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  standalone: false,
+  standalone: false
 })
 export class HomePage implements OnInit {
   patient = {
     name: "Sebastian Rodriguez",
+    id: "12345678",
     conditions: ["Hypertension", "Ulcerative Colitis"],
     medications: [
       { name: "Lisinopril", dosage: "10mg", frequency: "Once daily" },
@@ -20,7 +22,21 @@ export class HomePage implements OnInit {
     ],
   };
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {}
+
+  goToMedicalFile() {
+    this.router.navigate(['/medical-file']);
+  }
+
+  getMonth(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleString('default', { month: 'short' });
+  }
+
+  getDay(dateString: string): string {
+    const date = new Date(dateString);
+    return date.getDate().toString();
+  }
 }

@@ -1,13 +1,268 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>medical-file</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Medical File</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="print-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">medical-file</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="medical-file-container">
+    <!-- Patient Basic Information -->
+    <ion-card class="patient-card">
+      <div class="patient-header">
+        <div class="avatar-circle large">
+          <ion-icon name="person"></ion-icon>
+        </div>
+        <div class="patient-info">
+          <h1 class="patient-name">{{patient.name}}</h1>
+          <p class="patient-id">ID: {{patient.id}}</p>
+          <div class="patient-tags">
+            <ion-badge color="primary">Active</ion-badge>
+            <ion-badge *ngIf="patient.insurance" color="success">Insured</ion-badge>
+          </div>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Personal Information Section -->
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="person-outline"></ion-icon>
+          Personal Information
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Date of Birth</span>
+            <span class="info-value">{{patient.dateOfBirth}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Age</span>
+            <span class="info-value">{{patient.age}} years</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Height</span>
+            <span class="info-value">{{patient.height}} cm</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Weight</span>
+            <span class="info-value">{{patient.weight}} kg</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Blood Type</span>
+            <span class="info-value">{{patient.bloodType}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">RUT</span>
+            <span class="info-value">{{patient.rut}}</span>
+          </div>
+        </div>
+
+        <div class="contact-info">
+          <div class="contact-item">
+            <ion-icon name="home-outline"></ion-icon>
+            <div>
+              <span class="info-label">Address</span>
+              <span class="info-value full-width">{{patient.address}}</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <ion-icon name="call-outline"></ion-icon>
+            <div>
+              <span class="info-label">Phone</span>
+              <span class="info-value">{{patient.phone}}</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <ion-icon name="mail-outline"></ion-icon>
+            <div>
+              <span class="info-label">Email</span>
+              <span class="info-value">{{patient.email}}</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <div>
+              <span class="info-label">Emergency Contact</span>
+              <span class="info-value full-width">{{patient.emergencyContact.name}} ({{patient.emergencyContact.relation}})</span>
+              <span class="info-value">{{patient.emergencyContact.phone}}</span>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Medical Conditions Section -->
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="fitness-outline"></ion-icon>
+          Medical Conditions
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="condition-list">
+          <div *ngFor="let condition of patient.medicalConditions" class="condition-item">
+            <div class="condition-header" (click)="toggleCondition(condition)">
+              <div class="condition-name-container">
+                <ion-icon name="medical" color="danger"></ion-icon>
+                <span class="condition-name">{{condition.name}}</span>
+              </div>
+              <div class="condition-meta">
+                <span class="condition-date">{{condition.diagnosisDate}}</span>
+                <ion-icon [name]="condition.expanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+              </div>
+            </div>
+            <div class="condition-details" *ngIf="condition.expanded">
+              <div class="detail-item">
+                <span class="detail-label">Treating Physician</span>
+                <span class="detail-value">Dr. {{condition.treatingPhysician}}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Severity</span>
+                <ion-badge [color]="condition.severity === 'Severe' ? 'danger' : condition.severity === 'Moderate' ? 'warning' : 'success'">
+                  {{condition.severity}}
+                </ion-badge>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Status</span>
+                <span class="detail-value">{{condition.status}}</span>
+              </div>
+              <div class="detail-notes">
+                <span class="detail-label">Notes</span>
+                <p class="notes-text">{{condition.notes}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Medications Section -->
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="medkit-outline"></ion-icon>
+          Current Medications
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="medication-list">
+          <div *ngFor="let medication of patient.medications" class="medication-item">
+            <div class="medication-header" (click)="toggleMedication(medication)">
+              <div class="medication-primary">
+                <span class="medication-name">{{medication.name}}</span>
+                <span class="medication-dosage">{{medication.dosage}}</span>
+              </div>
+              <div class="medication-secondary">
+                <span class="medication-frequency">{{medication.frequency}}</span>
+                <ion-icon [name]="medication.expanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+              </div>
+            </div>
+            <div class="medication-details" *ngIf="medication.expanded">
+              <div class="detail-item">
+                <span class="detail-label">Prescribed By</span>
+                <span class="detail-value">Dr. {{medication.prescribedBy}}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Start Date</span>
+                <span class="detail-value">{{medication.startDate}}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Purpose</span>
+                <span class="detail-value">{{medication.purpose}}</span>
+              </div>
+              <div class="detail-item" *ngIf="medication.sideEffects && medication.sideEffects.length > 0">
+                <span class="detail-label">Side Effects</span>
+                <span class="detail-value">{{medication.sideEffects.join(', ')}}</span>
+              </div>
+              <div class="detail-notes" *ngIf="medication.notes">
+                <span class="detail-label">Notes</span>
+                <p class="notes-text">{{medication.notes}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Allergies Section -->
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          Allergies
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="allergy-list">
+          <div *ngFor="let allergy of patient.allergies" class="allergy-item">
+            <div class="allergy-info">
+              <ion-icon name="alert-circle" color="danger"></ion-icon>
+              <span class="allergy-name">{{allergy.name}}</span>
+            </div>
+            <div class="allergy-details">
+              <ion-badge [color]="allergy.severity === 'Severe' ? 'danger' : allergy.severity === 'Moderate' ? 'warning' : 'success'">
+                {{allergy.severity}}
+              </ion-badge>
+              <span class="allergy-reaction">{{allergy.reaction}}</span>
+            </div>
+          </div>
+          <div *ngIf="patient.allergies.length === 0" class="no-data">
+            <span>No known allergies</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Lab Results Section -->
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="flask-outline"></ion-icon>
+          Recent Lab Results
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="lab-list">
+          <div *ngFor="let result of patient.labResults" class="lab-item">
+            <div class="lab-info">
+              <ion-icon name="flask-outline"></ion-icon>
+              <span class="lab-name">{{result.testName}}</span>
+            </div>
+            <div class="lab-details">
+              <span class="lab-date">{{result.date}}</span>
+              <ion-badge [color]="result.status === 'Normal' ? 'success' : 'warning'">
+                {{result.status}}
+              </ion-badge>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button class="btn-mio" fill="clear" color="primary">
+        <ion-icon slot="start" name="document-text-outline"></ion-icon>
+        Download
+      </ion-button>
+      <ion-button class="btn-mio" fill="clear" color="primary">
+        <ion-icon slot="start" name="share-outline"></ion-icon>
+        Share
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

@@ -1,95 +1,126 @@
 <ion-content>
-  <div class="container">
-    <ion-card>
-      <div class="p-6">
-        <!-- Header with patient info -->
-        <div class="flex-container space-between mb-6">
-          <div class="flex-container gap-3">
-            <div class="avatar-circle">
-              <ion-icon name="person"></ion-icon>
-            </div>
-            <div>
-              <h1 class="text-xl font-bold">{{patient.name}}</h1>
-              <p class="text-sm text-gray-500">Patient ID: 12345678</p>
-            </div>
-          </div>
-          <ion-icon name="notifications" class="primary-icon"></ion-icon>
+  <div class="home-container">
+    <!-- Patient Profile Card -->
+    <ion-card class="profile-card">
+      <div class="profile-header">
+        <div class="avatar-circle">
+          <ion-icon name="person"></ion-icon>
         </div>
-
-        <!-- Medical conditions preview -->
-        <div class="mb-6">
-          <h2 class="section-title">
-            <ion-icon name="heart" class="text-red-500"></ion-icon>
-            Medical Conditions
-          </h2>
-          <div class="badge-container">
-            <ion-badge *ngFor="let condition of patient.conditions" class="condition-badge">
-              {{condition}}
-            </ion-badge>
+        <div class="profile-info">
+          <h1 class="profile-name">{{patient.name}}</h1>
+          <p class="profile-id">Patient ID: {{patient.id}}</p>
+        </div>
+        <ion-icon name="notifications" class="notification-icon"></ion-icon>
+      </div>
+      
+      <!-- Health Status Summary -->
+      <div class="health-status">
+        <div class="status-item">
+          <div class="status-icon">
+            <ion-icon name="pulse"></ion-icon>
+          </div>
+          <div class="status-text">
+            <span class="status-label">Blood Pressure</span>
+            <span class="status-value">120/80</span>
           </div>
         </div>
-
-        <!-- Medications -->
-        <div class="mb-6">
-          <h2 class="section-title">Current Medications</h2>
-          <div class="medication-list">
-            <ion-item *ngFor="let medication of patient.medications" class="inp">
-              <div class="w-100">
-                <div class="flex-container space-between">
-                  <span class="font-medium">{{medication.name}}</span>
-                  <span>{{medication.dosage}}</span>
-                </div>
-                <p class="text-sm text-gray-500">{{medication.frequency}}</p>
-              </div>
-            </ion-item>
+        <div class="status-item">
+          <div class="status-icon">
+            <ion-icon name="thermometer"></ion-icon>
           </div>
-        </div>
-
-        <!-- Upcoming appointments -->
-        <div class="mb-6">
-          <h2 class="section-title">
-            <ion-icon name="calendar" class="primary-icon"></ion-icon>
-            Upcoming Appointments
-          </h2>
-          <div class="appointment-list">
-            <ion-item *ngFor="let appointment of patient.appointments" lines="none" class="appointment-item">
-              <div class="w-100">
-                <div class="flex-container space-between">
-                  <div>
-                    <p class="font-medium">{{appointment.date}}</p>
-                    <p class="text-sm text-gray-500">
-                      {{appointment.time}} • {{appointment.doctor}}
-                    </p>
-                  </div>
-                  <ion-badge [class]="appointment.type === 'Specialist' ? 'specialist-badge' : 'checkup-badge'">
-                    {{appointment.type}}
-                  </ion-badge>
-                </div>
-              </div>
-            </ion-item>
+          <div class="status-text">
+            <span class="status-label">Last Check</span>
+            <span class="status-value">May 5, 2025</span>
           </div>
-        </div>
-
-        <!-- Action buttons -->
-        <div class="button-grid">
-          <ion-button class="btn-mio" expand="block">
-            <ion-icon slot="start" name="document-text"></ion-icon>
-            Medical File
-          </ion-button>
-          <ion-button class="btn-mio" expand="block">
-            <ion-icon slot="start" name="videocam"></ion-icon>
-            Book Online
-          </ion-button>
-          <ion-button class="btn-mio" expand="block">
-            <ion-icon slot="start" name="settings"></ion-icon>
-            Settings
-          </ion-button>
-          <ion-button class="btn-mio" expand="block">
-            <ion-icon slot="start" name="accessibility"></ion-icon>
-            Accessibility
-          </ion-button>
         </div>
       </div>
     </ion-card>
+
+    <!-- Medical Conditions Card -->
+    <ion-card class="info-card">
+      <div class="card-header">
+        <ion-icon name="heart"></ion-icon>
+        <h2>Medical Conditions</h2>
+      </div>
+      <div class="conditions-container">
+        <div *ngFor="let condition of patient.conditions" class="condition-badge">
+          <span>{{condition}}</span>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Medications Card -->
+    <ion-card class="info-card">
+      <div class="card-header">
+        <ion-icon name="medkit"></ion-icon>
+        <h2>Current Medications</h2>
+      </div>
+      <div class="medications-list">
+        <div *ngFor="let medication of patient.medications" class="medication-item">
+          <div class="medication-info">
+            <h3 class="medication-name">{{medication.name}}</h3>
+            <span class="medication-dosage">{{medication.dosage}}</span>
+          </div>
+          <div class="medication-schedule">
+            <span class="medication-frequency">{{medication.frequency}}</span>
+            <ion-icon name="time-outline"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Appointments Card -->
+    <ion-card class="info-card">
+      <div class="card-header">
+        <ion-icon name="calendar"></ion-icon>
+        <h2>Upcoming Appointments</h2>
+      </div>
+      <div class="appointments-list">
+        <div *ngFor="let appointment of patient.appointments" class="appointment-item">
+          <div class="appointment-date">
+            <div class="date-box">
+              <span class="date-month">{{getMonth(appointment.date)}}</span>
+              <span class="date-day">{{getDay(appointment.date)}}</span>
+            </div>
+            <span class="appointment-time">{{appointment.time}}</span>
+          </div>
+          <div class="appointment-details">
+            <h3 class="appointment-type">{{appointment.type}}</h3>
+            <span class="appointment-doctor">{{appointment.doctor}}</span>
+          </div>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Quick Actions -->
+    <div class="actions-grid">
+      <ion-card class="action-card" (click)="goToMedicalFile()">
+        <div class="action-icon">
+          <ion-icon name="document-text"></ion-icon>
+        </div>
+        <span class="action-label">Medical File</span>
+      </ion-card>
+      
+      <ion-card class="action-card">
+        <div class="action-icon">
+          <ion-icon name="videocam"></ion-icon>
+        </div>
+        <span class="action-label">Book Online</span>
+      </ion-card>
+      
+      <ion-card class="action-card">
+        <div class="action-icon">
+          <ion-icon name="settings"></ion-icon>
+        </div>
+        <span class="action-label">Settings</span>
+      </ion-card>
+      
+      <ion-card class="action-card">
+        <div class="action-icon">
+          <ion-icon name="accessibility"></ion-icon>
+        </div>
+        <span class="action-label">Accessibility</span>
+      </ion-card>
+    </div>
   </div>
 </ion-content>
