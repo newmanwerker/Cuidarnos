@@ -1,0 +1,103 @@
+
+===============================
+CUIDARNOS - INSTALACIÓN DEL PROYECTO
+===============================
+
+Este archivo contiene los pasos necesarios para ejecutar correctamente el proyecto en sus tres partes: 
+1. Frontend móvil (Ionic)
+2. Backend API (Node.js + Express)
+3. Admin web (Django + Tailwind)
+
+-------------------------------
+1. FRONTEND (Ionic + Angular)
+-------------------------------
+Ubicación: /PF/cuidarnos
+
+Requisitos:
+- Node.js
+- npm
+- Ionic CLI (`npm install -g @ionic/cli`)
+
+Instalación:
+1. Ir a la carpeta:
+   cd cuidarnos
+2. Instalar dependencias:
+   npm install
+3. Ejecutar app:
+   ionic serve
+
+-------------------------------
+2. BACKEND (Node.js + Express + PostgreSQL)
+-------------------------------
+Ubicación: /PF/backend
+
+Requisitos:
+- Node.js
+- PostgreSQL
+
+Dependencias necesarias:
+- express
+- pg
+- cors
+- bcrypt
+- dotenv
+- nodemon (opcional para desarrollo)
+
+Instalación:
+1. Ir a la carpeta:
+   cd backend
+2. Instalar dependencias:
+   npm install
+3. Iniciar servidor:
+   node app.js
+   # o para desarrollo:
+   npx nodemon app.js
+
+Notas:
+- Asegúrate de tener el archivo `.env` con las credenciales a la base de datos.
+
+-------------------------------
+3. ADMIN WEB (Django + Tailwind + PostgreSQL)
+-------------------------------
+Ubicación: /PF/admin-web
+
+Requisitos:
+- Python 3.10+
+- pip
+- PostgreSQL
+- Node.js y npm
+
+Dependencias Python:
+- django
+- psycopg2
+- bcrypt
+- python-dotenv
+- django-tailwind
+
+Instalación:
+1. Crear entorno virtual:
+   python3 -m venv venv
+   source venv/bin/activate
+2. Instalar paquetes:
+   pip install -r requirements.txt
+
+Tailwind:
+1. Iniciar tailwind:
+   python manage.py tailwind init theme
+2. Instalar dependencias de npm:
+   python manage.py tailwind install
+3. Ejecutar tailwind (en segundo terminal):
+   python manage.py tailwind start
+
+Ejecutar Django:
+python manage.py runserver
+
+Notas:
+- Agrega tu archivo `.env` con las variables:
+  PG_DBNAME, PG_USER, PG_PASSWORD, PG_HOST, PG_PORT
+
+-------------------------------
+IMPORTANTE
+-------------------------------
+- Asegúrate de tener un archivo `.gitignore` para excluir `.env`, `__pycache__`, `node_modules`, etc.
+- Usa `git pull origin main` para obtener cambios antes de trabajar.
