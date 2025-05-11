@@ -1,0 +1,462 @@
+ion-content {
+  --background: none;
+  background: linear-gradient(-50deg, #0f0f0f, #1a1a1a, #2a2a2a, #0f0f0f);
+  background-size: 400% 400%;
+  animation: gradientMove 6s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+ion-header ion-toolbar {
+  --background: #0F172A;
+  --color: white;
+}
+
+.booking-container {
+  padding: 16px;
+  padding-bottom: 80px; // Add extra padding at the bottom
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Step Indicator */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 4px;
+  transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+  background-color: #0F172A;
+  color: white;
+}
+
+.step-label {
+  font-size: 10px;
+  color: #6b7280;
+  transition: all 0.3s ease;
+}
+
+.step.active .step-label {
+  color: #0F172A;
+  font-weight: 500;
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background-color: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.step-line.active {
+  background-color: #0F172A;
+}
+
+/* Cards */
+ion-card {
+  background: rgb(255, 255, 255);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  overflow: hidden;
+}
+
+.info-card {
+  padding: 16px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-header ion-icon {
+  font-size: 20px;
+  margin-right: 8px;
+  color: #0F172A;
+}
+
+.card-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Step 1: Specialties */
+.specialty-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.specialty-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  border-radius: 10px;
+  background-color: #f9fafb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.specialty-item.selected {
+  background-color: #dbeafe;
+  border: 1px solid #0F172A;
+}
+
+.specialty-icon {
+  background-color: #0F172A;
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.specialty-icon ion-icon {
+  font-size: 24px;
+}
+
+.specialty-name {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Step 2: Doctors */
+.doctors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.doctor-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  background-color: #f9fafb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.doctor-item.selected {
+  background-color: #dbeafe;
+  border: 1px solid #0F172A;
+}
+
+.doctor-avatar {
+  background-color: #0F172A;
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.doctor-avatar ion-icon {
+  font-size: 24px;
+}
+
+.doctor-info {
+  flex: 1;
+  min-width: 0; /* Prevents text overflow */
+}
+
+.doctor-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 2px 0;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.doctor-specialty {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0 0 4px 0;
+}
+
+.doctor-rating {
+  display: flex;
+  align-items: center;
+}
+
+.doctor-rating ion-icon {
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+.doctor-rating ion-icon.filled {
+  color: #fbbf24;
+}
+
+.rating-count {
+  font-size: 12px;
+  color: #6b7280;
+  margin-left: 4px;
+}
+
+.doctor-availability {
+  flex-shrink: 0;
+}
+
+.next-available {
+  font-size: 12px;
+  color: #059669;
+  font-weight: 500;
+}
+
+/* Step 3: Date and Time */
+.date-selector {
+  margin-bottom: 16px;
+}
+
+.month-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.current-month {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.weekday-header {
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  padding: 4px 0;
+  font-weight: 500;
+}
+
+.calendar-day {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.calendar-day.other-month {
+  color: #d1d5db;
+  cursor: default;
+}
+
+.calendar-day.available {
+  background-color: #f9fafb;
+}
+
+.calendar-day.unavailable {
+  color: #d1d5db;
+  text-decoration: line-through;
+  cursor: default;
+}
+
+.calendar-day.selected {
+  background-color: #0F172A;
+  color: white;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.time-slot {
+  padding: 8px;
+  text-align: center;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.time-slot.selected {
+  background-color: #0F172A;
+  color: white;
+}
+
+.appointment-types {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.appointment-type {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  background-color: #f9fafb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.appointment-type.selected {
+  background-color: #dbeafe;
+  border: 1px solid #0F172A;
+}
+
+.type-icon {
+  background-color: #0F172A;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.type-icon ion-icon {
+  font-size: 20px;
+}
+
+.type-info {
+  flex: 1;
+}
+
+.type-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 2px 0;
+}
+
+.type-duration {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Step 4: Confirmation */
+.confirmation-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.confirmation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.confirmation-label {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.confirmation-value {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: right;
+  max-width: 60%;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.notes-section {
+  margin-top: 16px;
+}
+
+.notes-label {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.notes-input {
+  --background: #f9fafb;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
+/* Navigation Buttons */
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.btn-mio {
+  --background: #0F172A;
+  --border-radius: 10px;
+  --color: #fff;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+}
+
+.btn-mio[fill="outline"] {
+  --background: transparent;
+  --color: #0F172A;
+  --border-color: #0F172A;
+}
+
+.confirm-button {
+  --background: #059669;
+  margin-left: auto;
+}
+.toolbar-spacer {
+  height: 70px; // Adjust based on your toolbar height
+}

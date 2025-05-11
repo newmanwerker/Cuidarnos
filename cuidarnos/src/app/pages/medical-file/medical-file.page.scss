@@ -12,7 +12,8 @@ ion-content {
 }
 
 .medical-file-container {
-  padding: 12px;
+  padding: 16px;
+  padding-bottom: 80px; // Add extra padding at the bottom
 }
 
 ion-card {
@@ -416,4 +417,8 @@ ion-footer ion-toolbar {
 ion-badge {
   padding: 4px 8px;
   border-radius: 4px;
+}
+
+.toolbar-spacer {
+  height: 70px; // Adjust based on your toolbar height
 }

@@ -4,18 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { MedicalFilePageRoutingModule } from './medical-file-routing.module';
+import { AccessibilityPageRoutingModule } from './accessibility-routing.module';
 
-import { MedicalFilePage } from './medical-file.page';
+import { AccessibilityPage } from './accessibility.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MedicalFilePageRoutingModule,
-
+    AccessibilityPageRoutingModule
   ],
-  declarations: [MedicalFilePage]
+  declarations: [AccessibilityPage]
 })
-export class MedicalFilePageModule {}
+export class AccessibilityPageModule {}

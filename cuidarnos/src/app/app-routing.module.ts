@@ -7,6 +7,19 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)},
   { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then( m => m.WelcomePageModule)},
    { path: 'medical-file', loadChildren: () => import('./pages/medical-file/medical-file.module').then( m => m.MedicalFilePageModule)},
+  {
+    path: 'booking',
+    loadChildren: () => import('./pages/booking/booking.module').then( m => m.BookingPageModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
+  },
+  {
+    path: 'accessibility',
+    loadChildren: () => import('./pages/accessibility/accessibility.module').then( m => m.AccessibilityPageModule)
+  },
+
 ];
 
 @NgModule({

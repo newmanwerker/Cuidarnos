@@ -4,18 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { MedicalFilePageRoutingModule } from './medical-file-routing.module';
+import { SettingsPageRoutingModule } from './settings-routing.module';
 
-import { MedicalFilePage } from './medical-file.page';
+import { SettingsPage } from './settings.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MedicalFilePageRoutingModule,
-
+    SettingsPageRoutingModule
   ],
-  declarations: [MedicalFilePage]
+  declarations: [SettingsPage]
 })
-export class MedicalFilePageModule {}
+export class SettingsPageModule {}

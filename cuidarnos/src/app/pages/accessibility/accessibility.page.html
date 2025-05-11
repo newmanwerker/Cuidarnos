@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="accessibility-container">
+    <ion-card class="info-card">
+      <div class="card-header">
+        <ion-icon name="accessibility"></ion-icon>
+        <h2>Accessibility Options</h2>
+      </div>
+      
+      <div class="accessibility-section">
+        <h3>Text Size</h3>
+        <p>Adjust the text size for better readability</p>
+        <div class="text-size-controls">
+          <ion-button fill="clear" (click)="decreaseFontSize()">
+            <ion-icon name="remove-circle"></ion-icon>
+          </ion-button>
+          <div class="text-size-preview" [style.fontSize.%]="fontSize">Aa</div>
+          <ion-button fill="clear" (click)="increaseFontSize()">
+            <ion-icon name="add-circle"></ion-icon>
+          </ion-button>
+        </div>
+        <div class="text-size-value">{{fontSize}}%</div>
+      </div>
+      
+      <div class="accessibility-section">
+        <h3>Display Options</h3>
+        <ion-item>
+          <ion-label>High Contrast Mode</ion-label>
+          <ion-toggle [(ngModel)]="highContrast"></ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-label>Reduce Motion</ion-label>
+          <ion-toggle></ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-label>Larger Touch Targets</ion-label>
+          <ion-toggle></ion-toggle>
+        </ion-item>
+      </div>
+      
+      <div class="accessibility-section">
+        <h3>Reading & Navigation</h3>
+        <ion-item>
+          <ion-label>Screen Reader Support</ion-label>
+          <ion-toggle></ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-label>Text-to-Speech</ion-label>
+          <ion-toggle></ion-toggle>
+        </ion-item>
+      </div>
+    </ion-card>
+    
+    <div class="toolbar-spacer"></div>
+  </div>
+</ion-content>
+

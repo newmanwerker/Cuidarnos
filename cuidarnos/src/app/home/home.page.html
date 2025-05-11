@@ -92,35 +92,27 @@
       </div>
     </ion-card>
 
-    <!-- Quick Actions -->
-    <div class="actions-grid">
-      <ion-card class="action-card" (click)="goToMedicalFile()">
-        <div class="action-icon">
-          <ion-icon name="document-text"></ion-icon>
-        </div>
-        <span class="action-label">Medical File</span>
-      </ion-card>
-      
-      <ion-card class="action-card">
-        <div class="action-icon">
-          <ion-icon name="videocam"></ion-icon>
-        </div>
-        <span class="action-label">Book Online</span>
-      </ion-card>
-      
-      <ion-card class="action-card">
-        <div class="action-icon">
-          <ion-icon name="settings"></ion-icon>
-        </div>
-        <span class="action-label">Settings</span>
-      </ion-card>
-      
-      <ion-card class="action-card">
-        <div class="action-icon">
-          <ion-icon name="accessibility"></ion-icon>
-        </div>
-        <span class="action-label">Accessibility</span>
-      </ion-card>
-    </div>
+    <!-- Bottom spacing to ensure content isn't hidden behind the toolbar -->
+    <div class="toolbar-spacer"></div>
   </div>
 </ion-content>
+
+<!-- Custom Bottom Toolbar -->
+<div class="bottom-toolbar">
+  <div class="toolbar-item" (click)="goToMedicalFile()">
+    <ion-icon name="document-text"></ion-icon>
+    <span>Medical File</span>
+  </div>
+  <div class="toolbar-item" (click)="goToBooking()">
+    <ion-icon name="videocam"></ion-icon>
+    <span>Book Online</span>
+  </div>
+  <div class="toolbar-item" (click)="goToSettings()">
+    <ion-icon name="settings"></ion-icon>
+    <span>Settings</span>
+  </div>
+  <div class="toolbar-item" (click)="goToAccessibility()">
+    <ion-icon name="accessibility"></ion-icon>
+    <span>Accessibility</span>
+  </div>
+</div>

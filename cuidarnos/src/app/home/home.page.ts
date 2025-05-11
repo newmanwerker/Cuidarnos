@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  standalone: false
+  standalone:false
 })
 export class HomePage implements OnInit {
   patient = {
@@ -26,10 +26,6 @@ export class HomePage implements OnInit {
 
   ngOnInit() {}
 
-  goToMedicalFile() {
-    this.router.navigate(['/medical-file']);
-  }
-
   getMonth(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleString('default', { month: 'short' });
@@ -38,5 +34,21 @@ export class HomePage implements OnInit {
   getDay(dateString: string): string {
     const date = new Date(dateString);
     return date.getDate().toString();
+  }
+
+  goToMedicalFile() {
+    this.router.navigate(['/medical-file']);
+  }
+
+  goToBooking() {
+    this.router.navigate(['/booking']);
+  }
+
+  goToSettings() {
+    this.router.navigate(['/settings']);
+  }
+
+  goToAccessibility() {
+  this.router.navigate(['/accessibility']);
   }
 }

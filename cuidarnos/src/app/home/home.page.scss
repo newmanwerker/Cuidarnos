@@ -3,6 +3,7 @@ ion-content {
   background: linear-gradient(-50deg, #0f0f0f, #1a1a1a, #2a2a2a, #0f0f0f);
   background-size: 400% 400%;
   animation: gradientMove 6s ease infinite;
+  --padding-bottom: 70px; /* Add padding to account for the toolbar */
 }
 
 @keyframes gradientMove {
@@ -285,45 +286,51 @@ ion-card {
   color: #6b7280;
 }
 
-/* Quick Actions */
-.actions-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+/* Bottom Toolbar */
+.bottom-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
-.action-card {
+.toolbar-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 8px;
+  width: 25%;
   cursor: pointer;
-  transition: transform 0.2s ease;
 }
 
-.action-card:active {
-  transform: scale(0.98);
-}
-
-.action-icon {
-  background-color: #0F172A;
-  color: white;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
-}
-
-.action-icon ion-icon {
+.toolbar-item ion-icon {
+  color: #0F172A;
   font-size: 24px;
+  margin-bottom: 4px;
 }
 
-.action-label {
-  font-size: 14px;
+.toolbar-item span {
+  font-size: 12px;
+  color: #0F172A;
   font-weight: 500;
   text-align: center;
+}
+
+.toolbar-item:active {
+  opacity: 0.7;
+}
+
+/* Add space at the bottom to prevent content from being hidden behind the toolbar */
+.toolbar-spacer {
+  height: 70px;
 }
