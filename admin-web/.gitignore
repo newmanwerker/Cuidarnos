@@ -1,0 +1,20 @@
+# Compilados de Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+
+# Archivos de entorno
+.env
+
+# Archivos estáticos generados
+static/css/dist/
+media/
+
+# Archivos temporales
+*.log
+*.tmp
+*.bak
+
+# Archivos del sistema
+.DS_Store

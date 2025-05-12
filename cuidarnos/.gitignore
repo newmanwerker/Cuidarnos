@@ -9,10 +9,11 @@
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
 
+# Logs
 *.log
 log.txt
 
-
+# Sourcemaps and versions
 /.sourcemaps
 /.versions
 /coverage
@@ -23,11 +24,23 @@ log.txt
 /platforms
 /plugins
 
-# Compiled output
+# Angular build output
 /dist
 /tmp
 /out-tsc
-/bazel-out
+/.angular
+/.angular/cache
+.angular/
+.angular-cache/
+*.tsbuildinfo
+
+# Capacitor platforms
+ios/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/captures/
 
 # Node
 /node_modules
@@ -52,15 +65,11 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
-
 # Miscellaneous
-/.angular
-/.angular/cache
 .sass-cache/
 /.nx
 /.nx/cache
 /connect.lock
-/coverage
 /libpeerconnection.log
 testem.log
 /typings
@@ -68,3 +77,14 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment files
+.env
+
+# Temporary/backup files
+*.bak
+*.tmp
+*.tmp.*
+
+# Custom build output
+build/
