@@ -12,7 +12,7 @@ export class WelcomePage implements OnInit {
 
   ngOnInit() {
     setTimeout(() => {
-      this.router.navigateByUrl('/login');
+      this.router.navigateByUrl('/login', { replaceUrl: true });
     }, 3000);
   }
 }

@@ -12,19 +12,32 @@ export class AccessibilityPage implements OnInit {
   
   constructor() { }
 
-  ngOnInit() { }
-  
-  increaseFontSize() {
-    if (this.fontSize < 150) {
-      this.fontSize += 10;
-    }
+ ngOnInit() {
+  const savedFontSize = localStorage.getItem('appFontSize');
+  if (savedFontSize) {
+    this.fontSize = parseInt(savedFontSize, 10);
+    document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}%`);
   }
-  
-  decreaseFontSize() {
-    if (this.fontSize > 80) {
-      this.fontSize -= 10;
-    }
+}
+
+increaseFontSize() {
+  if (this.fontSize < 150) {
+    this.fontSize += 10;
+    this.applyFontSize();
   }
+}
+
+decreaseFontSize() {
+  if (this.fontSize > 80) {
+    this.fontSize -= 10;
+    this.applyFontSize();
+  }
+}
+
+applyFontSize() {
+  localStorage.setItem('appFontSize', this.fontSize.toString());
+  document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}%`);
+}
   
   toggleHighContrast() {
     this.highContrast = !this.highContrast;

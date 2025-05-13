@@ -59,7 +59,7 @@ ion-header ion-toolbar {
 }
 
 .step-label {
-  font-size: 10px;
+  font-size: 0.625rem;
   color: #6b7280;
   transition: all 0.3s ease;
 }
@@ -100,13 +100,13 @@ ion-card {
 }
 
 .card-header ion-icon {
-  font-size: 20px;
+  font-size: 1.25rem;
   margin-right: 8px;
   color: #0F172A;
 }
 
 .card-header h2 {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
   margin: 0;
 }
@@ -147,11 +147,11 @@ ion-card {
 }
 
 .specialty-icon ion-icon {
-  font-size: 24px;
+  font-size: 1.5rem;
 }
 
 .specialty-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   text-align: center;
   white-space: normal;
@@ -194,7 +194,7 @@ ion-card {
 }
 
 .doctor-avatar ion-icon {
-  font-size: 24px;
+  font-size: 1.5rem;
 }
 
 .doctor-info {
@@ -203,7 +203,7 @@ ion-card {
 }
 
 .doctor-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   margin: 0 0 2px 0;
   white-space: normal;
@@ -211,7 +211,7 @@ ion-card {
 }
 
 .doctor-specialty {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #6b7280;
   margin: 0 0 4px 0;
 }
@@ -223,7 +223,7 @@ ion-card {
 
 .doctor-rating ion-icon {
   color: #d1d5db;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .doctor-rating ion-icon.filled {
@@ -231,7 +231,7 @@ ion-card {
 }
 
 .rating-count {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #6b7280;
   margin-left: 4px;
 }
@@ -241,7 +241,7 @@ ion-card {
 }
 
 .next-available {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #059669;
   font-weight: 500;
 }
@@ -259,7 +259,7 @@ ion-card {
 }
 
 .current-month {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 500;
 }
 
@@ -271,7 +271,7 @@ ion-card {
 
 .weekday-header {
   text-align: center;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #6b7280;
   padding: 4px 0;
   font-weight: 500;
@@ -283,7 +283,7 @@ ion-card {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 
@@ -318,7 +318,7 @@ ion-card {
   text-align: center;
   background-color: #f9fafb;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 
@@ -362,7 +362,7 @@ ion-card {
 }
 
 .type-icon ion-icon {
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
 .type-info {
@@ -370,13 +370,13 @@ ion-card {
 }
 
 .type-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   margin: 0 0 2px 0;
 }
 
 .type-duration {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #6b7280;
   margin: 0;
 }
@@ -396,12 +396,12 @@ ion-card {
 }
 
 .confirmation-label {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #6b7280;
 }
 
 .confirmation-value {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   text-align: right;
   max-width: 60%;
@@ -414,7 +414,7 @@ ion-card {
 }
 
 .notes-label {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #6b7280;
   margin-bottom: 8px;
   display: block;
