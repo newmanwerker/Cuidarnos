@@ -9,22 +9,22 @@ import { Router } from '@angular/router';
 })
 export class HomePage implements OnInit {
   patient = {
-    name: "Sebastian Rodriguez",
+    name: "Sebastian Ayala",
     id: "12345678",
-    conditions: ["Hypertension", "Ulcerative Colitis"],
+    rut: "20.258.691-0",
+    conditions: ["Hipertensión", "Colitis Ulcerosa"],
     medications: [
-      { name: "Lisinopril", dosage: "10mg", frequency: "Once daily" },
-      { name: "Mesalamine", dosage: "1000mg", frequency: "Twice daily" },
+      { name: "Losartán", dosage: "50mg", frequency: "Cada 12 horas" },
+      { name: "Mesalazina", dosage: "2000mg", frequency: "Cada 12 horas" },
+      { name: "Amlodipino", dosage: "5mg",frequency: "Cada 24 horas" },
     ],
     appointments: [
       { date: "May 15, 2025", 
         time: "10:00 AM", 
-        doctor: "Dr. Smith", 
-        type: "Check-up",
+        doctor: "Dra. Diaz", 
+        type: "General",
         online: true 
       },
-
-      { date: "May 22, 2025", time: "2:30 PM", doctor: "Dr. Johnson", type: "Specialist" },
     ],
   };
 

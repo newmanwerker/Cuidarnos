@@ -26,7 +26,7 @@ export class BookingPage implements OnInit {
       specialtyId: 1,
       rating: 4.8,
       reviewCount: 124,
-      nextAvailable: 'Today'
+      nextAvailable: 'Hoy'
     },
     { 
       id: 2, 
@@ -35,7 +35,7 @@ export class BookingPage implements OnInit {
       specialtyId: 2,
       rating: 4.9,
       reviewCount: 87,
-      nextAvailable: 'Tomorrow'
+      nextAvailable: 'Mañana'
     },
     { 
       id: 3, 
@@ -44,7 +44,7 @@ export class BookingPage implements OnInit {
       specialtyId: 4,
       rating: 4.7,
       reviewCount: 56,
-      nextAvailable: 'Today'
+      nextAvailable: 'Hoy'
     },
     { 
       id: 4, 
@@ -53,7 +53,7 @@ export class BookingPage implements OnInit {
       specialtyId: 1,
       rating: 4.5,
       reviewCount: 92,
-      nextAvailable: 'May 15'
+      nextAvailable: 'Mayo 15'
     }
   ];
   filteredDoctors: any[] = [];
@@ -64,7 +64,7 @@ export class BookingPage implements OnInit {
   currentYear = this.currentDate.getFullYear();
   currentMonth = this.currentDate.getMonth();
   currentMonthName = '';
-  weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  weekdays = ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'];
   calendarDays: any[] = [];
   selectedDate: Date | null = null;
   
@@ -72,9 +72,8 @@ export class BookingPage implements OnInit {
   selectedTimeSlot: string | null = null;
   
   appointmentTypes = [
-    { id: 1, name: 'Regular Check-up', duration: 30, icon: 'clipboard' },
-    { id: 2, name: 'Follow-up', duration: 15, icon: 'repeat' },
-    { id: 3, name: 'New Condition', duration: 45, icon: 'alert-circle' }
+    { id: 1, name: 'Revisión General', duration: 30, icon: 'clipboard' },
+    { id: 2, name: 'Seguimiento', duration: 15, icon: 'repeat' },
   ];
   selectedAppointmentType: number | null = null;
   
@@ -142,8 +141,8 @@ export class BookingPage implements OnInit {
   // Step 3: Date and Time Selection
   updateMonthName() {
     const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
     ];
     this.currentMonthName = monthNames[this.currentMonth];
   }
@@ -305,7 +304,7 @@ export class BookingPage implements OnInit {
     
     // Show confirmation toast
     const toast = await this.toastController.create({
-      message: 'Appointment scheduled successfully!',
+      message: 'Reunión Agendad Correctamente!',
       duration: 2000,
       position: 'bottom',
       color: 'success'

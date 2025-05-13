@@ -8,7 +8,7 @@
         </div>
         <div class="profile-info">
           <h1 class="profile-name">{{patient.name}}</h1>
-          <p class="profile-id">Patient ID: {{patient.id}}</p>
+          <p class="profile-id">RUT Paciente: {{patient.rut}}</p>
         </div>
         <ion-icon name="notifications" class="notification-icon"></ion-icon>
       </div>
@@ -20,8 +20,8 @@
             <ion-icon name="pulse"></ion-icon>
           </div>
           <div class="status-text">
-            <span class="status-label">Blood Pressure</span>
-            <span class="status-value">120/80</span>
+            <span class="status-label">Presión Arterial</span>
+            <span class="status-value">140/85</span>
           </div>
         </div>
         <div class="status-item">
@@ -29,8 +29,8 @@
             <ion-icon name="thermometer"></ion-icon>
           </div>
           <div class="status-text">
-            <span class="status-label">Last Check</span>
-            <span class="status-value">May 5, 2025</span>
+            <span class="status-label">Última revisión</span>
+            <span class="status-value">5 de Mayo, 2025</span>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
     <ion-card class="info-card">
       <div class="card-header">
         <ion-icon name="heart"></ion-icon>
-        <h2>Medical Conditions</h2>
+        <h2>Condiciones Médicas</h2>
       </div>
       <div class="conditions-container">
         <div *ngFor="let condition of patient.conditions" class="condition-badge">
@@ -53,7 +53,7 @@
     <ion-card class="info-card">
       <div class="card-header">
         <ion-icon name="medkit"></ion-icon>
-        <h2>Current Medications</h2>
+        <h2>Medicamentos Actuales</h2>
       </div>
       <div class="medications-list">
         <div *ngFor="let medication of patient.medications" class="medication-item">
@@ -73,7 +73,7 @@
     <ion-card class="info-card">
       <div class="card-header">
         <ion-icon name="calendar"></ion-icon>
-        <h2>Upcoming Appointments</h2>
+        <h2>Reuniones Agendadas</h2>
       </div>
       <div class="appointments-list">
         <div *ngFor="let appointment of patient.appointments" class="appointment-item">
@@ -107,18 +107,18 @@
 <div class="bottom-toolbar">
   <div class="toolbar-item" (click)="goToMedicalFile()">
     <ion-icon name="document-text"></ion-icon>
-    <span>Medical File</span>
+    <span>Ficha Médica</span>
   </div>
   <div class="toolbar-item" (click)="goToBooking()">
     <ion-icon name="videocam"></ion-icon>
-    <span>Book Online</span>
+    <span>Agendar Videollamada</span>
   </div>
   <div class="toolbar-item" (click)="goToSettings()">
     <ion-icon name="settings"></ion-icon>
-    <span>Settings</span>
+    <span>Configuración</span>
   </div>
   <div class="toolbar-item" (click)="goToAccessibility()">
     <ion-icon name="accessibility"></ion-icon>
-    <span>Accessibility</span>
+    <span>Accesibilidad</span>
   </div>
 </div>

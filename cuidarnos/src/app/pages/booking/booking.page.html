@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-title>Book Appointment</ion-title>
+    <ion-title>Agendar Videollamada</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,7 +13,7 @@
     <div class="step-indicator">
       <div class="step" [ngClass]="{'active': currentStep >= 1}">
         <div class="step-number">1</div>
-        <span class="step-label">Specialty</span>
+        <span class="step-label">Especialidad</span>
       </div>
       <div class="step-line" [ngClass]="{'active': currentStep >= 2}"></div>
       <div class="step" [ngClass]="{'active': currentStep >= 2}">
@@ -23,12 +23,12 @@
       <div class="step-line" [ngClass]="{'active': currentStep >= 3}"></div>
       <div class="step" [ngClass]="{'active': currentStep >= 3}">
         <div class="step-number">3</div>
-        <span class="step-label">Date & Time</span>
+        <span class="step-label">Fecha & Hora</span>
       </div>
       <div class="step-line" [ngClass]="{'active': currentStep >= 4}"></div>
       <div class="step" [ngClass]="{'active': currentStep >= 4}">
         <div class="step-number">4</div>
-        <span class="step-label">Confirm</span>
+        <span class="step-label">Confirmación</span>
       </div>
     </div>
 
@@ -37,7 +37,7 @@
       <ion-card class="info-card">
         <div class="card-header">
           <ion-icon name="medical"></ion-icon>
-          <h2>Select Specialty</h2>
+          <h2>Seleccione Especialidad</h2>
         </div>
         <div class="specialty-grid">
           <div *ngFor="let specialty of specialties" 
@@ -58,7 +58,7 @@
       <ion-card class="info-card">
         <div class="card-header">
           <ion-icon name="people"></ion-icon>
-          <h2>Select Doctor</h2>
+          <h2>Seleccione Doctor</h2>
         </div>
         <div class="doctors-list">
           <div *ngFor="let doctor of filteredDoctors" 
@@ -71,14 +71,9 @@
             <div class="doctor-info">
               <h3 class="doctor-name">Dr. {{doctor.name}}</h3>
               <p class="doctor-specialty">{{doctor.specialty}}</p>
-              <div class="doctor-rating">
-                <ion-icon name="star" *ngFor="let i of [1,2,3,4,5]" 
-                          [ngClass]="{'filled': i <= doctor.rating}"></ion-icon>
-                <span class="rating-count">({{doctor.reviewCount}})</span>
-              </div>
             </div>
             <div class="doctor-availability">
-              <span class="next-available">Next: {{doctor.nextAvailable}}</span>
+              <span class="next-available">Siguiente: {{doctor.nextAvailable}}</span>
             </div>
           </div>
         </div>
@@ -90,7 +85,7 @@
       <ion-card class="info-card">
         <div class="card-header">
           <ion-icon name="calendar"></ion-icon>
-          <h2>Select Date</h2>
+          <h2>Seleccione Fecha</h2>
         </div>
         <div class="date-selector">
           <div class="month-selector">
@@ -122,7 +117,7 @@
       <ion-card class="info-card" *ngIf="selectedDate">
         <div class="card-header">
           <ion-icon name="time"></ion-icon>
-          <h2>Select Time</h2>
+          <h2>Seleccione Hora</h2>
         </div>
         <div class="time-slots">
           <div *ngFor="let slot of availableTimeSlots" 
@@ -137,7 +132,7 @@
       <ion-card class="info-card" *ngIf="selectedTimeSlot">
         <div class="card-header">
           <ion-icon name="clipboard"></ion-icon>
-          <h2>Appointment Type</h2>
+          <h2>Tipo de reunión</h2>
         </div>
         <div class="appointment-types">
           <div *ngFor="let type of appointmentTypes" 
@@ -161,7 +156,7 @@
       <ion-card class="info-card">
         <div class="card-header">
           <ion-icon name="checkmark-circle"></ion-icon>
-          <h2>Confirm Appointment</h2>
+          <h2>Confirmar Agendamiento</h2>
         </div>
         <div class="confirmation-details">
           <div class="confirmation-item">
@@ -169,31 +164,31 @@
             <span class="confirmation-value">Dr. {{getSelectedDoctorName()}}</span>
           </div>
           <div class="confirmation-item">
-            <span class="confirmation-label">Specialty</span>
+            <span class="confirmation-label">Especialidad</span>
             <span class="confirmation-value">{{getSelectedSpecialtyName()}}</span>
           </div>
           <div class="confirmation-item">
-            <span class="confirmation-label">Date</span>
+            <span class="confirmation-label">Fecha</span>
             <span class="confirmation-value">{{formatSelectedDate()}}</span>
           </div>
           <div class="confirmation-item">
-            <span class="confirmation-label">Time</span>
+            <span class="confirmation-label">Hora</span>
             <span class="confirmation-value">{{selectedTimeSlot}}</span>
           </div>
           <div class="confirmation-item">
-            <span class="confirmation-label">Appointment Type</span>
+            <span class="confirmation-label">Tipo de reunión</span>
             <span class="confirmation-value">{{getSelectedAppointmentTypeName()}}</span>
           </div>
           <div class="confirmation-item">
-            <span class="confirmation-label">Duration</span>
-            <span class="confirmation-value">{{getSelectedAppointmentTypeDuration()}} minutes</span>
+            <span class="confirmation-label">Duración</span>
+            <span class="confirmation-value">{{getSelectedAppointmentTypeDuration()}} minutos</span>
           </div>
         </div>
 
         <div class="notes-section">
-          <ion-label class="notes-label">Additional Notes (Optional)</ion-label>
+          <ion-label class="notes-label">Notas adicionales (Opcional)</ion-label>
           <ion-textarea 
-            placeholder="Add any information the doctor should know before the appointment"
+            placeholder="Añade cualquier detalle adicional que deba saber el doctor aqui" 
             rows="3"
             class="notes-input"
             [(ngModel)]="appointmentNotes">
@@ -209,21 +204,21 @@
                   fill="outline" 
                   (click)="previousStep()">
         <ion-icon slot="start" name="arrow-back"></ion-icon>
-        Back
+        Retroceder
       </ion-button>
       
       <ion-button *ngIf="currentStep < 4" 
                   class="btn-mio" 
                   [disabled]="!canProceed()"
                   (click)="nextStep()">
-        Next
+        Siguiente
         <ion-icon slot="end" name="arrow-forward"></ion-icon>
       </ion-button>
       
       <ion-button *ngIf="currentStep === 4" 
                   class="btn-mio confirm-button" 
                   (click)="confirmAppointment()">
-        Confirm Appointment
+        Confirmar Agendamiento
         <ion-icon slot="end" name="checkmark"></ion-icon>
       </ion-button>
     </div>

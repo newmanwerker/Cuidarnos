@@ -12,12 +12,12 @@
     <ion-card class="info-card">
       <div class="card-header">
         <ion-icon name="accessibility"></ion-icon>
-        <h2>Accessibility Options</h2>
+        <h2>Accesibilidad</h2>
       </div>
       
       <div class="accessibility-section">
-        <h3>Text Size</h3>
-        <p>Adjust the text size for better readability</p>
+        <h3>Tamaño del texto</h3>
+        <p>Ajusta el tamaño del texto para una mejor lectura</p>
         <div class="text-size-controls">
           <ion-button fill="clear" (click)="decreaseFontSize()">
             <ion-icon name="remove-circle"></ion-icon>
@@ -31,32 +31,32 @@
       </div>
       
       <div class="accessibility-section">
-        <h3>Display Options</h3>
+        <h3>Opciones de visualización</h3>
 <ion-item>
-  <ion-label>High Contrast Mode</ion-label>
+  <ion-label>Modo de alto contraste</ion-label>
   <ion-toggle
     [(ngModel)]="highContrast"
     (ionChange)="toggleHighContrast()">
   </ion-toggle>
 </ion-item>
         <ion-item>
-          <ion-label>Reduce Motion</ion-label>
+          <ion-label>Reducción de movimiento</ion-label>
           <ion-toggle></ion-toggle>
         </ion-item>
         <ion-item>
-          <ion-label>Larger Touch Targets</ion-label>
+          <ion-label>Botones más grandes</ion-label>
           <ion-toggle></ion-toggle>
         </ion-item>
       </div>
       
       <div class="accessibility-section">
-        <h3>Reading & Navigation</h3>
+        <h3>Lectura & Navegación</h3>
         <ion-item>
-          <ion-label>Screen Reader Support</ion-label>
+          <ion-label>Soporte de Lector de Pantalla</ion-label>
           <ion-toggle></ion-toggle>
         </ion-item>
         <ion-item>
-          <ion-label>Text-to-Speech</ion-label>
+          <ion-label>Texto a voz</ion-label>
           <ion-toggle></ion-toggle>
         </ion-item>
       </div>

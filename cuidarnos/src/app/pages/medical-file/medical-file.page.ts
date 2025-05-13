@@ -8,94 +8,94 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MedicalFilePage implements OnInit {
   patient = {
-    name: 'Sebastian Rodriguez',
+    name: 'Sebastian Ayala',
     id: '12345678',
-    dateOfBirth: '15/04/1985',
-    age: 40,
-    height: 175,
-    weight: 78,
-    bloodType: 'O+',
-    rut: '12.345.678-9',
+    dateOfBirth: '16/02/2000',
+    age: 25,
+    height: 196,
+    weight: 98,
+    bloodType: 'B+',
+    rut: '20.258.691-0',
     address: 'Av. Providencia 1234, Santiago',
     phone: '+56 9 1234 5678',
-    email: 'sebastian.rodriguez@email.com',
-    insurance: true,
+    email: 'sebastian.ayala@gmail.com',
+    insurance: false,
     emergencyContact: {
-      name: 'Maria Rodriguez',
-      relation: 'Spouse',
+      name: 'Claudia Santos',
+      relation: 'Madre',
       phone: '+56 9 8765 4321'
     },
     medicalConditions: [
       {
-        name: 'Hypertension',
+        name: 'Hipertensión',
         diagnosisDate: '10/03/2018',
         treatingPhysician: 'Garcia',
-        severity: 'Moderate',
-        status: 'Controlled',
-        notes: 'Patient has been maintaining blood pressure within normal ranges with medication. Regular monitoring required.',
+        severity: 'Moderada',
+        status: 'Controlada',
+        notes: 'El paciente se ha mantenido con una presión arterial normal con uso de medicamentos.',
         expanded: false
       },
       {
-        name: 'Ulcerative Colitis',
+        name: 'Colitis Ulcerosa',
         diagnosisDate: '22/07/2020',
         treatingPhysician: 'Martinez',
-        severity: 'Moderate',
-        status: 'In remission',
-        notes: 'Patient experienced a flare-up in January 2023 but has been in remission since March 2023. Currently on maintenance therapy.',
+        severity: 'Moderada',
+        status: 'En remisión',
+        notes: 'Paciente en remisión con uso de mesalamina.',
         expanded: false
       }
     ],
     medications: [
       {
-        name: 'Lisinopril',
-        dosage: '10mg',
-        frequency: 'Once daily',
+        name: 'Losartán',
+        dosage: '50mg',
+        frequency: 'Cada 12 horas',
         startDate: '15/03/2018',
         endDate: null,
         prescribedBy: 'Garcia',
-        purpose: 'Control hypertension',
-        sideEffects: ['Dry cough'],
-        notes: 'Take in the morning with food.',
+        purpose: 'Controlar hipertensión',
+        sideEffects: ['Mareos, fatiga'],
+        notes: 'Consumir en la mañana, con comida.',
         expanded: false
       },
       {
-        name: 'Mesalamine',
-        dosage: '1000mg',
-        frequency: 'Twice daily',
+        name: 'Mesalazina',
+        dosage: '2000mg',
+        frequency: 'Cada 12 horas',
         startDate: '25/07/2020',
         endDate: null,
         prescribedBy: 'Martinez',
-        purpose: 'Maintain remission of ulcerative colitis',
+        purpose: 'Mantener en remisión colitis ulcerosa',
         sideEffects: [],
-        notes: 'Take with meals in the morning and evening.',
+        notes: 'Tomar con comidas en la mañana y noche.',
         expanded: false
       }
     ],
     allergies: [
       {
-        name: 'Penicillin',
-        severity: 'Severe',
-        reaction: 'Anaphylaxis'
+        name: 'Penicilina',
+        severity: 'Severa',
+        reaction: 'Anafilaxis'
       },
       {
         name: 'Pollen',
-        severity: 'Mild',
-        reaction: 'Rhinitis, itchy eyes'
+        severity: 'Leve',
+        reaction: 'Rinitis, picazón en ojos'
       }
     ],
     labResults: [
       {
-        testName: 'Complete Blood Count',
+        testName: 'Hemograma Completo',
         date: '10/04/2025',
         status: 'Normal'
       },
       {
-        testName: 'Lipid Panel',
+        testName: 'Panel Lipídico',
         date: '10/04/2025',
-        status: 'Elevated LDL'
+        status: 'LDL Elevado'
       },
       {
-        testName: 'Kidney Function',
+        testName: 'Función Hepática',
         date: '10/04/2025',
         status: 'Normal'
       }
