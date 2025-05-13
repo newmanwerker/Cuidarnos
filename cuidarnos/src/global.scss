@@ -51,9 +51,38 @@ body {
     --ion-text-color: #000000;
     --ion-color-step-50: #f2f2f2;
     --ion-color-step-850: #000000;
-    // puedes ajustar más colores si hace falta
   }
 html, body {
   font-size: var(--app-font-size, 100%);
 }
+}
+
+
+    // Elegir colores para edición de alto contraste
+body.high-contrast {
+  --ion-background-color: #000000;
+  --ion-text-color: #FFFF00;
+  --ion-card-background: #000000;
+  --ion-color-primary: #FFFF00;
+
+  ion-card, ion-item {
+    background-color: #000000 !important;
+    color: #FFFF00 !important;
+    border: 2px solid #FFFF00;
+  }
+
+  ion-icon {
+    color: #FFFF00 !important;
+  }
+
+  .toolbar-item span {
+    color: #FFFF00 !important;
+  }
+
+  button, ion-button {
+    background-color: #FFFF00 !important;
+    color: #000 !important;
+    font-weight: bold;
+    border: 2px solid #FFFF00 !important;
+  }
 }

@@ -32,10 +32,13 @@
       
       <div class="accessibility-section">
         <h3>Display Options</h3>
-        <ion-item>
-          <ion-label>High Contrast Mode</ion-label>
-          <ion-toggle [(ngModel)]="highContrast"></ion-toggle>
-        </ion-item>
+<ion-item>
+  <ion-label>High Contrast Mode</ion-label>
+  <ion-toggle
+    [(ngModel)]="highContrast"
+    (ionChange)="toggleHighContrast()">
+  </ion-toggle>
+</ion-item>
         <ion-item>
           <ion-label>Reduce Motion</ion-label>
           <ion-toggle></ion-toggle>

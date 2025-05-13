@@ -13,11 +13,17 @@ export class AccessibilityPage implements OnInit {
   constructor() { }
 
  ngOnInit() {
+    const savedContrast = localStorage.getItem('highContrast');
+    this.highContrast = savedContrast === 'true';
+    this.applyContrast();
+
+  
   const savedFontSize = localStorage.getItem('appFontSize');
   if (savedFontSize) {
     this.fontSize = parseInt(savedFontSize, 10);
     document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}%`);
   }
+  
 }
 
 increaseFontSize() {
@@ -40,6 +46,18 @@ applyFontSize() {
 }
   
   toggleHighContrast() {
-    this.highContrast = !this.highContrast;
+
+    localStorage.setItem('highContrast', this.highContrast.toString());
+    this.applyContrast();
+
+
+  }
+
+    private applyContrast() {
+    if (this.highContrast) {
+      document.body.classList.add('high-contrast');
+    } else {
+      document.body.classList.remove('high-contrast');
+    }
   }
 }
