@@ -8,6 +8,8 @@ import { VideoCallPageRoutingModule } from './video-call-routing.module';
 
 import { VideoCallPage } from './video-call.page';
 
+import { SafeUrlPipe } from 'src/app/pipes/safe-url.pipe'
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +17,7 @@ import { VideoCallPage } from './video-call.page';
     IonicModule,
     VideoCallPageRoutingModule
   ],
-  declarations: [VideoCallPage]
+  declarations: [VideoCallPage,SafeUrlPipe],
+  
 })
 export class VideoCallPageModule {}
