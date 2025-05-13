@@ -59,3 +59,6 @@ def login_admin(request):
 
 def dashboard(request):
     return render(request, 'dashboard.html')
+
+def sucursales(request):
+    return render(request, 'sucursales.html')
