@@ -17,7 +17,13 @@ export class HomePage implements OnInit {
       { name: "Mesalamine", dosage: "1000mg", frequency: "Twice daily" },
     ],
     appointments: [
-      { date: "May 15, 2025", time: "10:00 AM", doctor: "Dr. Smith", type: "Check-up" },
+      { date: "May 15, 2025", 
+        time: "10:00 AM", 
+        doctor: "Dr. Smith", 
+        type: "Check-up",
+        online: true 
+      },
+
       { date: "May 22, 2025", time: "2:30 PM", doctor: "Dr. Johnson", type: "Specialist" },
     ],
   };
@@ -50,5 +56,9 @@ export class HomePage implements OnInit {
 
   goToAccessibility() {
   this.router.navigate(['/accessibility']);
+  }
+
+  goToCall(){
+    this.router.navigate(['/video-call']);
   }
 }

@@ -87,6 +87,11 @@
           <div class="appointment-details">
             <h3 class="appointment-type">{{appointment.type}}</h3>
             <span class="appointment-doctor">{{appointment.doctor}}</span>
+
+            <!-- SOLO si la cita es la fecha actual -->
+            <button *ngIf="appointment.online" class="join-button" (click)="goToCall()">
+              Ingresar a la consulta médica
+            </button>
           </div>
         </div>
       </div>
