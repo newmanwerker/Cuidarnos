@@ -3,6 +3,7 @@ import psycopg2
 import bcrypt
 import os
 from dotenv import load_dotenv
+from .models import Sucursal
 
 def login_admin(request):
     if request.method == 'POST':
@@ -61,4 +62,6 @@ def dashboard(request):
     return render(request, 'dashboard.html')
 
 def sucursales(request):
-    return render(request, 'sucursales.html')
+    sucursales = Sucursal.objects.all()
+    return render(request, 'sucursales.html', {'sucursales': sucursales})
+
