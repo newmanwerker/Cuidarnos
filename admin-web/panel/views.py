@@ -3,6 +3,9 @@ import psycopg2
 import bcrypt
 import os
 from dotenv import load_dotenv
+from .models import Sucursal
+import json
+from django.http import JsonResponse
 
 def login_admin(request):
     if request.method == 'POST':
@@ -61,4 +64,19 @@ def dashboard(request):
     return render(request, 'dashboard.html')
 
 def sucursales(request):
-    return render(request, 'sucursales.html')
+    sucursales = Sucursal.objects.all()
+    return render(request, 'sucursales.html', {'sucursales': sucursales})
+
+def crear_sucursal(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        nueva = Sucursal(
+            nombre=data['nombre'],
+            ubicacion=data['ubicacion'],
+            direccion=data['direccion'],
+            fono=data['fono']
+        )
+        nueva.save()
+        return JsonResponse({'status': 'ok', 'id': nueva.id})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
