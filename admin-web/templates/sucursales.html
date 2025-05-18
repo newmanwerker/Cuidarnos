@@ -47,11 +47,15 @@
           <h2 class="text-2xl font-bold">Sucursales</h2>
           <p class="text-gray-500">Gestiona todas las sucursales de tu organización</p>
         </div>
-        <button class="btn-primary">
-          <span class="text-lg">+</span> Agregar Sucursal
+        <button onclick="abrirModalSucursal()" id="btn-agregar-sucursal" class="btn-primary text-lg flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 12h8"/>
+            <path d="M12 8v8"/>
+          </svg>
+          Agregar Sucursal
         </button>
       </div>
-
 
       <!-- Search -->
       <div class="input-busqueda-container">
@@ -83,7 +87,7 @@
               <td>{{ sucursal.nombre }}</td>
               <td>{{ sucursal.ubicacion }}</td>
               <td>{{ sucursal.direccion }}</td>
-              <td>{{ sucursal.telefono }}</td>
+              <td>{{ sucursal.fono }}</td>
               <td class="px-6 py-4 flex items-center gap-1">
                 <svg class="icon-users" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                     viewBox="0 0 24 24">
@@ -116,6 +120,29 @@
       </div>
     </main>
   </div>
+
+    <!-- Modal para agregar sucursal -->
+  <div id="modal-sucursal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg w-full max-w-sm relative">
+      <h3 class="text-xl font-bold mb-1">Agregar Nueva Sucursal</h3>
+      <p class="mb-16 text-gray-500">Completa los detalles para crear una nueva sucursal</p>
+      <form id="form-sucursal">
+        <label class="block font-semibold mb-1">Nombre</label>
+        <input name="nombre" placeholder="Nombre" class="input-modal mb-2" required />
+        <label class="block font-semibold mb-1">Ubicación</label>
+        <input name="ubicacion" placeholder="Ubicación" class="input-modal mb-2" required />
+        <label class="block font-semibold mb-1">Dirección</label>
+        <input name="direccion" placeholder="Dirección" class="input-modal mb-2" required />
+        <label class="block font-semibold mb-1">Teléfono</label>
+        <input name="fono" placeholder="Teléfono" class="input-modal mb-2" required />
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" onclick="cerrarModalSucursal()" class="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="{% static 'js/sucursales.js' %}"></script>
 </body>
 </html>
