@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login_admin, name='login'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('sucursales/', views.sucursales, name='sucursales')
+    path('sucursales/', views.sucursales, name='sucursales'),
+    path('api/sucursales/crear/', views.crear_sucursal, name='crear_sucursal'),
 ]
