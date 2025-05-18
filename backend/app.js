@@ -13,3 +13,6 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Servidor backend en http://localhost:${PORT}`);
 });
+
+const centrosRoutes = require('./routes/centros.routes');
+app.use('/api', centrosRoutes);
