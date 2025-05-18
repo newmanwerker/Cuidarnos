@@ -14,14 +14,14 @@
             </div>
             <!-- Input field de email / debemos definir si sera correo, clave unica o rut -->
             <ion-input
-              formControlName="email"
-              type="email"
-              placeholder="Correo electrónico"
+              formControlName="rut"
+              type="text"
+              placeholder="99.999.999-9"
               class="inp"
             ></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="email.invalid && email.touched">
-            <p class="ion-padding-start">Correo inválido</p>
+            <p class="ion-padding-start">El RUT es requerido</p>
           </ion-text>
 
           <ion-item class="inp">

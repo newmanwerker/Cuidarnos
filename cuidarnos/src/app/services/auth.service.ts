@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api'; // Cambia al endpoint real del backend
+  private apiUrl = 'https://cuidarnos.up.railway.app/api'; // Cambia al endpoint real del backend
 
   constructor(private http: HttpClient) {}
 
@@ -15,5 +15,32 @@ export class AuthService {
 
   login(data: any) {
     return this.http.post(`${this.apiUrl}/auth/login`, data);
+  }
+
+   loginUsuario(data: any) {
+    return this.http.post(`${this.apiUrl}/login`, data);
+  }
+
+  guardarSesion(token: string, user: any) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('usuario', JSON.stringify(user));
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  getUsuario(): any {
+    const raw = localStorage.getItem('usuario');
+    return raw ? JSON.parse(raw) : null;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken();
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,37 +12,42 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {}
+
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      rut: ['', [Validators.required]],
       password: ['', Validators.required],
     });
   }
 
-  get email() {
-    return this.loginForm.get('email')!;
+  get rut() {
+    return this.loginForm.get('rut')!;
   }
 
   get password() {
     return this.loginForm.get('password')!;
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      const { email } = this.loginForm.value;
+async onSubmit() {
+  if (this.loginForm.valid) {
+    const { rut, password } = this.loginForm.value;
 
-      // Cualquiera de estas credenciales lleva al home, asi no tenemos que estar usando nuevos a cada rato, luego esto lo debemos manejar y extraer con BE desde la DB
-      if (email === 'seba@g.com') {
-        localStorage.setItem('auth', 'true');
-        this.router.navigateByUrl('/home');
-      } else if (email === 'fer@g.com') {
-        localStorage.setItem('auth', 'fake');
-        this.router.navigateByUrl('/home');
-      } else {
-        alert('Credenciales incorrectas');
+    this.auth.loginUsuario({ rut, password }).subscribe({
+      next: (data: any) => {
+        this.auth.guardarSesion(data.token, data.user);
+
+        if (data.user.tipo === 'paciente') {
+          this.router.navigate(['/home']);
+        } else if (data.user.tipo === 'medico') {
+          this.router.navigate(['/medico-home']);
+        }
+      },
+      error: () => {
+        alert('Rut o contraseña incorrecta');
       }
-    }
+    });
   }
+}
 }
