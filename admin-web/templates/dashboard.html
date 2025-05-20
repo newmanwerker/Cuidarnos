@@ -49,9 +49,9 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <h3 class="text-sm text-gray-500">Total de Sucursales</h3>
-          <p class="text-2xl font-bold">12</p>
-          <p class="text-sm text-green-600 mt-1">+2 en el último mes</p>
-          <a href="#" class="text-sm text-teal-600 mt-2 block">Ver todas →</a>
+          <p class="text-2xl font-bold">{{ total_sucursales }}</p>
+          <p class="text-sm text-green-600 mt-1">+ {{ sucursales_ult_mes }} en el último mes</p>
+          <a href="{% url 'sucursales' %}" class="text-sm text-teal-600 mt-2 block">Ver todas →</a>
         </div>
         <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <h3 class="text-sm text-gray-500">Total de Usuarios</h3>
@@ -74,24 +74,17 @@
           <h3 class="text-lg font-bold">Sucursales Recientes</h3>
           <p class="text-sm text-gray-500 mb-2">Las últimas sucursales creadas en el sistema</p>
           <ul class="divide-y divide-gray-200">
+            {% for sucursal in ultimas_sucursales %}
             <li class="py-2 flex justify-between">
               <span>
-                <strong>Sucursal Central</strong><br><small>Ciudad de México</small>
+                <strong>{{ sucursal.nombre }}</strong><br>
+                <small>{{ sucursal.ubicacion }}</small>
               </span>
-              <span class="text-sm text-gray-500">👥 8 usuarios</span>
+              <span class="text-sm text-gray-500">👥 {{ sucursal.usuarios }} usuarios</span>
             </li>
-            <li class="py-2 flex justify-between">
-              <span>
-                <strong>Sucursal Norte</strong><br><small>Monterrey</small>
-              </span>
-              <span class="text-sm text-gray-500">👥 5 usuarios</span>
-            </li>
-            <li class="py-2 flex justify-between">
-              <span>
-                <strong>Sucursal Oeste</strong><br><small>Guadalajara</small>
-              </span>
-              <span class="text-sm text-gray-500">👥 6 usuarios</span>
-            </li>
+            {% empty %}
+            <li class="py-2">No hay sucursales registradas.</li>
+            {% endfor %}
           </ul>
         </div>
 

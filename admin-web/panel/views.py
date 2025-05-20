@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from .models import Sucursal
 import json
 from django.http import JsonResponse
+from django.utils import timezone
 
 def login_admin(request):
     if request.method == 'POST':
@@ -61,7 +62,21 @@ def login_admin(request):
     return render(request, 'login.html')
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    now = timezone.now()
+    ultimas_sucursales = Sucursal.objects.order_by('-id')[:3]
+    total_sucursales = Sucursal.objects.count()
+
+    #Filtrar sucursales creadas el ultimo mes
+    sucursales_ult_mes = Sucursal.objects.filter(
+        creado_el__year=now.year,
+        creado_el__month=now.month
+    ).count()
+
+    return render(request, 'dashboard.html', {
+        'ultimas_sucursales': ultimas_sucursales,
+        'total_sucursales':total_sucursales,
+        'sucursales_ult_mes': sucursales_ult_mes
+    })
 
 def sucursales(request):
     sucursales = Sucursal.objects.all()
