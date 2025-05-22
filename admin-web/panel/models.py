@@ -8,7 +8,7 @@ class Sucursal(models.Model):
     ubicacion = models.TextField()
     direccion = models.TextField()
     fono = models.TextField()
-    usuarios = models.IntegerField(null=True)
+    usuarios = models.IntegerField(null=False, default=0)
     creado_el = models.DateTimeField(null=True)
     adm_id = models.ForeignKey(
         'AdmUser',

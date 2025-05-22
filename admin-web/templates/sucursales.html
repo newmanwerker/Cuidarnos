@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" id="html-root">
 <head>
   <meta charset="UTF-8" />
   <title>Sucursales</title>
@@ -12,6 +12,24 @@
   <header class="bg-white shadow px-6 py-4 flex justify-between items-center border-b border-gray-200">
     <h1 class="text-lg font-bold">Panel de Super Administrador</h1>
     <img src="" class="rounded-full w-10 h-10" alt="User"/>
+    <button id="toggle-theme" class="text-sm flex items-center gap-2">
+      <span id="icon-moon" class="hidden">
+          <!-- Ícono luna -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-icon">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </span>
+        <span id="icon-sun" class="hidden">
+          <!-- Ícono sol -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/>
+            <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+            <path d="M2 12h2"/><path d="M20 12h2"/>
+            <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+          </svg>
+        </span>
+      <span>Cambiar Modo</span>
+    </button>
   </header>
 
   <div class="flex">
@@ -70,7 +88,7 @@
 
       <!-- Table -->
       <div class="tabla-container">
-        <table class="tabla-sucursales">
+        <table class="tabla-sucursales min-w-full text-sm">
           <thead>
             <tr>
               <th class="col-nombre">Nombre</th>
@@ -121,7 +139,7 @@
     </main>
   </div>
 
-    <!-- Modal para agregar sucursal -->
+  <!-- Modal para agregar sucursal -->
   <div id="modal-sucursal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
     <div class="bg-white p-6 rounded shadow-lg w-full max-w-sm relative">
       <h3 class="text-xl font-bold mb-1">Agregar Nueva Sucursal</h3>
@@ -143,6 +161,7 @@
     </div>
   </div>
 
-  <script src="{% static 'js/sucursales.js' %}"></script>
+  <script src="{% static 'js/scripts.js' %}"></script>
+  <script src="{% static 'js/menu-toggle.js' %}"></script>
 </body>
 </html>

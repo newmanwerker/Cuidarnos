@@ -3,7 +3,7 @@ import psycopg2
 import bcrypt
 import os
 from dotenv import load_dotenv
-from .models import Sucursal
+from .models import Sucursal, AdmUser
 import json
 from django.http import JsonResponse
 from django.utils import timezone
@@ -71,11 +71,14 @@ def dashboard(request):
         creado_el__year=now.year,
         creado_el__month=now.month
     ).count()
+    usuarios_recientes = AdmUser.objects.select_related(
+        'sucursal').order_by('-adm_create_at')[:3]
 
     return render(request, 'dashboard.html', {
         'ultimas_sucursales': ultimas_sucursales,
         'total_sucursales':total_sucursales,
-        'sucursales_ult_mes': sucursales_ult_mes
+        'sucursales_ult_mes': sucursales_ult_mes,
+        'usuarios_recientes': usuarios_recientes
     })
 
 def sucursales(request):
@@ -94,4 +97,8 @@ def crear_sucursal(request):
         nueva.save()
         return JsonResponse({'status': 'ok', 'id': nueva.id})
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def users(request):
+    users = AdmUser.objects.all().select_related('sucursal')
+    return render(request, 'users.html', {'users': users})
 

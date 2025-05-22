@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" id="html-root">
 <head>
   <meta charset="UTF-8" />
   <title>Admin Panel - Dashboard</title>
@@ -11,6 +11,24 @@
   <header class="bg-white shadow px-6 py-4 flex justify-between items-center border-b border-gray-200">
     <h1 class="text-lg font-bold">Panel de Super Administrador</h1>
     <img src="" class="rounded-full w-10 h-10" alt="User"/>
+    <button id="toggle-theme" class="text-sm flex items-center gap-2">
+      <span id="icon-moon" class="hidden">
+          <!-- Ícono luna -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-icon">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </span>
+        <span id="icon-sun" class="hidden">
+          <!-- Ícono sol -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/>
+            <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+            <path d="M2 12h2"/><path d="M20 12h2"/>
+            <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+          </svg>
+        </span>
+      <span>Cambiar Modo</span>
+    </button>
   </header>
 
   <div class="flex">
@@ -80,7 +98,15 @@
                 <strong>{{ sucursal.nombre }}</strong><br>
                 <small>{{ sucursal.ubicacion }}</small>
               </span>
-              <span class="text-sm text-gray-500">👥 {{ sucursal.usuarios }} usuarios</span>
+              <span class="text-sm text-gray-500 flex items-center gap-1">
+                <svg class="w-4 h-4 text-gray-500 icon-users" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                    viewBox="0 0 24 24">
+                  <path fill-rule="evenodd"
+                        d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H6Zm7.25-2.095c.478-.86.75-1.85.75-2.905a5.973 5.973 0 0 0-.75-2.906 4 4 0 1 1 0 5.811ZM15.466 20c.34-.588.535-1.271.535-2v-1a5.978 5.978 0 0 0-1.528-4H18a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2h-4.535Z"
+                        clip-rule="evenodd" />
+                </svg>
+                {{ sucursal.usuarios }} usuarios
+              </span>
             </li>
             {% empty %}
             <li class="py-2">No hay sucursales registradas.</li>
@@ -89,33 +115,30 @@
         </div>
 
         <!-- Usuarios -->
+        <!-- Usuarios -->
         <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-          <h3 class="text-lg font-bold">Usuarios Recientes</h3>
-          <p class="text-sm text-gray-500 mb-2">Los últimos usuarios agregados al sistema</p>
+          <h3 class="text-lg font-bold">Administradores Recientes</h3>
+          <p class="text-sm text-gray-500 mb-2">Los últimos administradores agregados al sistema</p>
           <ul class="divide-y divide-gray-200">
-            <li class="py-2 flex justify-between">
-              <span>
-                <strong>Carlos Méndez</strong><br><small>carlos@example.com</small>
-              </span>
-              <span class="text-sm text-gray-500">Sucursal Central</span>
-            </li>
-            <li class="py-2 flex justify-between">
-              <span>
-                <strong>Ana López</strong><br><small>ana@example.com</small>
-              </span>
-              <span class="text-sm text-gray-500">Sucursal Norte</span>
-            </li>
-            <li class="py-2 flex justify-between">
-              <span>
-                <strong>Roberto García</strong><br><small>roberto@example.com</small>
-              </span>
-              <span class="text-sm text-gray-500">Sucursal Oeste</span>
-            </li>
+            {% for usuario in usuarios_recientes %}
+              <li class="py-2 flex justify-between">
+                <span>
+                  <strong>{{ usuario.adm_name }} {{ usuario.adm_last_name }}</strong><br>
+                  <small>{{ usuario.adm_email }}</small>
+                </span>
+                <span class="text-sm text-gray-500">
+                  {{ usuario.sucursal.nombre|default:"Sin sucursal" }}
+                </span>
+              </li>
+            {% empty %}
+              <li class="py-2">No hay administradores registrados recientemente.</li>
+            {% endfor %}
           </ul>
         </div>
       </div>
     </main>
   </div>
 <script src="{% static 'js/scripts.js' %}"></script>
+<script src="{% static 'js/menu-toggle.js' %}"></script>
 </body>
 </html>
