@@ -31,7 +31,7 @@ def login_admin(request):
             print("✅ Conexión a la base de datos exitosa")
 
             cur = conn.cursor()
-            cur.execute("SELECT admin_psw FROM administrador WHERE admin_email = %s", (email,))
+            cur.execute("SELECT super_psw FROM super_adm WHERE super_email = %s", (email,))
             result = cur.fetchone()
             print("🧠 Resultado desde DB:", result)
 
