@@ -3,9 +3,10 @@ import psycopg2
 import bcrypt
 import os
 from dotenv import load_dotenv
-from .models import Sucursal
+from .models import Sucursal, AdmUser
 import json
 from django.http import JsonResponse
+from django.utils import timezone
 
 def login_admin(request):
     if request.method == 'POST':
@@ -30,7 +31,7 @@ def login_admin(request):
             print("✅ Conexión a la base de datos exitosa")
 
             cur = conn.cursor()
-            cur.execute("SELECT admin_psw FROM administrador WHERE admin_email = %s", (email,))
+            cur.execute("SELECT super_psw FROM super_adm WHERE super_email = %s", (email,))
             result = cur.fetchone()
             print("🧠 Resultado desde DB:", result)
 
@@ -61,7 +62,24 @@ def login_admin(request):
     return render(request, 'login.html')
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    now = timezone.now()
+    ultimas_sucursales = Sucursal.objects.order_by('-id')[:3]
+    total_sucursales = Sucursal.objects.count()
+
+    #Filtrar sucursales creadas el ultimo mes
+    sucursales_ult_mes = Sucursal.objects.filter(
+        creado_el__year=now.year,
+        creado_el__month=now.month
+    ).count()
+    usuarios_recientes = AdmUser.objects.select_related(
+        'sucursal').order_by('-adm_create_at')[:3]
+
+    return render(request, 'dashboard.html', {
+        'ultimas_sucursales': ultimas_sucursales,
+        'total_sucursales':total_sucursales,
+        'sucursales_ult_mes': sucursales_ult_mes,
+        'usuarios_recientes': usuarios_recientes
+    })
 
 def sucursales(request):
     sucursales = Sucursal.objects.all()
@@ -79,4 +97,8 @@ def crear_sucursal(request):
         nueva.save()
         return JsonResponse({'status': 'ok', 'id': nueva.id})
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def users(request):
+    users = AdmUser.objects.all().select_related('sucursal')
+    return render(request, 'users.html', {'users': users})
 

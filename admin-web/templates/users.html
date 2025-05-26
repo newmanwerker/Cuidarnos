@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es" id="html-root">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usuarios - Panel de Super Administrador</title>
+  <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Topbar -->
+  {% include 'partials/header.html' %}
+
+  <!-- Sidebar -->
+    {% include 'partials/sidebar.html' %}
+
+  <main class="ml-64 p-6">
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h1 class="text-2xl font-bold">Usuarios</h1>
+        <p class="text-sm text-gray-600">Gestiona todos los usuarios de todas las sucursales</p>
+      </div>
+      <button class="bg-black text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-800">
+        + Agregar Usuario
+      </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="flex flex-wrap gap-4 items-center mb-4">
+      <input type="text" placeholder="🔍 Buscar usuarios..." class="border border-gray-300 rounded-lg px-3 py-2 w-full md:w-1/3" />
+      <select class="border border-gray-300 rounded-lg px-3 py-2">
+        <option>Todos los roles</option>
+      </select>
+      <select class="border border-gray-300 rounded-lg px-3 py-2">
+        <option>Todos los estados</option>
+        <option>Activo</option>
+        <option>Inactivo</option>
+      </select>
+      <select class="border border-gray-300 rounded-lg px-3 py-2">
+        <option>Todas las sucursales</option>
+        <!-- dinámico -->
+      </select>
+    </div>
+
+    <!-- Tabla de usuarios -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-100 text-left">
+          <tr>
+            <th class="px-4 py-3 font-semibold">Nombre</th>
+            <th class="px-4 py-3 font-semibold">Email</th>
+            <th class="px-4 py-3 font-semibold">Rol</th>
+            <th class="px-4 py-3 font-semibold">Sucursal</th>
+            <th class="px-4 py-3 font-semibold">Estado</th>
+            <th class="px-4 py-3 font-semibold text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for usuario in usuarios %}
+          <tr>
+            <td class="px-4 py-3">{{ usuario.nombre }}</td>
+            <td class="px-4 py-3">{{ usuario.email }}</td>
+            <td class="px-4 py-3">{{ usuario.rol }}</td>
+            <td class="px-4 py-3">{{ usuario.sucursal.nombre }}</td>
+            <td class="px-4 py-3">
+                {% if usuario.estado == 'Activo' %}
+                <span class="inline-block px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                    {{ usuario.estado }}
+                </span>
+                {% else %}
+                <span class="inline-block px-2 py-1 text-xs rounded-full bg-gray-200 text-gray-500">
+                    {{ usuario.estado }}
+                </span>
+                {% endif %}
+            </td>
+            <td class="px-4 py-3 text-center space-x-2">
+              <a href="{% url 'editar_usuario' usuario.id %}" class="text-gray-500 hover:text-teal-600">
+                ✏️
+              </a>
+              <a href="{% url 'eliminar_usuario' usuario.id %}" class="text-gray-500 hover:text-red-600">
+                🗑️
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+              No se encontraron usuarios.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="{% static 'js/scripts.js' %}"></script>
+  <script src="{% static 'js/menu-toggle.js' %}"></script>
+</body>
+</html>
