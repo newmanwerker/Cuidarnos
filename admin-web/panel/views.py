@@ -99,6 +99,5 @@ def crear_sucursal(request):
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 def users(request):
-    users = AdmUser.objects.all().select_related('sucursal')
-    return render(request, 'users.html', {'users': users})
-
+    usuarios = AdmUser.objects.select_related('sucursal', 'rol_id').all()
+    return render(request, 'users.html', {'usuarios': usuarios})

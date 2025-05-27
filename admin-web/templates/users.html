@@ -1,101 +1,68 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es" id="html-root">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usuarios - Panel de Super Administrador</title>
+  <meta charset="UTF-8">
+  <title>Usuarios - Panel</title>
   <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet" />
 </head>
 <body class="bg-gray-50 text-gray-800">
+    <!-- Topbar -->
+    {% include 'partials/header.html' %}
+    <div class="flex">
+        <!-- Sidebar -->
+         <aside class="w-64 bg-white border-r border-gray-200 min-h-screen p-4">
+            <nav class="space-y-4">
+                <button onclick="window.location.href='/dashboard/'" class="flex items-center gap-2 text-left text-gray-700 hover:text-teal-600 font-medium">
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5"/>
+                </svg>
+                Dashboard
+                </button>
+                <button onclick="window.location.href='/sucursales/'" class="flex items-center gap-2 text-left text-gray-700 hover:text-teal-600 font-medium">
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M5.535 7.677c.313-.98.687-2.023.926-2.677H17.46c.253.63.646 1.64.977 2.61.166.487.312.953.416 1.347.11.42.148.675.148.779 0 .18-.032.355-.09.515-.06.161-.144.3-.243.412-.1.111-.21.192-.324.245a.809.809 0 0 1-.686 0 1.004 1.004 0 0 1-.324-.245c-.1-.112-.183-.25-.242-.412a1.473 1.473 0 0 1-.091-.515 1 1 0 1 0-2 0 1.4 1.4 0 0 1-.333.927.896.896 0 0 1-.667.323.896.896 0 0 1-.667-.323A1.401 1.401 0 0 1 13 9.736a1 1 0 1 0-2 0 1.4 1.4 0 0 1-.333.927.896.896 0 0 1-.667.323.896.896 0 0 1-.667-.323A1.4 1.4 0 0 1 9 9.74v-.008a1 1 0 0 0-2 .003v.008a1.504 1.504 0 0 1-.18.712 1.22 1.22 0 0 1-.146.209l-.007.007a1.01 1.01 0 0 1-.325.248.82.82 0 0 1-.316.08.973.973 0 0 1-.563-.256 1.224 1.224 0 0 1-.102-.103A1.518 1.518 0 0 1 5 9.724v-.006a2.543 2.543 0 0 1 .029-.207c.024-.132.06-.296.11-.49.098-.385.237-.85.395-1.344ZM4 12.112a3.521 3.521 0 0 1-1-2.376c0-.349.098-.8.202-1.208.112-.441.264-.95.428-1.46.327-1.024.715-2.104.958-2.767A1.985 1.985 0 0 1 6.456 3h11.01c.803 0 1.539.481 1.844 1.243.258.641.67 1.697 1.019 2.72a22.3 22.3 0 0 1 .457 1.487c.114.433.214.903.214 1.286 0 .412-.072.821-.214 1.207A3.288 3.288 0 0 1 20 12.16V19a2 2 0 0 1-2 2h-6a1 1 0 0 1-1-1v-4H8v4a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2v-6.888ZM13 15a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2Z" clip-rule="evenodd"/>
+                </svg>
+                Sucursales
+                </button>
+                <button onclick="window.location.href=/users/" class="flex items-center gap-2 text-left text-gray-700 hover:text-teal-600 font-medium">
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                </svg>
+                Usuarios
+                </button>
+            </nav>
+        </aside>
 
-  <!-- Topbar -->
-  {% include 'partials/header.html' %}
-
-  <!-- Sidebar -->
-    {% include 'partials/sidebar.html' %}
-
-  <main class="ml-64 p-6">
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h1 class="text-2xl font-bold">Usuarios</h1>
-        <p class="text-sm text-gray-600">Gestiona todos los usuarios de todas las sucursales</p>
-      </div>
-      <button class="bg-black text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-800">
-        + Agregar Usuario
-      </button>
+        <main class="p-6">
+            <h1 class="text-2xl font-bold mb-4">Usuarios del sistema</h1>
+            <table class="min-w-full text-sm bg-white rounded-lg shadow border border-gray-200">
+            <thead class="bg-gray-100">
+                <tr>
+                <th class="px-4 py-2 text-left">Nombre</th>
+                <th class="px-4 py-2 text-left">Email</th>
+                <th class="px-4 py-2 text-left">Rol</th>
+                <th class="px-4 py-2 text-left">Sucursal</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                {% for usuario in usuarios %}
+                <tr>
+                    <td class="px-4 py-2">{{ usuario.adm_name }} {{ usuario.adm_last_name }}</td>
+                    <td class="px-4 py-2">{{ usuario.adm_email }}</td>
+                    <td class="px-4 py-2">{{ usuario.rol_id.rol_name|default:"Sin rol" }}</td>
+                    <td class="px-4 py-2">{{ usuario.sucursal.nombre|default:"Sin sucursal" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="px-4 py-4 text-center text-gray-500">No se encontraron usuarios.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </main>
     </div>
-
-    <!-- Filtros -->
-    <div class="flex flex-wrap gap-4 items-center mb-4">
-      <input type="text" placeholder="🔍 Buscar usuarios..." class="border border-gray-300 rounded-lg px-3 py-2 w-full md:w-1/3" />
-      <select class="border border-gray-300 rounded-lg px-3 py-2">
-        <option>Todos los roles</option>
-      </select>
-      <select class="border border-gray-300 rounded-lg px-3 py-2">
-        <option>Todos los estados</option>
-        <option>Activo</option>
-        <option>Inactivo</option>
-      </select>
-      <select class="border border-gray-300 rounded-lg px-3 py-2">
-        <option>Todas las sucursales</option>
-        <!-- dinámico -->
-      </select>
-    </div>
-
-    <!-- Tabla de usuarios -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto">
-      <table class="min-w-full text-sm">
-        <thead class="bg-gray-100 text-left">
-          <tr>
-            <th class="px-4 py-3 font-semibold">Nombre</th>
-            <th class="px-4 py-3 font-semibold">Email</th>
-            <th class="px-4 py-3 font-semibold">Rol</th>
-            <th class="px-4 py-3 font-semibold">Sucursal</th>
-            <th class="px-4 py-3 font-semibold">Estado</th>
-            <th class="px-4 py-3 font-semibold text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-          {% for usuario in usuarios %}
-          <tr>
-            <td class="px-4 py-3">{{ usuario.nombre }}</td>
-            <td class="px-4 py-3">{{ usuario.email }}</td>
-            <td class="px-4 py-3">{{ usuario.rol }}</td>
-            <td class="px-4 py-3">{{ usuario.sucursal.nombre }}</td>
-            <td class="px-4 py-3">
-                {% if usuario.estado == 'Activo' %}
-                <span class="inline-block px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                    {{ usuario.estado }}
-                </span>
-                {% else %}
-                <span class="inline-block px-2 py-1 text-xs rounded-full bg-gray-200 text-gray-500">
-                    {{ usuario.estado }}
-                </span>
-                {% endif %}
-            </td>
-            <td class="px-4 py-3 text-center space-x-2">
-              <a href="{% url 'editar_usuario' usuario.id %}" class="text-gray-500 hover:text-teal-600">
-                ✏️
-              </a>
-              <a href="{% url 'eliminar_usuario' usuario.id %}" class="text-gray-500 hover:text-red-600">
-                🗑️
-              </a>
-            </td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="6" class="px-4 py-6 text-center text-gray-500">
-              No se encontraron usuarios.
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </main>
-
-  <script src="{% static 'js/scripts.js' %}"></script>
-  <script src="{% static 'js/menu-toggle.js' %}"></script>
+<script src="{% static 'js/scripts.js' %}"></script>
+<script src="{% static 'js/menu-toggle.js' %}"></script>
 </body>
 </html>
