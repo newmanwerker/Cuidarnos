@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,37 +12,43 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      nombre: ['', Validators.required],
+      rut: ['', Validators.required]
     });
   }
 
-  get email() {
-    return this.loginForm.get('email')!;
+  get nombre() {
+    return this.loginForm.get('nombre')!;
   }
 
-  get password() {
-    return this.loginForm.get('password')!;
+  get rut() {
+    return this.loginForm.get('rut')!;
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const { email } = this.loginForm.value;
+      const { nombre, rut } = this.loginForm.value;
 
-      // Cualquiera de estas credenciales lleva al home, asi no tenemos que estar usando nuevos a cada rato, luego esto lo debemos manejar y extraer con BE desde la DB
-      if (email === 'seba@g.com') {
-        localStorage.setItem('auth', 'true');
-        this.router.navigateByUrl('/home');
-      } else if (email === 'fer@g.com') {
-        localStorage.setItem('auth', 'fake');
-        this.router.navigateByUrl('/home');
-      } else {
-        alert('Credenciales incorrectas');
-      }
+      this.authService.login({ nombre, rut }).subscribe({
+        next: (res: any) => {
+          console.log('✅ Login exitoso', res);
+          localStorage.setItem('auth', 'true');
+          localStorage.setItem('paciente', JSON.stringify(res.paciente));
+          this.router.navigateByUrl('/home');
+        },
+        error: (err) => {
+          console.error('❌ Error en login:', err);
+          alert('Paciente no encontrado o datos incorrectos');
+        }
+      });
     }
   }
 }

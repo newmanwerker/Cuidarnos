@@ -1,44 +1,36 @@
 const pool = require('../db');
-const bcrypt = require('bcrypt');
 
-exports.loginAdmin = async (req, res) => {
-  const { email, password } = req.body;
+// controllers/auth.controller.js
+exports.loginPaciente = async (req, res) => {
+  const { rut, nombre } = req.body;
 
   try {
-    console.log('📥 Email recibido:', email);
-    console.log('📥 Password recibido:', password);
+    console.log('📥 RUT recibido:', rut);
+    console.log('📥 Nombre recibido:', nombre);
 
-    // Buscar admin por email
+    // Buscar paciente por RUT
     const result = await pool.query(
-      'SELECT * FROM administrador WHERE admin_email = $1',
-      [email]
+      'SELECT * FROM pacientes WHERE rut = $1 AND nombre = $2',
+      [rut, nombre]
     );
 
     if (result.rows.length === 0) {
-      console.log('❌ Admin no encontrado');
-      return res.status(404).json({ error: 'Admin no encontrado' });
+      console.log('❌ Paciente no encontrado');
+      return res.status(404).json({ error: 'Paciente no encontrado' });
     }
 
-    const admin = result.rows[0];
+    const paciente = result.rows[0];
 
-    console.log('🔐 Hash en base de datos:', admin.admin_psw);
+    //Success login message
+    console.log(`✅ Login exitoso para paciente: ${paciente.nombre} (${paciente.rut})`);
 
-    // Comparar contraseñas
-    const match = await bcrypt.compare(password, admin.admin_psw);
-    console.log('🟡 ¿Coincide la contraseña?:', match);
-
-    if (!match) {
-      return res.status(401).json({ error: 'Contraseña incorrecta' });
-    }
-
-    // si todo esta correcto, se puede iniciar sesión
+    // Devuelve datos mínimos del paciente
     res.json({
       message: 'Login exitoso',
-      admin: {
-        id: admin.admin_id,
-        nombre: admin.admin_name,
-        email: admin.admin_email,
-        rol: admin.admin_rol
+      paciente: {
+        id: paciente.paciente_id,
+        nombre: paciente.paciente_nombre,
+        rut: paciente.paciente_rut
       }
     });
 

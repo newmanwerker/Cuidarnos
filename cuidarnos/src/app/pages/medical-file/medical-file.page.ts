@@ -8,8 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MedicalFilePage implements OnInit {
   patient = {
-    name: 'Sebastian Rodriguez',
-    id: '12345678',
+    name: 'Sebastian Rodrigues',
+    id: '12345675',
     dateOfBirth: '15/04/1985',
     age: 40,
     height: 175,
