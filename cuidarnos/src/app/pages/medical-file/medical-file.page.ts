@@ -8,14 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MedicalFilePage implements OnInit {
   patient = {
-    name: 'Sebastian Ayala',
-    id: '12345678',
-    dateOfBirth: '16/02/2000',
-    age: 25,
-    height: 196,
-    weight: 98,
-    bloodType: 'B+',
-    rut: '20.258.691-0',
+    name: 'Sebastian Rodrigues',
+    id: '12345675',
+    dateOfBirth: '15/04/1985',
+    age: 40,
+    height: 175,
+    weight: 78,
+    bloodType: 'O+',
+    rut: '12.345.678-9',
     address: 'Av. Providencia 1234, Santiago',
     phone: '+56 9 1234 5678',
     email: 'sebastian.ayala@gmail.com',

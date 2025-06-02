@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,42 +12,43 @@ import { AuthService } from '../../services/auth.service';
 export class LoginPage implements OnInit {
   loginForm!: FormGroup;
 
-constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {}
-
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      rut: ['', [Validators.required]],
-      password: ['', Validators.required],
+      nombre: ['', Validators.required],
+      rut: ['', Validators.required]
     });
+  }
+
+  get nombre() {
+    return this.loginForm.get('nombre')!;
   }
 
   get rut() {
     return this.loginForm.get('rut')!;
   }
 
-  get password() {
-    return this.loginForm.get('password')!;
-  }
+  onSubmit() {
+    if (this.loginForm.valid) {
+      const { nombre, rut } = this.loginForm.value;
 
-async onSubmit() {
-  if (this.loginForm.valid) {
-    const { rut, password } = this.loginForm.value;
-
-    this.auth.loginUsuario({ rut, password }).subscribe({
-      next: (data: any) => {
-        this.auth.guardarSesion(data.token, data.user);
-
-        if (data.user.tipo === 'paciente') {
-          this.router.navigate(['/home']);
-        } else if (data.user.tipo === 'medico') {
-          this.router.navigate(['/medico-home']);
+      this.authService.login({ nombre, rut }).subscribe({
+        next: (res: any) => {
+          console.log('✅ Login exitoso', res);
+          localStorage.setItem('auth', 'true');
+          localStorage.setItem('paciente', JSON.stringify(res.paciente));
+          this.router.navigateByUrl('/home');
+        },
+        error: (err) => {
+          console.error('❌ Error en login:', err);
+          alert('Paciente no encontrado o datos incorrectos');
         }
-      },
-      error: () => {
-        alert('Rut o contraseña incorrecta');
-      }
-    });
+      });
+    }
   }
-}
 }

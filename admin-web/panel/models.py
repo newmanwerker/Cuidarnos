@@ -37,9 +37,27 @@ class AdmUser(models.Model):
         db_column='adm_centro_salud'
     )
     adm_create_at = models.DateTimeField(null=True)
+    rol_id = models.ForeignKey(
+        'Rol',
+        on_delete=models.SET_NULL,
+        null=True,
+        db_column='rol_id'
+    )
 
     def __str__(self):
         return f"{self.adm_name} {self.adm_last_name}"
     class Meta:
         db_table = 'adm_user'
         managed = False
+
+
+class Rol(models.Model):
+    rol_id = models.AutoField(primary_key=True)
+    rol_name = models.CharField(max_length=100)
+    rol_desc = models.TextField()
+    class Meta:
+        db_table = 'roles'
+        managed = False
+    
+    def __str__(self):
+        return self.rol_name
