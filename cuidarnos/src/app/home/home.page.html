@@ -7,8 +7,8 @@
           <ion-icon name="person"></ion-icon>
         </div>
         <div class="profile-info">
-          <h1 class="profile-name">{{patient.name}}</h1>
-          <p class="profile-id">Patient ID: {{patient.id}}</p>
+          <h1 class="profile-name">{{ getFullName() }}</h1>
+          <p class="profile-id">ID de paciente: {{ patient?.id }}</p>
         </div>
         <ion-icon name="notifications" class="notification-icon"></ion-icon>
       </div>
