@@ -8,29 +8,23 @@ import { Router } from '@angular/router';
   standalone:false
 })
 export class HomePage implements OnInit {
-  patient = {
-    name: "Sebastian Ayala",
-    id: "12345678",
-    rut: "20.258.691-0",
-    conditions: ["Hipertensión", "Colitis Ulcerosa"],
-    medications: [
-      { name: "Losartán", dosage: "50mg", frequency: "Cada 12 horas" },
-      { name: "Mesalazina", dosage: "2000mg", frequency: "Cada 12 horas" },
-      { name: "Amlodipino", dosage: "5mg",frequency: "Cada 24 horas" },
-    ],
-    appointments: [
-      { date: "May 15, 2025", 
-        time: "10:00 AM", 
-        doctor: "Dra. Diaz", 
-        type: "General",
-        online: true 
-      },
-    ],
-  };
+  patient: any = null;
 
   constructor(private router: Router) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const storedPatient = localStorage.getItem('paciente');
+    if (storedPatient) {
+      this.patient = JSON.parse(storedPatient);
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  getFullName(): string{
+    if (!this.patient) return '';
+    return `${this.patient.nombre} ${this.patient.apellido}`;
+  }
 
   getMonth(dateString: string): string {
     const date = new Date(dateString);

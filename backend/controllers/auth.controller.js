@@ -1,6 +1,5 @@
 const pool = require('../db');
 
-// controllers/auth.controller.js
 exports.loginPaciente = async (req, res) => {
   const { rut, nombre } = req.body;
 
@@ -8,7 +7,6 @@ exports.loginPaciente = async (req, res) => {
     console.log('📥 RUT recibido:', rut);
     console.log('📥 Nombre recibido:', nombre);
 
-    // Buscar paciente por RUT
     const result = await pool.query(
       'SELECT * FROM pacientes WHERE rut = $1 AND nombre = $2',
       [rut, nombre]
@@ -21,16 +19,20 @@ exports.loginPaciente = async (req, res) => {
 
     const paciente = result.rows[0];
 
-    //Success login message
     console.log(`✅ Login exitoso para paciente: ${paciente.nombre} (${paciente.rut})`);
 
-    // Devuelve datos mínimos del paciente
     res.json({
       message: 'Login exitoso',
       paciente: {
-        id: paciente.paciente_id,
-        nombre: paciente.paciente_nombre,
-        rut: paciente.paciente_rut
+        id: paciente.id,
+        nombre: paciente.nombre,
+        apellido: paciente.apellido,
+        fecha_nacimiento: paciente.fecha_nacimiento,
+        genero: paciente.genero,
+        direccion: paciente.direccion,
+        telefono: paciente.telefono,
+        email: paciente.email,
+        rut: paciente.rut
       }
     });
 
