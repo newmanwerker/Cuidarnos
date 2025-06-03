@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://cuidarnos.up.railway.app/api'; // Cambia al endpoint real del backend
+  private apiUrl = 'http://localhost:3000/api'; // Cambia al endpoint real del backend
 
   constructor(private http: HttpClient) {}
 
@@ -44,3 +44,6 @@ export class AuthService {
     return !!this.getToken();
   }
 }
+
+
+//hola
