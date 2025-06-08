@@ -8,7 +8,7 @@ exports.loginPaciente = async (req, res) => {
     console.log('📥 Nombre recibido:', nombre);
 
     const result = await pool.query(
-      'SELECT * FROM pacientes WHERE rut = $1 AND nombre = $2',
+      'SELECT * FROM pacientes WHERE rut = $1 AND LOWER(nombre) = LOWER($2)',
       [rut, nombre]
     );
 

@@ -11,7 +11,7 @@ const authRoutes = require('./routes/auth.routes');
 app.use('/api', authRoutes);
 
 //Server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ BE server running on http://0.0.0.0:${PORT}`);
 });
