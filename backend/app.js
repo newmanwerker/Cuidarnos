@@ -12,8 +12,8 @@ app.use('/api', authRoutes);
 
 //Server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => { 
-  console.log(`BE server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ BE server running on http://0.0.0.0:${PORT}`);
 });
 
 const centrosRoutes = require('./routes/centros.routes');
