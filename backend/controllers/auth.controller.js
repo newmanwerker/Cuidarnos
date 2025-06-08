@@ -83,8 +83,7 @@ exports.loginUsuario = async (req, res) => {
         tipo
       }
     });
-
-  } catch (error) {
+} catch (error) {
     console.error('❌ Error en loginUsuario:', error);
     res.status(500).json({ error: 'Error del servidor' });
   }
