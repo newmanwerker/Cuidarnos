@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
+  //private apiUrl = 'http://localhost:3000/api';
   private apiUrl = 'https://cuidarnos.up.railway.app/api';
 
   constructor(private http: HttpClient) {}

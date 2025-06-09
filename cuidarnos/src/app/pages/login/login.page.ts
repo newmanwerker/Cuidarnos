@@ -36,12 +36,14 @@ export class LoginPage implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       const { nombre, rut } = this.loginForm.value;
+      console.log('Enviando login con:', nombre, rut);
 
       this.authService.login({ nombre, rut }).subscribe({
         next: (res: any) => {
           console.log('✅ Login exitoso', res);
           localStorage.setItem('auth', 'true');
           localStorage.setItem('paciente', JSON.stringify(res.paciente));
+          localStorage.setItem('userData', JSON.stringify(res)); //guarda la data para poder utilizarla dentro de las demas secciones luego del login
           this.router.navigateByUrl('/home');
         },
         error: (err) => {

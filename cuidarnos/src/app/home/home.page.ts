@@ -16,6 +16,7 @@ export class HomePage implements OnInit {
     const storedPatient = localStorage.getItem('paciente');
     if (storedPatient) {
       this.patient = JSON.parse(storedPatient);
+      console.log('Patient data loaded:', this.patient);
     } else {
       this.router.navigate(['/login']);
     }
@@ -24,6 +25,10 @@ export class HomePage implements OnInit {
   getFullName(): string{
     if (!this.patient) return '';
     return `${this.patient.nombre} ${this.patient.apellido}`;
+  }
+
+  getSucursal(): string {
+    return this.patient?.centro_salud || 'No Data';
   }
 
   getMonth(dateString: string): string {

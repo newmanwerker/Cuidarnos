@@ -14,6 +14,7 @@
 
 <ion-content>
   <div class="medical-file-container">
+
     <!-- Patient Basic Information -->
     <ion-card class="patient-card">
       <div class="patient-header">
@@ -21,8 +22,8 @@
           <ion-icon name="person"></ion-icon>
         </div>
         <div class="patient-info">
-          <h1 class="patient-name">{{patient.name}}</h1>
-          <p class="patient-id">ID: {{patient.id}}</p>
+          <h1 class="patient-name">{{patient.nombre}} {{patient.apellido}}</h1>
+          <p class="patient-id">Sucursal: {{patient.centro_salud}}</p>
           <div class="patient-tags">
             <ion-badge color="primary">Activo</ion-badge>
             <ion-badge *ngIf="patient.insurance" color="success">Insured</ion-badge>
@@ -93,7 +94,9 @@
             <ion-icon name="alert-circle-outline"></ion-icon>
             <div>
               <span class="info-label">Contacto de emergencia</span>
-              <span class="info-value full-width">{{patient.emergencyContact.name}} ({{patient.emergencyContact.relation}})</span>
+              <span class="info-value full-width">
+                {{patient.emergencyContact.name}} ({{patient.emergencyContact.relation}})
+              </span>
               <span class="info-value">{{patient.emergencyContact.phone}}</span>
             </div>
           </div>
@@ -102,7 +105,7 @@
     </ion-card>
 
     <!-- Medical Conditions Section -->
-    <ion-card class="info-card">
+    <ion-card class="info-card" *ngIf="patient.medicalConditions?.length">
       <ion-card-header>
         <ion-card-title>
           <ion-icon name="fitness-outline"></ion-icon>
@@ -157,40 +160,7 @@
       </ion-card-header>
       <ion-card-content>
         <div class="medication-list">
-          <div *ngFor="let medication of patient.medications" class="medication-item">
-            <div class="medication-header" (click)="toggleMedication(medication)">
-              <div class="medication-primary">
-                <span class="medication-name">{{medication.name}}</span>
-                <span class="medication-dosage">{{medication.dosage}}</span>
-              </div>
-              <div class="medication-secondary">
-                <span class="medication-frequency">{{medication.frequency}}</span>
-                <ion-icon [name]="medication.expanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
-              </div>
-            </div>
-            <div class="medication-details" *ngIf="medication.expanded">
-              <div class="detail-item">
-                <span class="detail-label">Preescrito por</span>
-                <span class="detail-value">Dr. {{medication.prescribedBy}}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Fecha de inicio</span>
-                <span class="detail-value">{{medication.startDate}}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Propósito</span>
-                <span class="detail-value">{{medication.purpose}}</span>
-              </div>
-              <div class="detail-item" *ngIf="medication.sideEffects && medication.sideEffects.length > 0">
-                <span class="detail-label">Efectos Secundarios</span>
-                <span class="detail-value">{{medication.sideEffects.join(', ')}}</span>
-              </div>
-              <div class="detail-notes" *ngIf="medication.notes">
-                <span class="detail-label">Notas</span>
-                <p class="notes-text">{{medication.notes}}</p>
-              </div>
-            </div>
-          </div>
+          <span class="info-value">No hay medicamentos registrados.</span>
         </div>
       </ion-card-content>
     </ion-card>
@@ -205,21 +175,7 @@
       </ion-card-header>
       <ion-card-content>
         <div class="allergy-list">
-          <div *ngFor="let allergy of patient.allergies" class="allergy-item">
-            <div class="allergy-info">
-              <ion-icon name="alert-circle" color="danger"></ion-icon>
-              <span class="allergy-name">{{allergy.name}}</span>
-            </div>
-            <div class="allergy-details">
-              <ion-badge [color]="allergy.severity === 'Severa' ? 'danger' : allergy.severity === 'Moderada' ? 'warning' : 'success'">
-                {{allergy.severity}}
-              </ion-badge>
-              <span class="allergy-reaction">{{allergy.reaction}}</span>
-            </div>
-          </div>
-          <div *ngIf="patient.allergies.length === 0" class="no-data">
-            <span>No tiene alergias conocidas</span>
-          </div>
+          <span class="info-value">No hay alergias registradas.</span>
         </div>
       </ion-card-content>
     </ion-card>
@@ -234,18 +190,7 @@
       </ion-card-header>
       <ion-card-content>
         <div class="lab-list">
-          <div *ngFor="let result of patient.labResults" class="lab-item">
-            <div class="lab-info">
-              <ion-icon name="flask-outline"></ion-icon>
-              <span class="lab-name">{{result.testName}}</span>
-            </div>
-            <div class="lab-details">
-              <span class="lab-date">{{result.date}}</span>
-              <ion-badge [color]="result.status === 'Normal' ? 'success' : 'warning'">
-                {{result.status}}
-              </ion-badge>
-            </div>
-          </div>
+          <span class="info-value">No hay resultados de laboratorio disponibles.</span>
         </div>
       </ion-card-content>
     </ion-card>

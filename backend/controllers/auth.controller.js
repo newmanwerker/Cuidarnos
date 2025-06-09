@@ -7,8 +7,12 @@ exports.loginPaciente = async (req, res) => {
     console.log('📥 RUT recibido:', rut);
     console.log('📥 Nombre recibido:', nombre);
 
+    // Consulta para traer datos del paciente + centro de salud
     const result = await pool.query(
-      'SELECT * FROM pacientes WHERE rut = $1 AND LOWER(nombre) = LOWER($2)',
+      `SELECT p.*, cs.nombre AS centro_salud 
+       FROM pacientes p
+       JOIN centro_salud cs ON p.id_centro_salud = cs.id
+       WHERE p.rut = $1 AND LOWER(p.nombre) = LOWER($2)`,
       [rut, nombre]
     );
 
@@ -19,11 +23,26 @@ exports.loginPaciente = async (req, res) => {
 
     const paciente = result.rows[0];
 
+    // Consulta para traer ficha médica
+    const fichaResult = await pool.query(
+      `SELECT * FROM ficha_paciente WHERE id = $1`,
+      [paciente.id_ficha_paciente]
+    );
+    const ficha_medica = fichaResult.rows[0] || null;
+    //Convierte el array del historial_medico en texto
+    if (ficha_medica && typeof ficha_medica.historial_medico === 'string') {
+      ficha_medica.historial_medico = ficha_medica.historial_medico
+      .replace(/[{}]/g,'')//elimina las llaves del array
+      .split(',') //Separta los items con comas
+      .map(item => item.trim()); //elimina espacion en blanco
+    }
     console.log(`✅ Login exitoso para paciente: ${paciente.nombre} (${paciente.rut})`);
+    console.log('🩺 Historial médico:', ficha_medica?.historial_medico);
 
     res.json({
       message: 'Login exitoso',
       paciente: {
+        // Datos desde la tabla pacientes
         id: paciente.id,
         nombre: paciente.nombre,
         apellido: paciente.apellido,
@@ -32,7 +51,27 @@ exports.loginPaciente = async (req, res) => {
         direccion: paciente.direccion,
         telefono: paciente.telefono,
         email: paciente.email,
-        rut: paciente.rut
+        rut: paciente.rut,
+        centro_salud: paciente.centro_salud,
+
+        // Datos adicionales desde ficha_medica
+        ficha_medica: {
+          id: ficha_medica?.id,
+          nombre: ficha_medica?.nombre,
+          apellido: ficha_medica?.apellido,
+          fecha_nac: ficha_medica?.fecha_nac,
+          edad: ficha_medica?.edad,
+          altura: ficha_medica?.altura,
+          peso: ficha_medica?.peso,
+          tipo_sangre: ficha_medica?.tipo_sangre,
+          direccion: ficha_medica?.direccion,
+          celular: ficha_medica?.celular,
+          email: ficha_medica?.email,
+          contacto_emergencia: ficha_medica?.contacto_emergencia,
+          parentezco_contacto: ficha_medica?.parentezco_contacto,
+          activo: ficha_medica?.activo,
+          historial_medico: ficha_medica?.historial_medico || []
+        }
       }
     });
 

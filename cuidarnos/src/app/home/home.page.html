@@ -8,7 +8,7 @@
         </div>
         <div class="profile-info">
           <h1 class="profile-name">{{ getFullName() }}</h1>
-          <p class="profile-id">ID de paciente: {{ patient?.id }}</p>
+          <p class="profile-id">Sucursal: {{ getSucursal() }}</p>
         </div>
         <ion-icon name="notifications" class="notification-icon"></ion-icon>
       </div>
@@ -37,14 +37,14 @@
     </ion-card>
 
     <!-- Medical Conditions Card -->
-    <ion-card class="info-card">
+    <ion-card class="info-card" *ngIf="patient?.ficha_medica?.historial_medico?.length">
       <div class="card-header">
         <ion-icon name="heart"></ion-icon>
-        <h2>Condiciones Médicas</h2>
+        <h2>Condicione Médicas</h2>
       </div>
       <div class="conditions-container">
-        <div *ngFor="let condition of patient.conditions" class="condition-badge">
-          <span>{{condition}}</span>
+        <div *ngFor="let condition of patient.ficha_medica.historial_medico" class="condition-badge">
+          <span>{{ condition }}</span>
         </div>
       </div>
     </ion-card>
