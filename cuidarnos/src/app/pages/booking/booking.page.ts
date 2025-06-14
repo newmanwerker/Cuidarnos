@@ -20,44 +20,13 @@ export class BookingPage implements OnInit {
   selectedSpecialty: number | null = null;
   
   // Step 2: Doctors
-  doctors = [
-    { 
-      id: 1, 
-      name: 'Maria Garcia', 
-      specialty: 'General Medicine',
-      specialtyId: 1,
-      rating: 4.8,
-      reviewCount: 124,
-      nextAvailable: 'Hoy'
-    },
-    { 
-      id: 2, 
-      name: 'Carlos Rodriguez', 
-      specialty: 'Cardiology',
-      specialtyId: 2,
-      rating: 4.9,
-      reviewCount: 87,
-      nextAvailable: 'Mañana'
-    },
-    { 
-      id: 3, 
-      name: 'Ana Martinez', 
-      specialty: 'Gastroenterology',
-      specialtyId: 4,
-      rating: 4.7,
-      reviewCount: 56,
-      nextAvailable: 'Hoy'
-    },
-    { 
-      id: 4, 
-      name: 'Juan Perez', 
-      specialty: 'General Medicine',
-      specialtyId: 1,
-      rating: 4.5,
-      reviewCount: 92,
-      nextAvailable: 'Mayo 15'
-    }
-  ];
+doctors = [] as {
+  id: number;
+  name: string;
+  specialty: string;
+  specialtyId: number;
+  nextAvailable: string;
+}[];
   filteredDoctors: any[] = [];
   selectedDoctor: number | null = null;
   
@@ -90,6 +59,16 @@ export class BookingPage implements OnInit {
   ) { }
 
   ngOnInit() {
+      this.http.get<any[]>('https://cuidarnos.up.railway.app/api/doctores').subscribe(doctores => {
+    this.doctors = doctores.map(doc => ({
+      id: doc.id,
+      name: doc.name,
+      specialty: doc.especialidad,
+      specialtyId: 1, // Ajusta según estructura real
+      nextAvailable: 'Por confirmar'
+    }));
+  });
+    
     this.updateCalendar();
     this.updateMonthName();
   }

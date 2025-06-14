@@ -47,4 +47,21 @@ router.post('/consultas', async (req, res) => {
   }
 });
 
+
+// GET /api/doctores
+router.get('/doctores', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT id, nombre AS name, especialidad 
+      FROM medicos
+      ORDER BY nombre
+    `);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error('❌ Error al obtener doctores:', err);
+    res.status(500).json({ error: 'Error al obtener doctores' });
+  }
+});
+
 module.exports = router;
