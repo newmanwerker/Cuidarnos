@@ -348,3 +348,16 @@ ion-card {
   width: 225px;
   margin-top: 8px;
 }
+
+.custom-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4px;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--ion-color-primary, #3880ff); // o el color que quieras
+  }
+}

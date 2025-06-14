@@ -24,7 +24,7 @@ export class MedicalFilePage implements OnInit {
         apellido: paciente.apellido,
         rut: paciente.rut,
         insurance: false,
-        centro_salud: parsed.centro_salud,
+        centro_salud: parsed.paciente.centro_salud,
         address: ficha?.direccion || '',
         phone: ficha?.celular || '',
         email: ficha?.email || '',
@@ -67,4 +67,8 @@ export class MedicalFilePage implements OnInit {
   toggleMedication(medication: any) {
     medication.expanded = !medication.expanded;
   }
+  getSucursal(): string {
+    return this.patient?.centro_salud || 'No Data';
+  }
 }
+
