@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="notifications"></ion-icon>
+      </ion-button>
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="doctor-home-container">
+    <!-- Doctor Profile Card -->
+    <ion-card class="profile-card">
+      <div class="profile-header">
+        <div class="doctor-avatar">
+          <ion-icon name="medical"></ion-icon>
+        </div>
+        <div class="profile-info">
+          <h1 class="doctor-name">Dr. {{doctor.name}}</h1>
+          <p class="doctor-specialty">{{doctor.specialty}}</p>
+          <p class="doctor-id">Medical License: {{doctor.licenseNumber}}</p>
+        </div>
+        <div class="status-indicator">
+          <ion-badge [color]="doctor.status === 'Available' ? 'success' : 'warning'">
+            {{doctor.status}}
+          </ion-badge>
+        </div>
+      </div>
+      
+      <!-- Today's Summary -->
+      <div class="daily-summary">
+        <div class="summary-item">
+          <div class="summary-icon">
+            <ion-icon name="calendar"></ion-icon>
+          </div>
+          <div class="summary-text">
+            <span class="summary-label">Today's Appointments</span>
+            <span class="summary-value">{{todayAppointments.length}}</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-icon">
+            <ion-icon name="people"></ion-icon>
+          </div>
+          <div class="summary-text">
+            <span class="summary-label">Patients Seen</span>
+            <span class="summary-value">{{completedAppointments}}/{{todayAppointments.length}}</span>
+          </div>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Quick Actions -->
+    <div class="actions-grid">
+      <ion-card class="action-card primary-action" (click)="goToSchedule()">
+        <div class="action-icon">
+          <ion-icon name="videocam"></ion-icon>
+        </div>
+        <div class="action-content">
+          <h3 class="action-title">Today's Schedule</h3>
+          <p class="action-description">Join scheduled meetings with patients</p>
+          <span class="action-badge" *ngIf="upcomingAppointments > 0">
+            {{upcomingAppointments}} upcoming
+          </span>
+        </div>
+      </ion-card>
+
+      <ion-card class="action-card secondary-action" (click)="goToPatientManagement()">
+        <div class="action-icon">
+          <ion-icon name="people-circle"></ion-icon>
+        </div>
+        <div class="action-content">
+          <h3 class="action-title">Patient Management</h3>
+          <p class="action-description">View and manage your patient list</p>
+        </div>
+      </ion-card>
+
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,102 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/doctor/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Today's Schedule</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="calendar"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="schedule-container">
+    <!-- Date Header -->
+    <ion-card class="date-card">
+      <div class="date-header">
+        <div class="date-info">
+          <h2 class="current-date">{{getCurrentDate()}}</h2>
+          <p class="appointments-count">{{todayAppointments.length}} appointments scheduled</p>
+        </div>
+        <div class="schedule-status">
+          <ion-badge [color]="getStatusColor()">{{getScheduleStatus()}}</ion-badge>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Appointments List -->
+    <div class="appointments-list">
+      <div *ngFor="let appointment of todayAppointments" class="appointment-card">
+        <ion-card [ngClass]="{'completed': appointment.status === 'completed', 'upcoming': appointment.status === 'upcoming', 'in-progress': appointment.status === 'in-progress'}">
+          <div class="appointment-content">
+            <div class="appointment-time">
+              <div class="time-display">{{appointment.time}}</div>
+              <div class="duration">{{appointment.duration || '30'}} min</div>
+            </div>
+            
+            <div class="appointment-details">
+              <h3 class="patient-name">{{appointment.patientName}}</h3>
+              <p class="appointment-type">{{appointment.type}}</p>
+              <div class="patient-info">
+                <span class="patient-id">ID: {{appointment.patientId}}</span>
+                <span class="appointment-method">
+                  <ion-icon name="videocam"></ion-icon>
+                  Online Consultation
+                </span>
+              </div>
+            </div>
+
+            <div class="appointment-actions">
+              <ion-button 
+                *ngIf="appointment.status === 'upcoming'" 
+                class="join-button"
+                (click)="joinMeeting(appointment)">
+                <ion-icon slot="start" name="videocam"></ion-icon>
+                Join
+              </ion-button>
+              
+              <ion-button 
+                *ngIf="appointment.status === 'completed'" 
+                fill="outline" 
+                class="view-notes-button"
+                (click)="viewNotes(appointment)">
+                <ion-icon slot="start" name="document-text"></ion-icon>
+                Notes
+              </ion-button>
+              
+              <ion-button 
+                *ngIf="appointment.status === 'in-progress'" 
+                color="success"
+                class="in-progress-button"
+                (click)="continueSession(appointment)">
+                <ion-icon slot="start" name="play-circle"></ion-icon>
+                Continue
+              </ion-button>
+            </div>
+          </div>
+
+          <div class="appointment-status">
+            <ion-icon 
+              [name]="getStatusIcon(appointment.status)" 
+              [color]="getStatusIconColor(appointment.status)">
+            </ion-icon>
+          </div>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="todayAppointments.length === 0" class="empty-state">
+      <ion-card>
+        <div class="empty-content">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <h3>No appointments today</h3>
+          <p>You have no scheduled appointments for today.</p>
+        </div>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

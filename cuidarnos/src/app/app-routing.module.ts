@@ -10,7 +10,15 @@ const routes: Routes = [
   { path: 'booking', loadChildren: () => import('./pages/booking/booking.module').then( m => m.BookingPageModule)},
   { path: 'settings', loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)},
   { path: 'accessibility', loadChildren: () => import('./pages/accessibility/accessibility.module').then( m => m.AccessibilityPageModule)},
-  { path: 'video-call', loadChildren: () => import('./pages/video-call/video-call.module').then( m => m.VideoCallPageModule)},
+  { path: 'video-call', loadChildren: () => import('./pages/video-call/video-call.module').then( m => m.VideoCallPageModule)},  {
+    path: 'doctor-home',
+    loadChildren: () => import('./pages/doctor-home/doctor-home.module').then( m => m.DoctorHomePageModule)
+  },
+  {
+    path: 'schedule',
+    loadChildren: () => import('./pages/schedule/schedule.module').then( m => m.SchedulePageModule)
+  },
+
 ];
 
 @NgModule({
