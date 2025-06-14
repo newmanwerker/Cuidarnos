@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service'; // Adjust the path as necessary
 
 @Component({
   selector: 'app-booking',
@@ -66,7 +68,7 @@ export class BookingPage implements OnInit {
   currentMonthName = '';
   weekdays = ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'];
   calendarDays: any[] = [];
-  selectedDate: Date | null = null;
+  selectedDate: string | null = null;
   
   availableTimeSlots: string[] = [];
   selectedTimeSlot: string | null = null;
@@ -82,7 +84,9 @@ export class BookingPage implements OnInit {
 
   constructor(
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private http: HttpClient,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -233,19 +237,47 @@ export class BookingPage implements OnInit {
     this.updateMonthName();
   }
 
-  selectDate(date: Date) {
-    this.selectedDate = date;
-    this.generateTimeSlots();
-    this.selectedTimeSlot = null;
+selectDate(date: Date) {
+  // Formatear la fecha a YYYY-MM-DD para la API
+  const yyyy = date.getFullYear();
+  const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+  const dd = date.getDate().toString().padStart(2, '0');
+  const formattedDate = `${yyyy}-${mm}-${dd}`;
+
+  this.selectedDate = formattedDate;
+
+  if (!this.selectedDoctor) {
+    console.warn('No se ha seleccionado un doctor.');
+    return;
   }
 
-  isSelectedDate(date: Date): boolean {
-    if (!this.selectedDate) return false;
-    
-    return date.getFullYear() === this.selectedDate.getFullYear() &&
-           date.getMonth() === this.selectedDate.getMonth() &&
-           date.getDate() === this.selectedDate.getDate();
-  }
+  this.http.get<string[]>(`https://cuidarnos.up.railway.app/api/disponibilidad`, {
+    params: {
+      medicoId: this.selectedDoctor.toString(),
+      fecha: formattedDate
+    }
+  }).subscribe({
+    next: (slots) => {
+      this.availableTimeSlots = slots;
+      console.log('Horarios disponibles:', slots);
+    },
+    error: (err) => {
+      console.error('❌ Error al obtener disponibilidad:', err);
+      alert('No se pudo cargar la disponibilidad');
+    }
+  });
+}
+
+
+isSelectedDate(date: Date): boolean {
+  if (!this.selectedDate) return false;
+
+  const selected = new Date(this.selectedDate);  // convertir string a Date
+
+  return date.getFullYear() === selected.getFullYear() &&
+         date.getMonth() === selected.getMonth() &&
+         date.getDate() === selected.getDate();
+}
 
   generateTimeSlots() {
     // This would typically come from an API based on doctor availability
@@ -276,19 +308,20 @@ export class BookingPage implements OnInit {
     return specialty ? specialty.name : '';
   }
 
-  formatSelectedDate(): string {
-    if (!this.selectedDate) return '';
-    
-    const options: Intl.DateTimeFormatOptions = { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    };
-    
-    return this.selectedDate.toLocaleDateString('en-US', options);
-  }
+formatSelectedDate(): string {
+  if (!this.selectedDate) return '';
 
+  const selected = new Date(this.selectedDate);  // convertir string a Date
+
+  const options: Intl.DateTimeFormatOptions = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  };
+
+  return selected.toLocaleDateString('es-CL', options);
+}
   getSelectedAppointmentTypeName(): string {
     const type = this.appointmentTypes.find(t => t.id === this.selectedAppointmentType);
     return type ? type.name : '';
@@ -299,19 +332,25 @@ export class BookingPage implements OnInit {
     return type ? type.duration : 0;
   }
 
-  async confirmAppointment() {
-    // Here you would typically send the appointment data to your backend
-    
-    // Show confirmation toast
-    const toast = await this.toastController.create({
-      message: 'Reunión Agendad Correctamente!',
-      duration: 2000,
-      position: 'bottom',
-      color: 'success'
-    });
-    await toast.present();
-    
-    // Navigate back to home
-    this.router.navigate(['/home']);
-  }
+confirmAppointment() {
+  const payload = {
+    pacienteId: this.authService.getUsuario().id,  // Asume que estás usando localStorage
+    medicoId: this.selectedDoctor,
+    fecha: this.selectedDate,
+    hora: this.selectedTimeSlot,
+    tipo: this.getSelectedAppointmentTypeName(),
+    notas: this.appointmentNotes
+  };
+
+  this.http.post('https://cuidarnos.up.railway.app/api/consultas', payload).subscribe({
+    next: () => {
+      alert('✅ Consulta agendada con éxito');
+      this.router.navigateByUrl('/confirmacion-exitosa'); // o /home, según prefieras
+    },
+    error: (err) => {
+      console.error('❌ Error al agendar:', err);
+      alert('Ocurrió un error al agendar la consulta');
+    }
+  });
+}
 }

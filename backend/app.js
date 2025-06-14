@@ -18,3 +18,6 @@ app.listen(PORT, '0.0.0.0', () => {
 
 const centrosRoutes = require('./routes/centros.routes');
 app.use('/api', centrosRoutes);
+
+const agendamientosRoutes = require('./routes/agendamientos.routes');
+app.use('/api', agendamientosRoutes);
