@@ -51,6 +51,7 @@ doctors = [] as {
   
   // Step 4: Confirmation
   appointmentNotes: string = '';
+  isSubmitting = false;
 
   constructor(
     private router: Router,
@@ -333,8 +334,12 @@ formatSelectedDate(): string {
   }
 
 confirmAppointment() {
+  if (this.isSubmitting) return; // 🔒 Evita múltiples clics
+
+  this.isSubmitting = true; // ✅ Bloquear nuevo envío
+
   const payload = {
-    pacienteId: this.authService.getUsuario().id,  // Asume que estás usando localStorage
+    pacienteId: this.authService.getUsuario().id,
     medicoId: this.selectedDoctor,
     fecha: this.selectedDate,
     hora: this.selectedTimeSlot,
@@ -345,11 +350,12 @@ confirmAppointment() {
   this.http.post('https://cuidarnos.up.railway.app/api/consultas', payload).subscribe({
     next: () => {
       alert('✅ Consulta agendada con éxito');
-      this.router.navigateByUrl('/confirmacion-exitosa'); // o /home, según prefieras
+      this.router.navigateByUrl('/home'); // ⬅️ Redirige directo al home
     },
     error: (err) => {
       console.error('❌ Error al agendar:', err);
       alert('Ocurrió un error al agendar la consulta');
+      this.isSubmitting = false; // 🔓 Habilitar botón si falla
     }
   });
 }

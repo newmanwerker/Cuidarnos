@@ -25,7 +25,7 @@ export class MedicalFilePage implements OnInit {
         id: paciente.id,
         nombre: paciente.nombre,
         apellido: paciente.apellido,
-        rut: paciente.rut,
+        rut: this.formatRut(paciente.rut),
         insurance: false,
         centro_salud: parsed.paciente.centro_salud,
         address: ficha?.direccion || '',
@@ -88,5 +88,33 @@ export class MedicalFilePage implements OnInit {
   getSucursal(): string {
     return this.patient?.centro_salud || 'No Data';
   }
+
+
+
+formatRut(rut: string): string {
+  if (!rut) return '';
+
+  // Eliminar puntos y guion
+  rut = rut.replace(/\./g, '').replace('-', '');
+
+  const body = rut.slice(0, -1);
+  const dv = rut.slice(-1);
+
+  let formatted = '';
+  let count = 0;
+
+  for (let i = body.length - 1; i >= 0; i--) {
+    formatted = body[i] + formatted;
+    count++;
+    if (count % 3 === 0 && i !== 0) {
+      formatted = '.' + formatted;
+    }
+  }
+
+  return `${formatted}-${dv}`;
+}
+
+
+
 }
 

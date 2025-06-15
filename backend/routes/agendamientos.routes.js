@@ -107,5 +107,26 @@ router.get('/dias-disponibles', async (req, res) => {
   }
 });
 
+router.get('/consultas/existe', async (req, res) => {
+  const { pacienteId, medicoId, fecha, hora } = req.query;
+
+  if (!pacienteId || !medicoId || !fecha || !hora) {
+    return res.status(400).json({ error: 'Faltan parámetros requeridos' });
+  }
+
+  try {
+    const result = await pool.query(
+      `SELECT COUNT(*) FROM consultas_telemedicina 
+       WHERE paciente_id = $1 AND medico_id = $2 AND fecha_consulta = $3`,
+      [pacienteId, medicoId, `${fecha} ${hora}`]
+    );
+
+    const existe = parseInt(result.rows[0].count) > 0;
+    res.json({ existe });
+  } catch (error) {
+    console.error('❌ Error al verificar existencia de cita:', error);
+    res.status(500).json({ error: 'Error al verificar existencia de la cita' });
+  }
+});
 
 module.exports = router;
