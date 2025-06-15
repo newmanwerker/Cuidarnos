@@ -20,14 +20,9 @@
           <ion-icon name="medical"></ion-icon>
         </div>
         <div class="profile-info">
-          <h1 class="doctor-name">Dr. {{doctor.name}}</h1>
-          <p class="doctor-specialty">{{doctor.specialty}}</p>
-          <p class="doctor-id">Medical License: {{doctor.licenseNumber}}</p>
-        </div>
-        <div class="status-indicator">
-          <ion-badge [color]="doctor.status === 'Available' ? 'success' : 'warning'">
-            {{doctor.status}}
-          </ion-badge>
+        <h1 class="doctor-name">Dr. {{doctor.name}}</h1>
+        <p class="doctor-specialty">{{doctor.specialty}}</p>
+        <p class="doctor-id">Centro Médico: {{doctor.centro}}</p>
         </div>
       </div>
       

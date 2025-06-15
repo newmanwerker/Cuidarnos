@@ -87,28 +87,32 @@ const consultaPendiente = consultasResult.rows[0] || null;
     });
     }
     
-    // Si no es paciente, buscar médico
-    result = await pool.query(
-      `SELECT * FROM medicos WHERE rut = $1 AND LOWER(nombre) = LOWER($2)`,
-      [rut, nombre]
-    );
+      // Si no es paciente, buscar médico
+      result = await pool.query(
+        `SELECT m.*, cs.nombre AS centro_salud
+        FROM medicos m
+        LEFT JOIN centro_salud cs ON m.id_centro_salud = cs.id
+        WHERE m.rut = $1 AND LOWER(m.nombre) = LOWER($2)`,
+        [rut, nombre]
+      );
 
-    if (result.rows.length > 0) {
-      const medico = result.rows[0];
+      if (result.rows.length > 0) {
+        const medico = result.rows[0];
 
-      return res.json({
-        message: 'Login exitoso',
-        tipo: 'medico',
-        medico: {
-          id: medico.id,
-          rut: medico.rut,
-          nombre: medico.nombre,
-          email: medico.email,
-          especialidad: medico.especialidad,
-          id_centro_salud: medico.id_centro_salud
-        }
-      });
-    }
+        return res.json({
+          message: 'Login exitoso',
+          tipo: 'medico',
+          medico: {
+            id: medico.id,
+            rut: medico.rut,
+            nombre: medico.nombre,
+            apellido: medico.apellido,
+            email: medico.email,
+            especialidad: medico.especialidad,
+            centro_salud: medico.centro_salud
+          }
+        });
+      }
 
     // Ningún usuario encontrado
     return res.status(404).json({ error: 'Usuario no encontrado' });

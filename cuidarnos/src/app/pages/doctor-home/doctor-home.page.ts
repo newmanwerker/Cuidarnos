@@ -8,34 +8,36 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class DoctorHomePage implements OnInit {
-  doctor = {
-    name: 'Maria Garcia',
-    specialty: 'General Medicine',
-    licenseNumber: 'ML-12345',
-    status: 'Available'
-  };
+  doctor: any = null;
+  todayAppointments: any[] = [];
+  completedAppointments = 0;
+  upcomingAppointments = 0;
 
-  todayAppointments = [
-    { id: 1, patientName: 'Sebastian Rodriguez', time: '9:00 AM', type: 'Check-up', status: 'completed' },
-    { id: 2, patientName: 'Ana Martinez', time: '9:30 AM', type: 'Follow-up', status: 'completed' },
-    { id: 3, patientName: 'Carlos Perez', time: '10:00 AM', type: 'New Condition', status: 'upcoming' },
-    { id: 4, patientName: 'Maria Lopez', time: '10:30 AM', type: 'Check-up', status: 'upcoming' },
-    { id: 5, patientName: 'Juan Silva', time: '11:00 AM', type: 'Follow-up', status: 'upcoming' }
-  ];
-
-  completedAppointments = 2;
-  upcomingAppointments = 3;
-  emergencyAlerts = 1;
-
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   ngOnInit() {
-    this.calculateStats();
+    const stored = localStorage.getItem('userData');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      this.doctor = {
+        name: `${parsed.medico.nombre} ${parsed.medico.apellido || ''}`,
+        specialty: parsed.medico.especialidad || 'General',
+        centro: parsed.medico.centro_salud || 'Centro Desconocido',
+        status: 'Disponible' // puedes cambiar según lógica real
+      };
+
+      // Cargar sus citas de hoy si ya las tienes
+      this.todayAppointments = parsed.medico.appointments || [];
+
+      this.calculateStats();
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   calculateStats() {
-    this.completedAppointments = this.todayAppointments.filter(apt => apt.status === 'completed').length;
-    this.upcomingAppointments = this.todayAppointments.filter(apt => apt.status === 'upcoming').length;
+    this.completedAppointments = this.todayAppointments.filter(a => a.status === 'completed').length;
+    this.upcomingAppointments = this.todayAppointments.filter(a => a.status === 'upcoming').length;
   }
 
   goToSchedule() {
@@ -47,16 +49,11 @@ export class DoctorHomePage implements OnInit {
   }
 
   goToPatientManagement() {
-    console.log('Navigate to patient management');
-    // this.router.navigate(['/doctor/patient-management']);
+    this.router.navigate(['/doctor/patient-management']);
   }
 
   logout() {
-    localStorage.removeItem('auth');
-    localStorage.removeItem('paciente');
-    localStorage.removeItem('userData');
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
-
-
 }

@@ -90,4 +90,11 @@ this.patient = {
     today.getDate() === date.getDate()
   );
 }
+  logout() {
+    localStorage.removeItem('auth');
+    localStorage.removeItem('paciente');
+    localStorage.removeItem('userData');
+    this.router.navigate(['/login']);
+  }
+
 }
