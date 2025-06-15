@@ -104,6 +104,9 @@ const consultaPendiente = consultasResult.rows[0] || null;
         centro_salud: paciente.centro_salud,
         ficha_medica: ficha_medica || {},
         medications: medicamentos, 
+        receta: receta,
+        alergias: alergias,
+        labResults: labResults,
         appointments: consultaPendiente ? [{
           id: consultaPendiente.id,
           date: consultaPendiente.fecha_consulta,
