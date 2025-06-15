@@ -48,7 +48,8 @@ router.post('/consultas', async (req, res) => {
     console.log('🛠️ hora recibida:', hora); 
     console.log('🛠️ hora recortada:', horaRecortada);
     console.log('🛠️ fecha completa:', `${fecha}T${horaRecortada}:00-04:00`);
-    const fechaHora = `${fecha}T${horaRecortada}:00-04:00`;
+
+    const fechaHora = new Date(`${fecha}T${horaRecortada}:00-04:00`);
     console.log('🕓 Agendando para:', fechaHora);
 
     await pool.query(`
@@ -120,7 +121,7 @@ router.get('/dias-disponibles', async (req, res) => {
   }
 });
 
-// CORREGIDO: Comparar usando ISO con zona horaria
+// GET /api/consultas/existe
 router.get('/consultas/existe', async (req, res) => {
   const { pacienteId, medicoId, fecha, hora } = req.query;
 
@@ -170,7 +171,6 @@ router.get('/consultas/doctor/hoy', async (req, res) => {
   }
 });
 
-// GET /api/consultas/hoy/:medicoId
 router.get('/consultas/hoy/:medicoId', async (req, res) => {
   const { medicoId } = req.params;
 
