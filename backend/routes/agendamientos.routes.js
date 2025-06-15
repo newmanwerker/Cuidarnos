@@ -17,9 +17,7 @@ router.get('/disponibilidad', async (req, res) => {
           FROM consultas_telemedicina c
           WHERE c.medico_id = d.doctor_id
             AND DATE(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago') = d.fecha
-            AND ABS(EXTRACT(EPOCH FROM (
-              (c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago')::time - d.hora
-            ))) < 60
+            AND trim(to_char(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago', 'HH24:MI')) = trim(to_char(d.hora, 'HH24:MI'))
             AND c.estado = 'pendiente'
         )
       ORDER BY d.hora

@@ -351,7 +351,7 @@ confirmAppointment() {
       const rut = this.authService.getUsuario().rut;
       const nombre = this.authService.getUsuario().nombre;
 
-      this.http.post('https://cuidarnos.up.railway.app/api/loginPersona', { rut, nombre }).subscribe({
+      this.http.post('https://cuidarnos.up.railway.app/api/auth/login', { rut, nombre }).subscribe({
         next: (updatedData: any) => {
           console.log('✅ Datos nuevos del paciente:', updatedData);  
           localStorage.setItem('userData', JSON.stringify(updatedData));
