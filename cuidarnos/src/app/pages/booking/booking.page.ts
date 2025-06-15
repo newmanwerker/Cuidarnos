@@ -316,7 +316,6 @@ formatSelectedDate(): string {
 
 confirmAppointment() {
   if (this.isSubmitting) return;
-  
 
   this.isSubmitting = true;
 
@@ -331,20 +330,28 @@ confirmAppointment() {
 
   this.http.post('https://cuidarnos.up.railway.app/api/consultas', payload).subscribe({
     next: () => {
-
+      // 🔄 Actualizar disponibilidad
       this.loadAvailableTimeSlots(this.selectedDate!, this.selectedDoctor!);
-      // 🔄 Después de agendar, recargar la data del paciente desde loginPersona
+
+      // 🔄 Recargar data del paciente
       const rut = this.authService.getUsuario().rut;
       const nombre = this.authService.getUsuario().nombre;
 
       this.http.post('https://cuidarnos.up.railway.app/api/loginPersona', { rut, nombre }).subscribe({
         next: (updatedData: any) => {
+           console.log('✅ Datos nuevos del paciente:', updatedData);  
           localStorage.setItem('userData', JSON.stringify(updatedData));
-          this.router.navigateByUrl('/home');
+          
+          // ✅ Espera breve antes de redirigir
+          setTimeout(() => {
+            this.router.navigateByUrl('/home');
+          }, 300);
         },
         error: () => {
           alert('Consulta agendada, pero no se pudo actualizar la sesión. Recarga manualmente.');
-          this.router.navigateByUrl('/home');
+          setTimeout(() => {
+            this.router.navigateByUrl('/home');
+          }, 300);
         }
       });
     },
@@ -354,10 +361,13 @@ confirmAppointment() {
       } else {
         alert('Ocurrió un error al agendar la consulta. Intenta más tarde.');
       }
-      this.router.navigateByUrl('/home');
+
+      // Siempre redirige después del error con un pequeño delay
+      setTimeout(() => {
+        this.router.navigateByUrl('/home');
+      }, 300);
     }
   });
-
 }
 
 
