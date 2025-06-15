@@ -49,13 +49,13 @@ router.post('/consultas', async (req, res) => {
     console.log('🛠️ hora recortada:', horaRecortada);
     console.log('🛠️ fecha completa:', `${fecha}T${horaRecortada}:00-04:00`);
 
-    const fechaHora = new Date(`${fecha}T${horaRecortada}:00-04:00`);
+    const fechaHora = `${fecha} ${horaRecortada}:00 -04:00`;
     console.log('🕓 Agendando para:', fechaHora);
 
     await pool.query(`
       INSERT INTO consultas_telemedicina 
         (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado)
-      VALUES ($1, $2, $3, $4, $5, 'pendiente')
+      VALUES ($1, $2, $3::timestamptz, $4, $5, 'pendiente')
     `, [pacienteId, medicoId, fechaHora, tipo, notas]);
 
     res.json({ message: 'Consulta agendada con éxito' });
@@ -130,7 +130,8 @@ router.get('/consultas/existe', async (req, res) => {
   }
 
   try {
-    const fechaHora = new Date(`${fecha}T${hora}:00-04:00`).toISOString();
+    const horaRecortada = hora.slice(0, 5);
+    const fechaHora = `${fecha} ${horaRecortada}:00 -04:00`;
 
     const result = await pool.query(
       `SELECT COUNT(*) FROM consultas_telemedicina 
