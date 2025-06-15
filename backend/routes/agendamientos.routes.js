@@ -8,19 +8,20 @@ router.get('/disponibilidad', async (req, res) => {
 
   try {
 const result = await pool.query(`
-  SELECT d.hora
-  FROM disponibilidad_medica d
-  WHERE d.fecha = $2
-    AND d.doctor_id = $1
-    AND NOT EXISTS (
-      SELECT 1
-      FROM consultas_telemedicina c
-      WHERE c.medico_id = d.doctor_id
-        AND DATE(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago') = d.fecha
-        AND to_char(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago', 'HH24:MI') = to_char(d.hora, 'HH24:MI')
-        AND c.estado = 'pendiente'
-    )
-  ORDER BY d.hora
+SELECT d.hora
+FROM disponibilidad_medica d
+WHERE d.fecha = $2
+  AND d.doctor_id = $1
+  AND NOT EXISTS (
+    SELECT 1
+    FROM consultas_telemedicina c
+    WHERE c.medico_id = d.doctor_id
+      AND DATE(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago') = d.fecha
+      AND to_char(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago', 'HH24:MI') = to_char(d.hora, 'HH24:MI')
+      AND c.estado = 'pendiente'
+  )
+ORDER BY d.hora
+
 `, [medicoId, fecha]);
     res.json(result.rows.map(r => r.hora.slice(0,5)));
   } catch (err) {
@@ -45,7 +46,10 @@ router.post('/consultas', async (req, res) => {
 
     // 🛠️ Normaliza la hora si viene con segundos
     const horaRecortada = hora.slice(0, 5); // "08:20" incluso si vino "08:20:00"
-    const fechaHora = new Date(`${fecha}T${horaRecortada}:00-04:00`).toISOString();
+    console.log('🛠️ hora recibida:', hora); 
+    console.log('🛠️ hora recortada:', horaRecortada);
+    console.log('🛠️ fecha completa:', `${fecha}T${horaRecortada}:00-04:00`);
+    const fechaHora = `${fecha}T${horaRecortada}:00-04:00`;
 
     console.log('🕓 Agendando para:', fechaHora);
 
