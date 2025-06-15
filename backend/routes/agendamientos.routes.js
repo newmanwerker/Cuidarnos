@@ -7,20 +7,22 @@ router.get('/disponibilidad', async (req, res) => {
   const { medicoId, fecha } = req.query;
 
   try {
-    const result = await pool.query(`
-      SELECT d.hora
-      FROM disponibilidad_medica d
-      LEFT JOIN consultas_telemedicina c
-        ON d.doctor_id = c.medico_id
-        AND d.fecha = $2
-        AND to_char(d.hora, 'HH24:MI') = to_char((c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago'), 'HH24:MI')
-      WHERE d.fecha = $2
-        AND d.doctor_id = $1
-        AND c.id IS NULL
-      ORDER BY d.hora
-    `, [medicoId, fecha]);
-
-    res.json(result.rows.map(r => r.hora));
+const result = await pool.query(`
+  SELECT d.hora
+  FROM disponibilidad_medica d
+  WHERE d.fecha = $2
+    AND d.doctor_id = $1
+    AND NOT EXISTS (
+      SELECT 1
+      FROM consultas_telemedicina c
+      WHERE c.medico_id = d.doctor_id
+        AND DATE(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago') = d.fecha
+        AND to_char(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago', 'HH24:MI') = to_char(d.hora, 'HH24:MI')
+        AND c.estado = 'pendiente'
+    )
+  ORDER BY d.hora
+`, [medicoId, fecha]);
+    res.json(result.rows.map(r => r.hora.slice(0,5)));
   } catch (err) {
     console.error('❌ Error al obtener disponibilidad:', err);
     res.status(500).json({ error: 'Error al obtener disponibilidad' });
