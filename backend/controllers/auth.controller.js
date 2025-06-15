@@ -45,7 +45,8 @@ exports.loginPersona = async (req, res) => {
           m.efectos_secundarios, 
           m.notas, 
           m.medico_id,
-          me.nombre AS medico_nombre  -- 🔹 Añade nombre del médico
+          me.nombre AS medico_nombre,
+          me.apellido AS medico_apellido  -- 🔹 Añade nombre del médico
         FROM medicamento m
         JOIN receta r ON m.id_receta = r.id_receta
         LEFT JOIN medicos me ON m.medico_id = me.id  -- 🔹 JOIN con la tabla de médicos

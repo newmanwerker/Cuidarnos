@@ -59,7 +59,9 @@ export class MedicalFilePage implements OnInit {
             frequency: m.frecuencia,
             startDate: this.datePipe.transform(m.fecha_inicio, 'dd/MM/yyyy') || '',
             endDate: this.datePipe.transform(m.fecha_termino, 'dd/MM/yyyy') || '',
-            prescribedBy: m.medico_nombre || 'Desconocido',
+            prescribedBy: m.medico_nombre && m.medico_apellido
+            ? `${m.medico_nombre} ${m.medico_apellido}`
+            : 'Desconocido',
             purpose: '',
             sideEffects: [],
             notes: '',

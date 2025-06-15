@@ -13,10 +13,29 @@ export class HomePage implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
-    const storedPatient = localStorage.getItem('paciente');
-    if (storedPatient) {
-      this.patient = JSON.parse(storedPatient);
-      console.log('Patient data loaded:', this.patient);
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      const parsed = JSON.parse(storedUserData);
+      const paciente = parsed.paciente;
+const ficha = paciente.ficha_medica;
+
+this.patient = {
+  ...paciente,
+  centro_salud: paciente.centro_salud,
+  ficha_medica: ficha || {},
+  medications: Array.isArray(paciente.medications)
+    ? paciente.medications.map((m: any) => ({
+        name: m.nombre,
+        dosage: m.dosis,
+        frequency: m.frecuencia,
+        startDate: m.fecha_inicio || '',
+        endDate: m.fecha_termino || '',
+        prescribedBy: m.medico_nombre || 'Desconocido'
+      }))
+    : [],
+};
+      console.log('✅ Datos del paciente:', this.patient);
+      console.log('💊 Medicamentos cargados:', this.patient.medications);
     } else {
       this.router.navigate(['/login']);
     }
