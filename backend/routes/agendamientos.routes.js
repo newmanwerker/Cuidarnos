@@ -42,7 +42,7 @@ router.post('/consultas', async (req, res) => {
   return res.status(409).json({ error: 'Ya tienes una consulta pendiente. Finalízala antes de agendar otra.' });
     }
 
-    const fechaHora = `${fecha} ${hora}`;
+    const fechaHora = new Date(`${fecha}T${hora}:00-04:00`); // Chile
 
     await pool.query(`
       INSERT INTO consultas_telemedicina 

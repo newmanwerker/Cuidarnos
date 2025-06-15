@@ -314,9 +314,9 @@ formatSelectedDate(): string {
   }
 
 confirmAppointment() {
-  if (this.isSubmitting) return; // 🔒 Evita múltiples clics
+  if (this.isSubmitting) return;
 
-  this.isSubmitting = true; // ✅ Bloquear nuevo envío
+  this.isSubmitting = true;
 
   const payload = {
     pacienteId: this.authService.getUsuario().id,
@@ -329,17 +329,28 @@ confirmAppointment() {
 
   this.http.post('https://cuidarnos.up.railway.app/api/consultas', payload).subscribe({
     next: () => {
-      alert('✅ Consulta agendada con éxito');
-      this.router.navigateByUrl('/home'); // ⬅️ Redirige directo al home
+      // 🔄 Después de agendar, recargar la data del paciente desde loginPersona
+      const rut = this.authService.getUsuario().rut;
+      const nombre = this.authService.getUsuario().nombre;
+
+      this.http.post('https://cuidarnos.up.railway.app/api/loginPersona', { rut, nombre }).subscribe({
+        next: (updatedData: any) => {
+          localStorage.setItem('userData', JSON.stringify(updatedData));
+          this.router.navigateByUrl('/home');
+        },
+        error: () => {
+          alert('Consulta agendada, pero no se pudo actualizar la sesión. Recarga manualmente.');
+          this.router.navigateByUrl('/home');
+        }
+      });
     },
     error: (err) => {
       if (err.status === 409) {
         alert('⚠️ Ya tienes una consulta pendiente. Solo puedes agendar una a la vez.');
-        this.router.navigateByUrl('/home');
       } else {
         alert('Ocurrió un error al agendar la consulta. Intenta más tarde.');
-        this.router.navigateByUrl('/home');
       }
+      this.router.navigateByUrl('/home');
     }
   });
 }

@@ -17,30 +17,31 @@ export class SchedulePage implements OnInit {
     private toastController: ToastController
   ) {}
 
-  ngOnInit() {
-    const stored = localStorage.getItem('userData');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      const medicoId = parsed.medico.id;
+ngOnInit() {
+  const stored = localStorage.getItem('userData');
+  if (stored) {
+    const parsed = JSON.parse(stored);
+    const medicoId = parsed.medico.id;
 
-      this.http.get<any[]>(`https://cuidarnos.up.railway.app/api/consultas/hoy/${medicoId}`).subscribe({
-        next: (data) => {
-          this.todayAppointments = data.map((a: any) => ({
-            ...a,
-            hora: new Date(a.fecha_consulta).toLocaleTimeString('es-CL', {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false,
-              timeZone: 'America/Santiago' // 🔹 Corrige desfase horario
-            })
-          }));
-        },
-        error: (err) => {
-          console.error('❌ Error al obtener consultas de hoy:', err);
-        }
-      });
-    }
+    this.http.get<any[]>(`https://cuidarnos.up.railway.app/api/consultas/hoy/${medicoId}`).subscribe({
+      next: (data) => {
+        this.todayAppointments = data.map((a: any) => ({
+          ...a,
+          hora: new Date(a.fecha_consulta).toLocaleTimeString('es-CL', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            timeZone: 'America/Santiago' // ✅ Correcta conversión
+          })
+        }));
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener consultas de hoy:', err);
+      }
+    });
   }
+}
+
 
   getCurrentDate(): string {
     return formatDate(new Date(), 'EEEE d \'de\' MMMM \'de\' y', 'es-CL');
