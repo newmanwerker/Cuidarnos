@@ -57,7 +57,7 @@ exports.loginPersona = async (req, res) => {
 
 
       const consultasResult = await pool.query(`
-  SELECT c.*, m.nombre AS doctor
+  SELECT c.*, m.nombre, m.apellido
   FROM consultas_telemedicina c
   JOIN medicos m ON m.id = c.medico_id
   WHERE c.paciente_id = $1 AND c.estado = 'pendiente'
@@ -80,7 +80,7 @@ const consultaPendiente = consultasResult.rows[0] || null;
           date: consultaPendiente.fecha_consulta,
           time: new Date(consultaPendiente.fecha_consulta).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
           type: consultaPendiente.motivo_consulta,
-          doctor: consultaPendiente.doctor,
+          doctor: `${consultaPendiente.nombre} ${consultaPendiente.apellido}`,
           online: true // por ahora siempre true, lo puedes cambiar si agregas lógica de tiempo
         }] : []
       }

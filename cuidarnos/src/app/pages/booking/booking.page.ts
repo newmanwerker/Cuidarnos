@@ -120,16 +120,6 @@ nextStep() {
     this.selectedSpecialty = specialtyId;
   }
 
-  // Step 2: Doctor Selection
-  filterDoctorsBySpecialty() {
-    this.filteredDoctors = this.doctors.filter(
-      doctor => doctor.specialtyId === this.selectedSpecialty
-    );
-  }
-
-  selectDoctor(doctorId: number) {
-    this.selectedDoctor = doctorId;
-  }
 
   // Step 3: Date and Time Selection
   updateMonthName() {
@@ -197,7 +187,6 @@ updateCalendar() {
     });
   }
 }
-
 
 
   previousMonth() {
@@ -280,15 +269,6 @@ isSelectedDate(date: Date): boolean {
   return selectedStr === currentStr;
 }
 
-  generateTimeSlots() {
-    // This would typically come from an API based on doctor availability
-    // For demo purposes, we'll generate some time slots
-    this.availableTimeSlots = [
-      '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
-      '11:00 AM', '11:30 AM', '2:00 PM', '2:30 PM',
-      '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'
-    ];
-  }
 
   selectTimeSlot(slot: string) {
     this.selectedTimeSlot = slot;
@@ -355,8 +335,10 @@ confirmAppointment() {
     error: (err) => {
       if (err.status === 409) {
         alert('⚠️ Ya tienes una consulta pendiente. Solo puedes agendar una a la vez.');
+        this.router.navigateByUrl('/home');
       } else {
         alert('Ocurrió un error al agendar la consulta. Intenta más tarde.');
+        this.router.navigateByUrl('/home');
       }
     }
   });
