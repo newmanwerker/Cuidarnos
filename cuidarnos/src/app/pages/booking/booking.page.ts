@@ -316,6 +316,7 @@ formatSelectedDate(): string {
 
 confirmAppointment() {
   if (this.isSubmitting) return;
+  
 
   this.isSubmitting = true;
 
@@ -330,6 +331,8 @@ confirmAppointment() {
 
   this.http.post('https://cuidarnos.up.railway.app/api/consultas', payload).subscribe({
     next: () => {
+
+      this.loadAvailableTimeSlots(this.selectedDate!, this.selectedDoctor!);
       // 🔄 Después de agendar, recargar la data del paciente desde loginPersona
       const rut = this.authService.getUsuario().rut;
       const nombre = this.authService.getUsuario().nombre;
@@ -354,6 +357,7 @@ confirmAppointment() {
       this.router.navigateByUrl('/home');
     }
   });
+
 }
 
 

@@ -110,10 +110,16 @@ const consultaPendiente = consultasResult.rows[0] || null;
         appointments: consultaPendiente ? [{
           id: consultaPendiente.id,
           date: consultaPendiente.fecha_consulta,
-          time: new Date(consultaPendiente.fecha_consulta).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
+          fecha_consulta: consultaPendiente.fecha_consulta, // 🔹 Añadido
+          time: new Date(consultaPendiente.fecha_consulta).toLocaleTimeString('es-CL', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            timeZone: 'America/Santiago'
+          }),
           type: consultaPendiente.motivo_consulta,
           doctor: `${consultaPendiente.nombre} ${consultaPendiente.apellido}`,
-          online: true // por ahora siempre true, lo puedes cambiar si agregas lógica de tiempo
+          online: true
         }] : []
       }
     });

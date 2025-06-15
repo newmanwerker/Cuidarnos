@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content *ngIf="patient; else cargando">
   <div class="home-container">
     <!-- Patient Profile Card -->
     <ion-card class="profile-card">
@@ -86,7 +86,7 @@
           <span class="date-month">{{ getMonth(appointment.date) }}</span>
           <span class="date-day">{{ getDay(appointment.date) }}</span>
         </div>
-        <span class="appointment-time">{{ appointment.time }}</span>
+          <span class="appointment-time">{{ getFormattedHour(appointment.fecha_consulta) }}</span>
       </div>
       <div class="appointment-details">
         <h3 class="appointment-type">{{ appointment.type }}</h3>
@@ -103,6 +103,12 @@
     <div class="toolbar-spacer"></div>
   </div>
 </ion-content>
+<ng-template #cargando>
+  <ion-content>
+    <ion-spinner></ion-spinner>
+    <p class="ion-text-center">Cargando información del paciente...</p>
+  </ion-content>
+</ng-template>
 
 <!-- Custom Bottom Toolbar -->
 <div class="bottom-toolbar">

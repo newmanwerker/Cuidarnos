@@ -87,14 +87,14 @@
           <ion-icon name="time"></ion-icon>
           <h2>Seleccione Hora</h2>
         </div>
-        <div class="time-slots">
-          <div *ngFor="let slot of availableTimeSlots" 
-               class="time-slot"
-               [ngClass]="{'selected': selectedTimeSlot === slot}"
-               (click)="selectTimeSlot(slot)">
-            {{slot}}
-          </div>
+      <div class="time-slots">
+        <div *ngFor="let slot of availableTimeSlots" 
+            class="time-slot"
+            [ngClass]="{'selected': selectedTimeSlot === slot}"
+            (click)="selectTimeSlot(slot)">
+          {{slot}}
         </div>
+      </div>
       </ion-card>
 
       <ion-card class="info-card" *ngIf="selectedTimeSlot">

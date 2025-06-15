@@ -1,43 +1,60 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  standalone:false
+  standalone: false
 })
-export class HomePage implements OnInit {
+export class HomePage {
   patient: any = null;
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.loadPacienteData();
+  }
+
+  loadPacienteData() {
     const storedUserData = localStorage.getItem('userData');
-    if (storedUserData) {
+
+    if (!storedUserData) {
+      console.warn('No hay datos en localStorage, redirigiendo al login...');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    try {
       const parsed = JSON.parse(storedUserData);
       const paciente = parsed.paciente;
+
+      if (!paciente) {
+        console.warn('No se encontró el objeto paciente en los datos.');
+        this.router.navigate(['/login']);
+        return;
+      }
+
       const ficha = paciente.ficha_medica;
 
-this.patient = {
-  ...paciente,
-  centro_salud: paciente.centro_salud,
-  ficha_medica: ficha || {},
-  medications: Array.isArray(paciente.medications)
-    ? paciente.medications.map((m: any) => ({
-        name: m.nombre,
-        dosage: m.dosis,
-        frequency: m.frecuencia,
-        startDate: m.fecha_inicio || '',
-        endDate: m.fecha_termino || '',
-        prescribedBy: m.medico_nombre || 'Desconocido'
-      }))
-    : [],
-    appointments: Array.isArray(paciente.appointments) ? paciente.appointments : []
-};
-      console.log('✅ Datos del paciente:', this.patient);
-      console.log('💊 Medicamentos cargados:', this.patient.medications);
-    } else {
+      this.patient = {
+        ...paciente,
+        centro_salud: paciente.centro_salud,
+        ficha_medica: ficha || {},
+        medications: Array.isArray(paciente.medications)
+          ? paciente.medications.map((m: any) => ({
+              name: m.nombre,
+              dosage: m.dosis,
+              frequency: m.frecuencia,
+              startDate: m.fecha_inicio || '',
+              endDate: m.fecha_termino || '',
+              prescribedBy: m.medico_nombre || 'Desconocido'
+            }))
+          : [],
+        appointments: Array.isArray(paciente.appointments) ? paciente.appointments : []
+      };
+    } catch (e) {
+      console.error('Error al parsear userData:', e);
       this.router.navigate(['/login']);
     }
   }
@@ -96,5 +113,15 @@ this.patient = {
     localStorage.removeItem('userData');
     this.router.navigate(['/login']);
   }
+
+getFormattedHour(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleTimeString('es-CL', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'America/Santiago'
+  });
+}
 
 }
