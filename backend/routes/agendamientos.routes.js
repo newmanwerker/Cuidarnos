@@ -16,14 +16,14 @@ router.get('/disponibilidad', async (req, res) => {
           SELECT 1
           FROM consultas_telemedicina c
           WHERE c.medico_id = d.doctor_id
-            AND DATE(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago') = d.fecha
-            AND trim(to_char(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago', 'HH24:MI')) = trim(to_char(d.hora, 'HH24:MI'))
+            AND DATE(c.fecha_consulta) = d.fecha
+            AND to_char(c.fecha_consulta, 'HH24:MI') = to_char(d.hora, 'HH24:MI')
             AND c.estado = 'pendiente'
         )
       ORDER BY d.hora
     `, [medicoId, fecha]);
 
-    res.json(result.rows.map(r => r.hora.slice(0,5)));
+    res.json(result.rows.map(r => r.hora.slice(0, 5)));
   } catch (err) {
     console.error('❌ Error al obtener disponibilidad:', err);
     res.status(500).json({ error: 'Error al obtener disponibilidad' });
@@ -36,7 +36,8 @@ router.post('/consultas', async (req, res) => {
 
   try {
     const pendienteResult = await pool.query(`
-      SELECT * FROM consultas_telemedicina
+      SELECT 1
+      FROM consultas_telemedicina
       WHERE paciente_id = $1 AND estado = 'pendiente'
     `, [pacienteId]);
 
@@ -45,17 +46,14 @@ router.post('/consultas', async (req, res) => {
     }
 
     const horaRecortada = hora.slice(0, 5);
-    console.log('🛠️ hora recibida:', hora); 
-    console.log('🛠️ hora recortada:', horaRecortada);
-    console.log('🛠️ fecha completa:', `${fecha}T${horaRecortada}:00-04:00`);
+    const fechaHora = `${fecha}T${horaRecortada}:00`;
 
-    const fechaHora = `${fecha} ${horaRecortada}:00 -04:00`;
     console.log('🕓 Agendando para:', fechaHora);
 
     await pool.query(`
       INSERT INTO consultas_telemedicina 
         (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado)
-      VALUES ($1, $2, $3::timestamptz, $4, $5, 'pendiente')
+      VALUES ($1, $2, $3::timestamp, $4, $5, 'pendiente')
     `, [pacienteId, medicoId, fechaHora, tipo, notas]);
 
     res.json({ message: 'Consulta agendada con éxito' });
@@ -131,7 +129,7 @@ router.get('/consultas/existe', async (req, res) => {
 
   try {
     const horaRecortada = hora.slice(0, 5);
-    const fechaHora = `${fecha} ${horaRecortada}:00 -04:00`;
+    const fechaHora = `${fecha}T${horaRecortada}:00`;
 
     const result = await pool.query(
       `SELECT COUNT(*) FROM consultas_telemedicina 

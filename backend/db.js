@@ -3,24 +3,15 @@ const { Pool } = require('pg');
 
 const pool = new Pool({
   user: process.env.PGUSER,
-  host: process.env.PGHOST,
+  host: process.env.PG_HOST,
   database: process.env.PGDATABASE,
-  password: process.env.PGPASSWORD,
-  port: process.env.PGPORT,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
   ssl: {
     rejectUnauthorized: false
-  }
-});
-
-// ⚠️ Railway no permite configurar la zona globalmente,
-// así que la forzamos por sesión al conectar:
-pool.on('connect', async (client) => {
-  try {
-    await client.query("SET TIME ZONE 'America/Santiago'");
-    console.log('✅ Zona horaria configurada como America/Santiago en Railway');
-  } catch (err) {
-    console.error('❌ Error al establecer zona horaria:', err);
-  }
+  },
+  max: 10, // máximo 10 conexiones
+  idleTimeoutMillis: 10000 // libera conexiones inactivas después de 10s
 });
 
 module.exports = pool;
