@@ -33,17 +33,38 @@ exports.loginPersona = async (req, res) => {
           .map(item => item.trim());
       }
 
+      // obtener medicamentos de la receta asociada
+      const medicamentosResult = await pool.query(
+        `SELECT 
+          m.nombre, 
+          m.dosis_mg AS dosis, 
+          m.frecuencia, 
+          m.fecha_inicio, 
+          m.fecha_termino, 
+          m.proposito, 
+          m.efectos_secundarios, 
+          m.notas, 
+          m.medico_id
+        FROM medicamento m
+        JOIN receta r ON m.id_receta = r.id_receta
+        WHERE r.id_paciente = $1`,
+        [paciente.id]
+      );
+      const medicamentos = medicamentosResult.rows || [];
+
+
       return res.json({
         message: 'Login exitoso',
         tipo: 'paciente',
         paciente: {
           ...paciente,
           centro_salud: paciente.centro_salud,
-          ficha_medica: ficha_medica || {}
+          ficha_medica: ficha_medica || {},
+          medications: medicamentos, 
         }
       });
     }
-
+    
     // Si no es paciente, buscar médico
     result = await pool.query(
       `SELECT * FROM medicos WHERE rut = $1 AND LOWER(nombre) = LOWER($2)`,
