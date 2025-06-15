@@ -17,12 +17,15 @@ WHERE d.fecha = $2
     FROM consultas_telemedicina c
     WHERE c.medico_id = d.doctor_id
       AND DATE(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago') = d.fecha
-      AND to_char(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago', 'HH24:MI') = to_char(d.hora, 'HH24:MI')
+      AND ABS(EXTRACT(EPOCH FROM (
+        (c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago')::time - d.hora
+      ))) < 60  -- ⚠️ Permite hasta 60 segundos de diferencia
       AND c.estado = 'pendiente'
   )
 ORDER BY d.hora
-
 `, [medicoId, fecha]);
+
+
     res.json(result.rows.map(r => r.hora.slice(0,5)));
   } catch (err) {
     console.error('❌ Error al obtener disponibilidad:', err);
@@ -50,7 +53,6 @@ router.post('/consultas', async (req, res) => {
     console.log('🛠️ hora recortada:', horaRecortada);
     console.log('🛠️ fecha completa:', `${fecha}T${horaRecortada}:00-04:00`);
     const fechaHora = `${fecha}T${horaRecortada}:00-04:00`;
-
     console.log('🕓 Agendando para:', fechaHora);
 
     await pool.query(`
