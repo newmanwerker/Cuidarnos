@@ -32,17 +32,17 @@ router.post('/consultas', async (req, res) => {
   const { pacienteId, medicoId, fecha, hora, tipo, notas } = req.body;
 
   try {
-    // Verificar si ya tiene una cita pendiente
     const pendienteResult = await pool.query(`
       SELECT * FROM consultas_telemedicina
       WHERE paciente_id = $1 AND estado = 'pendiente'
     `, [pacienteId]);
 
     if (pendienteResult.rows.length > 0) {
-  return res.status(409).json({ error: 'Ya tienes una consulta pendiente. Finalízala antes de agendar otra.' });
+      return res.status(409).json({ error: 'Ya tienes una consulta pendiente. Finalízala antes de agendar otra.' });
     }
 
-    const fechaHora = new Date(`${fecha}T${hora}:00-04:00`); // Chile
+    const fechaHora = new Date(`${fecha}T${hora}:00-04:00`).toISOString();
+    console.log('🕓 Agendando para:', fechaHora);
 
     await pool.query(`
       INSERT INTO consultas_telemedicina 
@@ -52,11 +52,10 @@ router.post('/consultas', async (req, res) => {
 
     res.json({ message: 'Consulta agendada con éxito' });
   } catch (err) {
-    console.error('❌ Error al agendar consulta:', err);
+    console.error('❌ Error al agendar consulta:', err.message);
     res.status(500).json({ error: 'Error al agendar consulta' });
   }
 });
-
 
 // GET /api/doctores
 router.get('/doctores', async (req, res) => {
@@ -66,14 +65,12 @@ router.get('/doctores', async (req, res) => {
       FROM medicos
       ORDER BY nombre
     `);
-
     res.json(result.rows);
   } catch (err) {
     console.error('❌ Error al obtener doctores:', err);
     res.status(500).json({ error: 'Error al obtener doctores' });
   }
 });
-
 
 router.get('/doctor-disponible', async (req, res) => {
   const { fecha } = req.query;
@@ -99,7 +96,6 @@ router.get('/doctor-disponible', async (req, res) => {
   }
 });
 
-
 router.get('/dias-disponibles', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -117,6 +113,7 @@ router.get('/dias-disponibles', async (req, res) => {
   }
 });
 
+// CORREGIDO: Comparar usando ISO con zona horaria
 router.get('/consultas/existe', async (req, res) => {
   const { pacienteId, medicoId, fecha, hora } = req.query;
 
@@ -125,10 +122,12 @@ router.get('/consultas/existe', async (req, res) => {
   }
 
   try {
+    const fechaHora = new Date(`${fecha}T${hora}:00-04:00`).toISOString();
+
     const result = await pool.query(
       `SELECT COUNT(*) FROM consultas_telemedicina 
        WHERE paciente_id = $1 AND medico_id = $2 AND fecha_consulta = $3`,
-      [pacienteId, medicoId, `${fecha} ${hora}`]
+      [pacienteId, medicoId, fechaHora]
     );
 
     const existe = parseInt(result.rows[0].count) > 0;
@@ -138,7 +137,6 @@ router.get('/consultas/existe', async (req, res) => {
     res.status(500).json({ error: 'Error al verificar existencia de la cita' });
   }
 });
-
 
 router.get('/consultas/doctor/hoy', async (req, res) => {
   const { medicoId } = req.query;
@@ -158,11 +156,7 @@ router.get('/consultas/doctor/hoy', async (req, res) => {
     const total = result.rows.length;
     const completadas = result.rows.filter(c => c.estado === 'terminada').length;
 
-    res.json({
-      total,
-      completadas
-    });
-
+    res.json({ total, completadas });
   } catch (err) {
     console.error('❌ Error al contar consultas del día:', err);
     res.status(500).json({ error: 'Error al obtener estadísticas del médico' });
@@ -189,8 +183,5 @@ router.get('/consultas/hoy/:medicoId', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener consultas del día' });
   }
 });
-
-
-
 
 module.exports = router;
