@@ -39,7 +39,7 @@ router.post('/consultas', async (req, res) => {
     `, [pacienteId]);
 
     if (pendienteResult.rows.length > 0) {
-      return res.status(400).json({ error: 'Ya tienes una consulta pendiente. Finalízala antes de agendar otra.' });
+  return res.status(409).json({ error: 'Ya tienes una consulta pendiente. Finalízala antes de agendar otra.' });
     }
 
     const fechaHora = `${fecha} ${hora}`;

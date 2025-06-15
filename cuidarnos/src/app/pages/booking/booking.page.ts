@@ -353,9 +353,11 @@ confirmAppointment() {
       this.router.navigateByUrl('/home'); // ⬅️ Redirige directo al home
     },
     error: (err) => {
-      console.error('❌ Error al agendar:', err);
-      alert('Ocurrió un error al agendar la consulta');
-      this.isSubmitting = false; // 🔓 Habilitar botón si falla
+      if (err.status === 409) {
+        alert('⚠️ Ya tienes una consulta pendiente. Solo puedes agendar una a la vez.');
+      } else {
+        alert('Ocurrió un error al agendar la consulta. Intenta más tarde.');
+      }
     }
   });
 }

@@ -92,7 +92,7 @@
         <h3 class="appointment-type">{{ appointment.type }}</h3>
         <span class="appointment-doctor">{{ appointment.doctor }}</span>
 
-        <button *ngIf="isToday(appointment.date)" class="join-button" (click)="goToCall()">
+        <button class="join-button" (click)="goToCall()">
           Ingresar a la consulta médica
         </button>
       </div>
