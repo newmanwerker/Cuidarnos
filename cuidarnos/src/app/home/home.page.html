@@ -73,32 +73,32 @@
     </ion-card>
 
     <!-- Appointments Card -->
-    <ion-card class="info-card">
-      <div class="card-header">
-        <ion-icon name="calendar"></ion-icon>
-        <h2>Reuniones Agendadas</h2>
-      </div>
-      <div class="appointments-list">
-        <div *ngFor="let appointment of patient.appointments" class="appointment-item">
-          <div class="appointment-date">
-            <div class="date-box">
-              <span class="date-month">{{getMonth(appointment.date)}}</span>
-              <span class="date-day">{{getDay(appointment.date)}}</span>
-            </div>
-            <span class="appointment-time">{{appointment.time}}</span>
-          </div>
-          <div class="appointment-details">
-            <h3 class="appointment-type">{{appointment.type}}</h3>
-            <span class="appointment-doctor">{{appointment.doctor}}</span>
+<ion-card class="info-card" *ngIf="patient?.appointments?.length">
+  <div class="card-header">
+    <ion-icon name="calendar"></ion-icon>
+    <h2>Reunión Pendiente</h2>
+  </div>
 
-            <!-- SOLO si la cita es la fecha actual -->
-            <button *ngIf="appointment.online" class="join-button" (click)="goToCall()">
-              Ingresar a la consulta médica
-            </button>
-          </div>
+  <div class="appointments-list">
+    <div *ngFor="let appointment of patient.appointments" class="appointment-item">
+      <div class="appointment-date">
+        <div class="date-box">
+          <span class="date-month">{{ getMonth(appointment.date) }}</span>
+          <span class="date-day">{{ getDay(appointment.date) }}</span>
         </div>
+        <span class="appointment-time">{{ appointment.time }}</span>
       </div>
-    </ion-card>
+      <div class="appointment-details">
+        <h3 class="appointment-type">{{ appointment.type }}</h3>
+        <span class="appointment-doctor">{{ appointment.doctor }}</span>
+
+        <button *ngIf="isToday(appointment.date)" class="join-button" (click)="goToCall()">
+          Ingresar a la consulta médica
+        </button>
+      </div>
+    </div>
+  </div>
+</ion-card>
 
     <div class="toolbar-spacer"></div>
   </div>

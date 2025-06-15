@@ -17,7 +17,7 @@ export class HomePage implements OnInit {
     if (storedUserData) {
       const parsed = JSON.parse(storedUserData);
       const paciente = parsed.paciente;
-const ficha = paciente.ficha_medica;
+      const ficha = paciente.ficha_medica;
 
 this.patient = {
   ...paciente,
@@ -33,6 +33,7 @@ this.patient = {
         prescribedBy: m.medico_nombre || 'Desconocido'
       }))
     : [],
+    appointments: Array.isArray(paciente.appointments) ? paciente.appointments : []
 };
       console.log('✅ Datos del paciente:', this.patient);
       console.log('💊 Medicamentos cargados:', this.patient.medications);
@@ -79,4 +80,14 @@ this.patient = {
   goToCall(){
     this.router.navigate(['/video-call']);
   }
+
+  isToday(dateStr: string): boolean {
+  const today = new Date();
+  const date = new Date(dateStr);
+  return (
+    today.getFullYear() === date.getFullYear() &&
+    today.getMonth() === date.getMonth() &&
+    today.getDate() === date.getDate()
+  );
+}
 }

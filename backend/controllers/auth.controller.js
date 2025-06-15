@@ -56,16 +56,35 @@ exports.loginPersona = async (req, res) => {
       const medicamentos = medicamentosResult.rows || [];
 
 
-      return res.json({
-        message: 'Login exitoso',
-        tipo: 'paciente',
-        paciente: {
-          ...paciente,
-          centro_salud: paciente.centro_salud,
-          ficha_medica: ficha_medica || {},
-          medications: medicamentos, 
-        }
-      });
+      const consultasResult = await pool.query(`
+  SELECT c.*, m.nombre AS doctor
+  FROM consultas_telemedicina c
+  JOIN medicos m ON m.id = c.medico_id
+  WHERE c.paciente_id = $1 AND c.estado = 'pendiente'
+  ORDER BY c.fecha_consulta ASC
+  LIMIT 1
+`, [paciente.id]);
+
+const consultaPendiente = consultasResult.rows[0] || null;
+
+    return res.json({
+      message: 'Login exitoso',
+      tipo: 'paciente',
+      paciente: {
+        ...paciente,
+        centro_salud: paciente.centro_salud,
+        ficha_medica: ficha_medica || {},
+        medications: medicamentos, 
+        appointments: consultaPendiente ? [{
+          id: consultaPendiente.id,
+          date: consultaPendiente.fecha_consulta,
+          time: new Date(consultaPendiente.fecha_consulta).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
+          type: consultaPendiente.motivo_consulta,
+          doctor: consultaPendiente.doctor,
+          online: true // por ahora siempre true, lo puedes cambiar si agregas lógica de tiempo
+        }] : []
+      }
+    });
     }
     
     // Si no es paciente, buscar médico

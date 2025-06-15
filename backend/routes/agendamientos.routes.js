@@ -32,12 +32,22 @@ router.post('/consultas', async (req, res) => {
   const { pacienteId, medicoId, fecha, hora, tipo, notas } = req.body;
 
   try {
+    // Verificar si ya tiene una cita pendiente
+    const pendienteResult = await pool.query(`
+      SELECT * FROM consultas_telemedicina
+      WHERE paciente_id = $1 AND estado = 'pendiente'
+    `, [pacienteId]);
+
+    if (pendienteResult.rows.length > 0) {
+      return res.status(400).json({ error: 'Ya tienes una consulta pendiente. Finalízala antes de agendar otra.' });
+    }
+
     const fechaHora = `${fecha} ${hora}`;
 
     await pool.query(`
       INSERT INTO consultas_telemedicina 
-        (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota)
-      VALUES ($1, $2, $3, $4, $5)
+        (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado)
+      VALUES ($1, $2, $3, $4, $5, 'pendiente')
     `, [pacienteId, medicoId, fechaHora, tipo, notas]);
 
     res.json({ message: 'Consulta agendada con éxito' });
