@@ -278,6 +278,7 @@ ion-card {
 }
 
 .calendar-day {
+  width: 100%;
   height: 36px;
   display: flex;
   align-items: center;
@@ -285,6 +286,10 @@ ion-card {
   border-radius: 50%;
   font-size: 0.875rem;
   cursor: pointer;
+  padding: 0;          /* ← importante */
+  margin: 0;           /* ← importante */
+  box-sizing: border-box;
+  user-select: none;   /* para que no se seleccione el número */
 }
 
 .calendar-day.other-month {

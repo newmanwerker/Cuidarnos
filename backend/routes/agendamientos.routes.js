@@ -64,4 +64,30 @@ router.get('/doctores', async (req, res) => {
   }
 });
 
+
+router.get('/doctor-disponible', async (req, res) => {
+  const { fecha } = req.query;
+
+  try {
+    const result = await pool.query(`
+      SELECT m.id, m.nombre, m.especialidad
+      FROM disponibilidad_medica d
+      JOIN medicos m ON d.doctor_id = m.id
+      WHERE d.fecha = $1
+      GROUP BY m.id
+      ORDER BY m.id
+      LIMIT 1
+    `, [fecha]);
+
+    if (result.rows.length > 0) {
+      res.json(result.rows[0]);
+    } else {
+      res.status(404).json({ error: 'No hay médico disponible ese día' });
+    }
+  } catch (err) {
+    console.error('❌ Error al obtener doctor disponible:', err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
 module.exports = router;

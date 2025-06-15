@@ -59,7 +59,7 @@ doctors = [] as {
   ) { }
 
   ngOnInit() {
-      this.http.get<any[]>('https://cuidarnos.up.railway.app/api/doctores').subscribe(doctores => {
+  this.http.get<any[]>('https://cuidarnos.up.railway.app/api/doctores').subscribe(doctores => {
     this.doctors = doctores.map(doc => ({
       id: doc.id,
       name: doc.name,
@@ -68,10 +68,10 @@ doctors = [] as {
       nextAvailable: 'Por confirmar'
     }));
   });
-    
-    this.updateCalendar();
-    this.updateMonthName();
-  }
+
+  this.updateCalendar();
+  this.updateMonthName();
+}
 
   // Step Navigation
   nextStep() {
@@ -217,7 +217,7 @@ doctors = [] as {
   }
 
 selectDate(date: Date) {
-  // Formatear la fecha a YYYY-MM-DD para la API
+  // Formatear la fecha a YYYY-MM-DD para las APIs
   const yyyy = date.getFullYear();
   const mm = (date.getMonth() + 1).toString().padStart(2, '0');
   const dd = date.getDate().toString().padStart(2, '0');
@@ -225,27 +225,34 @@ selectDate(date: Date) {
 
   this.selectedDate = formattedDate;
 
-  if (!this.selectedDoctor) {
-    console.warn('No se ha seleccionado un doctor.');
-    return;
-  }
-
-  this.http.get<string[]>(`https://cuidarnos.up.railway.app/api/disponibilidad`, {
-    params: {
-      medicoId: this.selectedDoctor.toString(),
-      fecha: formattedDate
-    }
+  // Obtener el médico disponible ese día
+  this.http.get<any>('https://cuidarnos.up.railway.app/api/doctor-disponible', {
+    params: { fecha: formattedDate }
   }).subscribe({
-    next: (slots) => {
-      this.availableTimeSlots = slots;
-      console.log('Horarios disponibles:', slots);
+    next: (doctor) => {
+      if (doctor) {
+        this.filteredDoctors = [doctor]; // Mostrar solo ese médico
+        this.selectedDoctor = doctor.id;
+
+        // Cargar sus horarios disponibles
+        this.loadAvailableTimeSlots(formattedDate, doctor.id);
+      } else {
+        this.filteredDoctors = [];
+        this.availableTimeSlots = [];
+        this.selectedDoctor = null;
+        alert('No hay médico disponible ese día');
+      }
     },
     error: (err) => {
-      console.error('❌ Error al obtener disponibilidad:', err);
-      alert('No se pudo cargar la disponibilidad');
+      console.error('❌ Error al obtener doctor del día:', err);
+      this.filteredDoctors = [];
+      this.availableTimeSlots = [];
+      this.selectedDoctor = null;
+      alert('No se pudo cargar el médico disponible');
     }
   });
 }
+
 
 
 isSelectedDate(date: Date): boolean {
@@ -332,4 +339,22 @@ confirmAppointment() {
     }
   });
 }
+
+
+loadAvailableTimeSlots(fecha: string, medicoId: number) {
+  this.http.get<string[]>('https://cuidarnos.up.railway.app/api/disponibilidad', {
+    params: {
+      medicoId: medicoId.toString(),
+      fecha
+    }
+  }).subscribe({
+    next: (slots) => {
+      this.availableTimeSlots = slots;
+    },
+    error: (err) => {
+      console.error('❌ Error al cargar horarios:', err);
+    }
+  });
+}
+
 }
