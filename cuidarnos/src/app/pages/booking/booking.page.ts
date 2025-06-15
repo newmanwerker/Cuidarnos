@@ -270,9 +270,10 @@ isSelectedDate(date: Date): boolean {
 }
 
 
-  selectTimeSlot(slot: string) {
-    this.selectedTimeSlot = slot;
-  }
+selectTimeSlot(slot: string) {
+  // Asegúrate que sea HH:MM sin segundos
+  this.selectedTimeSlot = slot.slice(0, 5);
+}
 
   selectAppointmentType(typeId: number) {
     this.selectedAppointmentType = typeId;

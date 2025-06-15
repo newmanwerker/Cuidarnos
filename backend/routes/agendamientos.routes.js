@@ -41,7 +41,10 @@ router.post('/consultas', async (req, res) => {
       return res.status(409).json({ error: 'Ya tienes una consulta pendiente. Finalízala antes de agendar otra.' });
     }
 
-    const fechaHora = new Date(`${fecha}T${hora}:00-04:00`).toISOString();
+    // 🛠️ Normaliza la hora si viene con segundos
+    const horaRecortada = hora.slice(0, 5); // "08:20" incluso si vino "08:20:00"
+    const fechaHora = new Date(`${fecha}T${horaRecortada}:00-04:00`).toISOString();
+
     console.log('🕓 Agendando para:', fechaHora);
 
     await pool.query(`
