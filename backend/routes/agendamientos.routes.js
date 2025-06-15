@@ -13,7 +13,7 @@ router.get('/disponibilidad', async (req, res) => {
       LEFT JOIN consultas_telemedicina c
         ON d.doctor_id = c.medico_id
         AND d.fecha = $2
-        AND d.hora = (c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago')::time
+        AND to_char(d.hora, 'HH24:MI') = to_char((c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago'), 'HH24:MI')
       WHERE d.fecha = $2
         AND d.doctor_id = $1
         AND c.id IS NULL
