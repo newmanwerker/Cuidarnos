@@ -286,19 +286,23 @@ ion-card {
   border-radius: 50%;
   font-size: 0.875rem;
   cursor: pointer;
-  padding: 0;          /* ← importante */
-  margin: 0;           /* ← importante */
   box-sizing: border-box;
-  user-select: none;   /* para que no se seleccione el número */
+  user-select: none;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  transition: background-color 0.2s;
 }
 
-.calendar-day.other-month {
+.calendar-day.other-month,
+.calendar-day.unavailable {
+  pointer-events: none;
   color: #d1d5db;
-  cursor: default;
 }
 
-.calendar-day.available {
-  background-color: #f9fafb;
+.calendar-day.unavailable {
+  pointer-events: none;
+  color: #d1d5db;
 }
 
 .calendar-day.unavailable {
@@ -464,4 +468,9 @@ ion-card {
 }
 .toolbar-spacer {
   height: 70px; // Adjust based on your toolbar height
+}
+
+
+.calendar-day.available:hover {
+  background-color: #dbeafe;
 }

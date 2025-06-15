@@ -31,15 +31,24 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  getUsuario(): any {
-    const raw = localStorage.getItem('usuario');
-    return raw ? JSON.parse(raw) : null;
-  }
+getUsuario(): any {
+  const raw = localStorage.getItem('userData');
+  if (!raw) return null;
 
-  logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('usuario');
-  }
+  const parsed = JSON.parse(raw);
+
+  // Retorna directamente el objeto paciente o medico
+  return parsed.paciente || parsed.medico || null;
+}
+
+logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('usuario');
+  localStorage.removeItem('auth');
+  localStorage.removeItem('paciente');
+  localStorage.removeItem('medico');
+  localStorage.removeItem('userData');
+}
 
   isAuthenticated(): boolean {
     return !!this.getToken();

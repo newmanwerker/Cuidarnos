@@ -60,15 +60,18 @@ doctors = [] as {
   ) { }
 
 ngOnInit() {
+  this.selectedSpecialty = this.specialties[0].id;
   this.doctors = [];
   this.filteredDoctors = [];
   this.selectedDoctor = null;
-  this.updateCalendar();
-  this.updateMonthName();
-   this.http.get<string[]>('https://cuidarnos.up.railway.app/api/dias-disponibles').subscribe({
+
+  // Obtener fechas disponibles y luego actualizar calendario
+  this.http.get<string[]>('https://cuidarnos.up.railway.app/api/dias-disponibles').subscribe({
     next: (fechas) => {
       this.availableDates = fechas;
-      this.updateCalendar(); // Espera a tener availableDates antes de construir el calendario
+      console.log('✅ Fechas con disponibilidad:', this.availableDates);
+
+      this.updateCalendar();
       this.updateMonthName();
     },
     error: (err) => {
@@ -77,12 +80,18 @@ ngOnInit() {
   });
 }
 
+
   // Step Navigation
-  nextStep() {
-    if (this.canProceed()) {
-      this.currentStep++;
+nextStep() {
+  if (this.canProceed()) {
+    this.currentStep++;
+
+    // Saltar el paso 2 (Doctor) si ya no se usa
+    if (this.currentStep === 2) {
+      this.currentStep = 3;
     }
   }
+}
 
   previousStep() {
     if (this.currentStep > 1) {
@@ -95,7 +104,7 @@ ngOnInit() {
       case 1:
         return this.selectedSpecialty !== null;
       case 2:
-        return this.selectedDoctor !== null;
+        return true;
       case 3:
         return this.selectedDate !== null && 
                this.selectedTimeSlot !== null && 
@@ -130,69 +139,65 @@ ngOnInit() {
     this.currentMonthName = monthNames[this.currentMonth];
   }
 
-  updateCalendar() {
-    this.calendarDays = [];
-    
-    // Get first day of the month
-    const firstDay = new Date(this.currentYear, this.currentMonth, 1);
-    const startingDay = firstDay.getDay();
-    
-    // Get last day of the month
-    const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
-    const totalDays = lastDay.getDate();
-    
-    // Get last day of previous month
-    const prevMonthLastDay = new Date(this.currentYear, this.currentMonth, 0).getDate();
-    
-    // Fill in days from previous month
-    for (let i = startingDay - 1; i >= 0; i--) {
-      const day = prevMonthLastDay - i;
-      const date = new Date(this.currentYear, this.currentMonth - 1, day);
-      this.calendarDays.push({
-        dayNumber: day,
-        date: date,
-        currentMonth: false,
-        available: false
-      });
-    }
-    
-    // Fill in days of current month
-    for (let i = 1; i <= totalDays; i++) {
-      const date = new Date(this.currentYear, this.currentMonth, i);
-      const today = new Date();
-      
-      // Check if date is in the past
-      const isPast = date < new Date(today.setHours(0, 0, 0, 0));
-      
-      // Check if it's a weekend
-      const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-      
-      // Determine availability (not in past and not weekend)
-      const available = !isPast && !isWeekend;
-      
-      this.calendarDays.push({
-        dayNumber: i,
-        date: date,
-        currentMonth: true,
-        available: available
-      });
-    }
-    
-    // Calculate how many days from next month to show
-    const totalCells = Math.ceil((startingDay + totalDays) / 7) * 7;
-    const nextMonthDays = totalCells - (startingDay + totalDays);
-    
-    // Fill in days from next month
-    for (let i = 1; i <= nextMonthDays; i++) {
-      const date = new Date(this.currentYear, this.currentMonth + 1, i);
-      this.calendarDays.push({
-        dayNumber: i,
-        date: date,
-        currentMonth: false,
-        available: false
-      });
-    }
+updateCalendar() {
+  this.calendarDays = [];
+
+  const firstDay = new Date(this.currentYear, this.currentMonth, 1);
+  const startingDay = firstDay.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
+
+  const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
+  const totalDays = lastDay.getDate();
+
+  const prevMonthLastDay = new Date(this.currentYear, this.currentMonth, 0).getDate();
+
+  // 🔹 Rellenar días del mes anterior (inicio)
+  for (let i = 0; i < startingDay; i++) {
+    const day = prevMonthLastDay - startingDay + 1 + i;
+    const date = new Date(this.currentYear, this.currentMonth - 1, day);
+    this.calendarDays.push({
+      dayNumber: day,
+      date,
+      currentMonth: false,
+      available: false
+    });
   }
+
+  // 🔹 Días del mes actual
+  for (let i = 1; i <= totalDays; i++) {
+    const date = new Date(this.currentYear, this.currentMonth, i);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const isPast = date < today;
+
+    const formatted = `${date.getFullYear()}-${(date.getMonth() + 1)
+      .toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    const available = !isPast && this.availableDates.includes(formatted);
+
+    this.calendarDays.push({
+      dayNumber: i,
+      date,
+      currentMonth: true,
+      available
+    });
+  }
+
+  // 🔹 Rellenar días del mes siguiente (final)
+  const totalCells = Math.ceil(this.calendarDays.length / 7) * 7;
+  const nextMonthDays = totalCells - this.calendarDays.length;
+
+  for (let i = 1; i <= nextMonthDays; i++) {
+    const date = new Date(this.currentYear, this.currentMonth + 1, i);
+    this.calendarDays.push({
+      dayNumber: i,
+      date,
+      currentMonth: false,
+      available: false
+    });
+  }
+}
+
+
 
   previousMonth() {
     if (this.currentMonth === 0) {
@@ -264,11 +269,14 @@ selectDate(date: Date) {
 isSelectedDate(date: Date): boolean {
   if (!this.selectedDate) return false;
 
-  const selected = new Date(this.selectedDate);  // convertir string a Date
+  // Normalizamos ambos a solo YYYY-MM-DD para evitar errores de hora
+  const format = (d: Date) =>
+    `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
 
-  return date.getFullYear() === selected.getFullYear() &&
-         date.getMonth() === selected.getMonth() &&
-         date.getDate() === selected.getDate();
+  const selectedStr = this.selectedDate;
+  const currentStr = format(date);
+
+  return selectedStr === currentStr;
 }
 
   generateTimeSlots() {
@@ -290,10 +298,10 @@ isSelectedDate(date: Date): boolean {
   }
 
   // Step 4: Confirmation
-  getSelectedDoctorName(): string {
-    const doctor = this.doctors.find(d => d.id === this.selectedDoctor);
-    return doctor ? doctor.name : '';
-  }
+getSelectedDoctorName(): string {
+  const doctor = this.filteredDoctors.find(d => d.id === this.selectedDoctor);
+  return doctor ? doctor.name : '';
+}
 
   getSelectedSpecialtyName(): string {
     const specialty = this.specialties.find(s => s.id === this.selectedSpecialty);
