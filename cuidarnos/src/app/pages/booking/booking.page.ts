@@ -316,8 +316,9 @@ formatSelectedDate(): string {
 
 confirmAppointment() {
   if (this.isSubmitting) return;
-
   this.isSubmitting = true;
+
+  console.log('⏰ Enviando hora al backend:', this.selectedTimeSlot);
 
   const payload = {
     pacienteId: this.authService.getUsuario().id,
@@ -333,16 +334,28 @@ confirmAppointment() {
       // 🔄 Actualizar disponibilidad
       this.loadAvailableTimeSlots(this.selectedDate!, this.selectedDoctor!);
 
-      // 🔄 Recargar data del paciente
+      // Verificar horas nuevamente
+      this.http.get<string[]>('https://cuidarnos.up.railway.app/api/disponibilidad', {
+        params: {
+          medicoId: this.selectedDoctor!.toString(),
+          fecha: this.selectedDate!
+        },
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      }).subscribe((slots) => {
+        console.log('🔄 Horarios luego de agendar:', slots);
+      });
+
+      // 🔄 Refrescar datos del paciente
       const rut = this.authService.getUsuario().rut;
       const nombre = this.authService.getUsuario().nombre;
 
       this.http.post('https://cuidarnos.up.railway.app/api/loginPersona', { rut, nombre }).subscribe({
         next: (updatedData: any) => {
-           console.log('✅ Datos nuevos del paciente:', updatedData);  
+          console.log('✅ Datos nuevos del paciente:', updatedData);  
           localStorage.setItem('userData', JSON.stringify(updatedData));
-          
-          // ✅ Espera breve antes de redirigir
+
           setTimeout(() => {
             this.router.navigateByUrl('/home');
           }, 300);
@@ -362,7 +375,6 @@ confirmAppointment() {
         alert('Ocurrió un error al agendar la consulta. Intenta más tarde.');
       }
 
-      // Siempre redirige después del error con un pequeño delay
       setTimeout(() => {
         this.router.navigateByUrl('/home');
       }, 300);
@@ -376,9 +388,13 @@ loadAvailableTimeSlots(fecha: string, medicoId: number) {
     params: {
       medicoId: medicoId.toString(),
       fecha
+    },
+    headers: {
+      'Cache-Control': 'no-cache'
     }
   }).subscribe({
     next: (slots) => {
+      console.log('✅ Slots frescos del backend:', slots);
       this.availableTimeSlots = slots;
     },
     error: (err) => {

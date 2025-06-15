@@ -7,24 +7,23 @@ router.get('/disponibilidad', async (req, res) => {
   const { medicoId, fecha } = req.query;
 
   try {
-const result = await pool.query(`
-SELECT d.hora
-FROM disponibilidad_medica d
-WHERE d.fecha = $2
-  AND d.doctor_id = $1
-  AND NOT EXISTS (
-    SELECT 1
-    FROM consultas_telemedicina c
-    WHERE c.medico_id = d.doctor_id
-      AND DATE(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago') = d.fecha
-      AND ABS(EXTRACT(EPOCH FROM (
-        (c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago')::time - d.hora
-      ))) < 60  -- ⚠️ Permite hasta 60 segundos de diferencia
-      AND c.estado = 'pendiente'
-  )
-ORDER BY d.hora
-`, [medicoId, fecha]);
-
+    const result = await pool.query(`
+      SELECT d.hora
+      FROM disponibilidad_medica d
+      WHERE d.fecha = $2
+        AND d.doctor_id = $1
+        AND NOT EXISTS (
+          SELECT 1
+          FROM consultas_telemedicina c
+          WHERE c.medico_id = d.doctor_id
+            AND DATE(c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago') = d.fecha
+            AND ABS(EXTRACT(EPOCH FROM (
+              (c.fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'America/Santiago')::time - d.hora
+            ))) < 60
+            AND c.estado = 'pendiente'
+        )
+      ORDER BY d.hora
+    `, [medicoId, fecha]);
 
     res.json(result.rows.map(r => r.hora.slice(0,5)));
   } catch (err) {
@@ -47,8 +46,7 @@ router.post('/consultas', async (req, res) => {
       return res.status(409).json({ error: 'Ya tienes una consulta pendiente. Finalízala antes de agendar otra.' });
     }
 
-    // 🛠️ Normaliza la hora si viene con segundos
-    const horaRecortada = hora.slice(0, 5); // "08:20" incluso si vino "08:20:00"
+    const horaRecortada = hora.slice(0, 5);
     console.log('🛠️ hora recibida:', hora); 
     console.log('🛠️ hora recortada:', horaRecortada);
     console.log('🛠️ fecha completa:', `${fecha}T${horaRecortada}:00-04:00`);
