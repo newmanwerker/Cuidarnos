@@ -12,7 +12,6 @@
         </div>
         <div class="header-icons">
           <ion-icon name="notifications" class="notification-icon"></ion-icon>
-          <ion-icon name="settings" class="notification-icon" (click)="goToSettings()"></ion-icon>
         </div>
       </div>
 
@@ -114,17 +113,11 @@
     <ion-icon name="videocam"></ion-icon>
     <span>Agendar Videollamada</span>
   </div>
-  <div class="toolbar-item">
-    <span> 
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square-icon lucide-messages-square">
-        <path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/>
-        <path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/>
-      </svg>
-    </span>
-    <span>Chatbot</span>
-  </div>
   <div class="toolbar-item" (click)="goToAccessibility()">
     <ion-icon name="accessibility"></ion-icon>
     <span>Accesibilidad</span>
   </div>
+  <div class="toolbar-item" (click)="goToSettings()">
+    <ion-icon name="settings"></ion-icon>
+    <span>Configuración</span>
 </div>

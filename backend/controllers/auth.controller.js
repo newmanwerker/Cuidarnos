@@ -33,6 +33,16 @@ exports.loginPersona = async (req, res) => {
           .map(item => item.trim());
       }
 
+      //Obtener los datos de la receta
+      const recetaResult = await pool.query(
+        `SELECT * FROM receta
+        WHERE id_paciente = $1
+        ORDER BY fecha_emision DESC
+        LIMIT 1`,
+        [paciente.id]
+      );
+      const receta = recetaResult.rows[0] || null;
+
       // obtener medicamentos de la receta asociada
       const medicamentosResult = await pool.query(
         `SELECT 
@@ -52,6 +62,25 @@ exports.loginPersona = async (req, res) => {
       );
       const medicamentos = medicamentosResult.rows || [];
 
+      //Obtener alergias del paciente
+      const alergiasResult = await pool.query(
+        `SELECT descripcion, severidad, causa
+        FROM alergia
+        WHERE paciente_id = $1`,
+        [paciente.id]
+      );
+      const alergias = alergiasResult.rows || [];
+
+      //Obtener resultados de laboratorio
+      const resultadosLabResult = await pool.query(
+        `SELECT descripcion, archivo_pdf, fecha
+        FROM resultado_laboratorio
+        WHERE paciente_id = $1
+        ORDER BY fecha DESC`,
+        [paciente.id]
+      );
+      const labResults = resultadosLabResult.rows || [];
+
 
       return res.json({
         message: 'Login exitoso',
@@ -60,7 +89,10 @@ exports.loginPersona = async (req, res) => {
           ...paciente,
           centro_salud: paciente.centro_salud,
           ficha_medica: ficha_medica || {},
+          receta: receta,
           medications: medicamentos, 
+          alergias: alergias,
+          labResults: labResults
         }
       });
     }
