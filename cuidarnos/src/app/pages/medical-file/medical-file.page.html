@@ -25,7 +25,7 @@
           <h1 class="patient-name">{{patient.nombre}} {{patient.apellido}}</h1>
           <p class="patient-id">Sucursal: {{patient.centro_salud}}</p>
           <div class="patient-tags">
-            <ion-badge color="primary">Activo</ion-badge>
+            <ion-badge color="success">Activo</ion-badge>
             <ion-badge *ngIf="patient.insurance" color="success">Insured</ion-badge>
           </div>
         </div>
@@ -150,6 +150,43 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- Receta Médica -->
+    <ion-card class="info-card" *ngIf="patient.receta">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="document-text-outline"></ion-icon>
+          Receta Médica
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Fecha de Emisión</span>
+            <span class="info-value">{{ patient.receta?.fechaEmision }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Fecha de Término</span>
+            <span class="info-value">{{ patient.receta?.fechaTermino }}</span>
+          </div>
+        </div>
+
+        <!-- Dropdown de Observaciones -->
+        <div class="observaciones-toggle" (click)="recetaExpanded = !recetaExpanded" style="cursor: pointer; margin-top: 12px;">
+          <ion-icon [name]="recetaExpanded ? 'chevron-down' : 'chevron-forward'"></ion-icon>
+          <span class="info-label">Observaciones</span>
+        </div>
+
+        <div *ngIf="recetaExpanded" style="margin-top: 10px;">
+          <ion-textarea
+            readonly
+            auto-grow="true"
+            value="{{ patient.receta.observacion }}"
+            placeholder="Sin observaciones"
+          ></ion-textarea>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
     <!-- Medicamentos Actuales -->
     <ion-card class="info-card" *ngIf="patient.medications?.length">
       <ion-card-header>
@@ -168,7 +205,11 @@
             <div *ngIf="med.expanded" class="medication-details">
               <div class="detail-item">
                 <span class="detail-label">Dosis</span>
+<<<<<<< HEAD
                 <span class="detail-value">{{ med.dosage }} mg</span>
+=======
+                <span class="detail-value">{{ med.dosage }}mg.</span>
+>>>>>>> 1275a193aa30749bd66417488b4c646323a5103c
               </div>
               <div class="detail-item">
                 <span class="detail-label">Frecuencia</span>
@@ -221,8 +262,8 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Allergies Section -->
-    <ion-card class="info-card">
+    <!-- Alergias del paciente -->
+    <ion-card class="info-card" *ngIf="patient.allergies?.length">
       <ion-card-header>
         <ion-card-title>
           <ion-icon name="alert-circle-outline"></ion-icon>
@@ -230,14 +271,73 @@
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <div class="allergy-list">
-          <span class="info-value">No hay alergias registradas.</span>
+        <div class="medication-list">
+          <div *ngFor="let allergy of patient.allergies" class="medication-item">
+
+            <!-- Header desplegable -->
+            <div class="medication-header" (click)="allergy.expanded = !allergy.expanded">
+              <h3 class="medication-name">{{ allergy.description }}</h3>
+              <ion-icon [name]="allergy.expanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+            </div>
+
+            <!-- Detalles -->
+            <div *ngIf="allergy.expanded" class="medication-details">
+              <div class="detail-item">
+                <span class="detail-label">Severidad</span>
+                <ion-badge [color]="allergy.severity === 'Alta' ? 'danger' : allergy.severity === 'Media' ? 'warning' : 'success'">
+                  {{ allergy.severity }}
+                </ion-badge>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Causa</span>
+                <span class="detail-value">{{ allergy.cause }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+        
+
+    <!-- Resultados de Laboratorio -->
+    <ion-card class="info-card" *ngIf="patient.labResults?.length">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="flask-outline"></ion-icon>
+          Resultados de Laboratorio
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="lab-result-list">
+          <div *ngFor="let result of patient.labResults" class="lab-result-item" style="margin-bottom: 12px;">
+            
+            <!-- Cabecera del resultado (dropdown) -->
+            <div class="lab-header" (click)="result.expanded = !result.expanded"
+              style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid #ccc; border-radius: 8px; padding: 10px;">
+              <span style="font-weight: 500;">{{ result.description }}</span>
+              <ion-icon [name]="result.expanded ? 'chevron-up' : 'chevron-down'" style="margin-left: 8px;"></ion-icon>
+            </div>
+
+            <!-- Contenido desplegable -->
+            <div *ngIf="result.expanded" class="lab-details"
+              style="margin-top: 8px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9;">
+              <div class="detail-item">
+                <span class="detail-label">Fecha</span>
+                <span class="detail-value">{{ result.date }}</span>
+              </div>
+              <div class="detail-item" style="margin-top: 6px;">
+                <span class="detail-label">Archivo</span>
+                <a [href]="result.file" target="_blank" rel="noopener noreferrer">Ver PDF</a>
+              </div>
+            </div>
+          </div>
         </div>
       </ion-card-content>
     </ion-card>
 
-    <!-- Lab Results Section -->
-    <ion-card class="info-card">
+    <!-- Si no hay resultados -->
+    <ion-card class="info-card" *ngIf="!patient.labResults?.length">
       <ion-card-header>
         <ion-card-title>
           <ion-icon name="flask-outline"></ion-icon>

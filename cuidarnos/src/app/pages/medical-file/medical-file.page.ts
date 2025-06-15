@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 })
 export class MedicalFilePage implements OnInit {
   patient: any = {};
+  recetaExpanded: boolean = false;
 
   constructor(private datePipe: DatePipe) {}
 
@@ -19,6 +20,7 @@ export class MedicalFilePage implements OnInit {
       const parsed = JSON.parse(storedData);
       const paciente = parsed.paciente;
       const ficha = paciente.ficha_medica;
+      const receta = paciente.receta;
       console.log('💊 Medicamentos recibidos:', paciente.medications);
 
       this.patient = {
@@ -52,6 +54,11 @@ export class MedicalFilePage implements OnInit {
               expanded: false
             }))
           : [],
+        receta: receta ?{
+          fechaEmision: this.datePipe.transform(receta.fecha_emision, 'dd/MM/yyyy'),
+          fechaTermino: this.datePipe.transform(receta.fecha_termino, 'dd/MM/yyyy'),
+          observacion: receta.observacion || '',
+        }: null,
         medications: Array.isArray(paciente?.medications)
         ? paciente.medications.map((m: any) => ({
             name: m.nombre,
@@ -68,8 +75,20 @@ export class MedicalFilePage implements OnInit {
             expanded: false
           }))
         : [],
-        allergies: [],
-        labResults: []
+        allergies: Array.isArray(paciente?.alergias)
+          ? paciente.alergias.map((a: any) => ({
+              description: a.descripcion,
+              severity: a.severidad,
+              cause: a.causa,
+              expanded: false
+          })): [],
+        labResults: Array.isArray(paciente.labResults)
+        ? paciente.labResults.map((r: any) => ({
+            description: r.descripcion,
+            file: r.archivo_pdf,
+            date: this.datePipe.transform(r.fecha, 'dd/MM/yyyy') || '',
+            expanded: false
+          })):[],
       };
 
       console.log('✅ Paciente procesado:', this.patient);
@@ -88,6 +107,7 @@ export class MedicalFilePage implements OnInit {
   getSucursal(): string {
     return this.patient?.centro_salud || 'No Data';
   }
+<<<<<<< HEAD
 
 
 
@@ -118,3 +138,6 @@ formatRut(rut: string): string {
 
 }
 
+=======
+}
+>>>>>>> 1275a193aa30749bd66417488b4c646323a5103c

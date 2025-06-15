@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { formatDate } from '@angular/common';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-schedule',
@@ -9,88 +11,103 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SchedulePage implements OnInit {
   todayAppointments: any[] = [];
-  doctorId: number = 0;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit() {
     const stored = localStorage.getItem('userData');
     if (stored) {
       const parsed = JSON.parse(stored);
-      this.doctorId = parsed.medico.id;
+      const medicoId = parsed.medico.id;
 
-      this.http.get<any[]>(`https://cuidarnos.up.railway.app/api/consultas/hoy/${this.doctorId}`)
-        .subscribe({
-          next: (res) => {
-            this.todayAppointments = res.map(apt => ({
-              id: apt.id,
-              patientName: apt.paciente_nombre,
-              patientId: apt.paciente_id,
-              time: new Date(apt.fecha_consulta).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
-              type: apt.motivo_consulta,
-              status: apt.estado === 'terminada' ? 'completed' : 'upcoming',
-              duration: 30 // puedes ajustar si tienes este dato
-            }));
-          },
-          error: (err) => {
-            console.error('❌ Error al cargar citas del día:', err);
-          }
-        });
+      this.http.get<any[]>(`https://cuidarnos.up.railway.app/api/consultas/hoy/${medicoId}`).subscribe({
+        next: (data) => {
+          this.todayAppointments = data.map((a: any) => ({
+            ...a,
+            hora: new Date(a.fecha_consulta).toLocaleTimeString('es-CL', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
+              timeZone: 'America/Santiago' // 🔹 Corrige desfase horario
+            })
+          }));
+        },
+        error: (err) => {
+          console.error('❌ Error al obtener consultas de hoy:', err);
+        }
+      });
     }
   }
 
   getCurrentDate(): string {
-    return new Date().toLocaleDateString('es-CL', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    return formatDate(new Date(), 'EEEE d \'de\' MMMM \'de\' y', 'es-CL');
   }
 
   getScheduleStatus(): string {
-    const completed = this.todayAppointments.filter(a => a.status === 'completed').length;
     const total = this.todayAppointments.length;
-    if (total === 0) return 'Sin Citas';
-    if (completed === total) return 'Completado';
-    if (completed === 0) return 'No Iniciado';
-    return 'En progreso';
+    const completadas = this.todayAppointments.filter(a => a.estado === 'terminada').length;
+
+    if (total === 0) return 'Sin Consultas';
+    if (completadas === total) return 'Todas Terminadas';
+    if (completadas === 0) return 'No Iniciadas';
+    return 'En Proceso';
   }
 
   getStatusColor(): string {
-    const status = this.getScheduleStatus();
-    return status === 'Completado' ? 'success' : status === 'En progreso' ? 'warning' : 'medium';
+    const total = this.todayAppointments.length;
+    const completadas = this.todayAppointments.filter(a => a.estado === 'terminada').length;
+
+    if (total === 0) return 'medium';
+    if (completadas === total) return 'success';
+    if (completadas === 0) return 'danger';
+    return 'warning';
+  }
+
+  async joinMeeting(appointment: any) {
+    const toast = await this.toastController.create({
+      message: `Ingresando a reunión con ${appointment.paciente_nombre}...`,
+      duration: 2000,
+      color: 'success',
+      position: 'bottom'
+    });
+    await toast.present();
+
+    appointment.estado = 'en curso';
+  }
+
+  async continueSession(appointment: any) {
+    const toast = await this.toastController.create({
+      message: `Reanudando sesión con ${appointment.paciente_nombre}...`,
+      duration: 2000,
+      color: 'primary',
+      position: 'bottom'
+    });
+    await toast.present();
+  }
+
+  viewNotes(appointment: any) {
+    console.log('🔍 Ver notas de la consulta:', appointment);
+    // Aquí podrías navegar a una vista o abrir un modal
   }
 
   getStatusIcon(status: string): string {
     switch (status) {
-      case 'completed': return 'checkmark-circle';
-      case 'in-progress': return 'play-circle';
-      case 'upcoming': return 'time';
-      default: return 'time';
+      case 'terminada': return 'checkmark-circle';
+      case 'en curso': return 'play-circle';
+      case 'pendiente': return 'time';
+      default: return 'help-circle';
     }
   }
 
   getStatusIconColor(status: string): string {
     switch (status) {
-      case 'completed': return 'success';
-      case 'in-progress': return 'warning';
-      case 'upcoming': return 'medium';
+      case 'terminada': return 'success';
+      case 'en curso': return 'warning';
+      case 'pendiente': return 'medium';
       default: return 'medium';
     }
-  }
-
-  async joinMeeting(appointment: any) {
-    // Lógica real de videollamada
-    appointment.status = 'in-progress';
-  }
-
-  async continueSession(appointment: any) {
-    // Lógica real de continuar
-  }
-
-  viewNotes(appointment: any) {
-    // Abrir notas
-    console.log('Ver notas de:', appointment);
   }
 }
