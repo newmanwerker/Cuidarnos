@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-medical-file',
   templateUrl: './medical-file.page.html',
   styleUrls: ['./medical-file.page.scss'],
-  standalone: false
+  standalone: false,
+  providers: [DatePipe]
 })
 export class MedicalFilePage implements OnInit {
   patient: any = {};
 
-  constructor() {}
+  constructor(private datePipe: DatePipe) {}
 
   ngOnInit() {
   const storedData = localStorage.getItem('userData');
@@ -17,6 +19,7 @@ export class MedicalFilePage implements OnInit {
       const parsed = JSON.parse(storedData);
       const paciente = parsed.paciente;
       const ficha = paciente.ficha_medica;
+      console.log('💊 Medicamentos recibidos:', paciente.medications);
 
       this.patient = {
         id: paciente.id,
@@ -28,7 +31,7 @@ export class MedicalFilePage implements OnInit {
         address: ficha?.direccion || '',
         phone: ficha?.celular || '',
         email: ficha?.email || '',
-        dateOfBirth: ficha?.fecha_nac || '',
+        dateOfBirth: this.datePipe.transform(ficha?.fecha_nac, 'dd \'de\' MMMM \'de\' yyyy', 'es') || '',
         age: ficha?.edad || '',
         height: ficha?.altura || '',
         weight: ficha?.peso || '',
@@ -49,7 +52,20 @@ export class MedicalFilePage implements OnInit {
               expanded: false
             }))
           : [],
-        medications: [],
+        medications: Array.isArray(paciente?.medications)
+        ? paciente.medications.map((m: any) => ({
+            name: m.nombre,
+            dosage: m.dosis,
+            frequency: m.frecuencia,
+            startDate: this.datePipe.transform(m.fecha_inicio, 'dd/MM/yyyy') || '',
+            endDate: this.datePipe.transform(m.fecha_termino, 'dd/MM/yyyy') || '',
+            prescribedBy: 'Médico tratante',
+            purpose: '',
+            sideEffects: [],
+            notes: '',
+            expanded: false
+          }))
+        : [],
         allergies: [],
         labResults: []
       };

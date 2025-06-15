@@ -104,7 +104,7 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Medical Conditions Section -->
+    <!-- Condiciones médicas -->
     <ion-card class="info-card" *ngIf="patient.medicalConditions?.length">
       <ion-card-header>
         <ion-card-title>
@@ -150,8 +150,64 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Medications Section -->
-    <ion-card class="info-card">
+    <!-- Medicamentos Actuales -->
+    <ion-card class="info-card" *ngIf="patient.medications?.length">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="medkit-outline"></ion-icon>
+          Medicamentos Actuales
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="medication-list">
+          <div *ngFor="let med of patient.medications" class="medication-item">
+            <div class="medication-header" (click)="toggleMedication(med)">
+              <h3 class="medication-name">{{ med.name }}</h3>
+              <ion-icon [name]="med.expanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+            </div>
+            <div *ngIf="med.expanded" class="medication-details">
+              <div class="detail-item">
+                <span class="detail-label">Dosis</span>
+                <span class="detail-value">{{ med.dosage }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Frecuencia</span>
+                <span class="detail-value">{{ med.frequency }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Inicio</span>
+                <span class="detail-value">{{ med.startDate }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Término</span>
+                <span class="detail-value">{{ med.endDate }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Prescrito por</span>
+                <span class="detail-value">{{ med.prescribedBy }}</span>
+              </div>
+              <div class="detail-item" *ngIf="med.purpose">
+                <span class="detail-label">Propósito</span>
+                <span class="detail-value">{{ med.purpose }}</span>
+              </div>
+              <div class="detail-item" *ngIf="med.sideEffects?.length">
+                <span class="detail-label">Efectos secundarios</span>
+                <ul class="detail-value">
+                  <li *ngFor="let e of med.sideEffects">{{ e }}</li>
+                </ul>
+              </div>
+              <div class="detail-notes" *ngIf="med.notes">
+                <span class="detail-label">Notas</span>
+                <p class="notes-text">{{ med.notes }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Si no hay medicamentos -->
+    <ion-card class="info-card" *ngIf="!patient.medications?.length">
       <ion-card-header>
         <ion-card-title>
           <ion-icon name="medkit-outline"></ion-icon>
