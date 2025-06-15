@@ -107,7 +107,6 @@ export class MedicalFilePage implements OnInit {
   getSucursal(): string {
     return this.patient?.centro_salud || 'No Data';
   }
-<<<<<<< HEAD
 
 
 
@@ -138,6 +137,3 @@ formatRut(rut: string): string {
 
 }
 
-=======
-}
->>>>>>> 1275a193aa30749bd66417488b4c646323a5103c

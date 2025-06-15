@@ -85,7 +85,6 @@ exports.loginPersona = async (req, res) => {
       const labResults = resultadosLabResult.rows || [];
 
 
-<<<<<<< HEAD
       const consultasResult = await pool.query(`
   SELECT c.*, m.nombre, m.apellido
   FROM consultas_telemedicina c
@@ -115,21 +114,6 @@ const consultaPendiente = consultasResult.rows[0] || null;
         }] : []
       }
     });
-=======
-      return res.json({
-        message: 'Login exitoso',
-        tipo: 'paciente',
-        paciente: {
-          ...paciente,
-          centro_salud: paciente.centro_salud,
-          ficha_medica: ficha_medica || {},
-          receta: receta,
-          medications: medicamentos, 
-          alergias: alergias,
-          labResults: labResults
-        }
-      });
->>>>>>> 1275a193aa30749bd66417488b4c646323a5103c
     }
     
       // Si no es paciente, buscar médico
