@@ -29,6 +29,7 @@ doctors = [] as {
 }[];
   filteredDoctors: any[] = [];
   selectedDoctor: number | null = null;
+  availableDates: string[] = [];
   
   // Step 3: Date and Time
   currentDate = new Date();
@@ -58,29 +59,28 @@ doctors = [] as {
     private authService: AuthService
   ) { }
 
-  ngOnInit() {
-  this.http.get<any[]>('https://cuidarnos.up.railway.app/api/doctores').subscribe(doctores => {
-    this.doctors = doctores.map(doc => ({
-      id: doc.id,
-      name: doc.name,
-      specialty: doc.especialidad,
-      specialtyId: 1, // Ajusta según estructura real
-      nextAvailable: 'Por confirmar'
-    }));
-  });
-
+ngOnInit() {
+  this.doctors = [];
+  this.filteredDoctors = [];
+  this.selectedDoctor = null;
   this.updateCalendar();
   this.updateMonthName();
+   this.http.get<string[]>('https://cuidarnos.up.railway.app/api/dias-disponibles').subscribe({
+    next: (fechas) => {
+      this.availableDates = fechas;
+      this.updateCalendar(); // Espera a tener availableDates antes de construir el calendario
+      this.updateMonthName();
+    },
+    error: (err) => {
+      console.error('❌ Error al obtener fechas disponibles:', err);
+    }
+  });
 }
 
   // Step Navigation
   nextStep() {
     if (this.canProceed()) {
       this.currentStep++;
-      
-      if (this.currentStep === 2) {
-        this.filterDoctorsBySpecialty();
-      }
     }
   }
 
@@ -217,7 +217,6 @@ doctors = [] as {
   }
 
 selectDate(date: Date) {
-  // Formatear la fecha a YYYY-MM-DD para las APIs
   const yyyy = date.getFullYear();
   const mm = (date.getMonth() + 1).toString().padStart(2, '0');
   const dd = date.getDate().toString().padStart(2, '0');
@@ -225,33 +224,40 @@ selectDate(date: Date) {
 
   this.selectedDate = formattedDate;
 
-  // Obtener el médico disponible ese día
   this.http.get<any>('https://cuidarnos.up.railway.app/api/doctor-disponible', {
     params: { fecha: formattedDate }
   }).subscribe({
     next: (doctor) => {
       if (doctor) {
-        this.filteredDoctors = [doctor]; // Mostrar solo ese médico
+        // Asegúrate de que los datos vengan bien formateados
+        this.filteredDoctors = [{
+          id: doctor.id,
+          name: doctor.nombre,
+          specialty: doctor.especialidad || 'No especificada',
+          specialtyId: 1, // esto es dummy ya que no estás filtrando
+          nextAvailable: 'Disponible ese día'
+        }];
         this.selectedDoctor = doctor.id;
 
-        // Cargar sus horarios disponibles
+        // Cargar horarios
         this.loadAvailableTimeSlots(formattedDate, doctor.id);
       } else {
         this.filteredDoctors = [];
-        this.availableTimeSlots = [];
         this.selectedDoctor = null;
+        this.availableTimeSlots = [];
         alert('No hay médico disponible ese día');
       }
     },
     error: (err) => {
       console.error('❌ Error al obtener doctor del día:', err);
       this.filteredDoctors = [];
-      this.availableTimeSlots = [];
       this.selectedDoctor = null;
+      this.availableTimeSlots = [];
       alert('No se pudo cargar el médico disponible');
     }
   });
 }
+
 
 
 

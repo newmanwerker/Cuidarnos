@@ -70,11 +70,10 @@ router.get('/doctor-disponible', async (req, res) => {
 
   try {
     const result = await pool.query(`
-      SELECT m.id, m.nombre, m.especialidad
+      SELECT DISTINCT ON (m.id) m.id, m.nombre, m.especialidad
       FROM disponibilidad_medica d
       JOIN medicos m ON d.doctor_id = m.id
       WHERE d.fecha = $1
-      GROUP BY m.id
       ORDER BY m.id
       LIMIT 1
     `, [fecha]);
@@ -89,5 +88,24 @@ router.get('/doctor-disponible', async (req, res) => {
     res.status(500).json({ error: 'Error del servidor' });
   }
 });
+
+
+router.get('/dias-disponibles', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT fecha
+      FROM disponibilidad_medica
+      WHERE fecha >= CURRENT_DATE
+      ORDER BY fecha
+    `);
+
+    const fechas = result.rows.map(row => row.fecha.toISOString().split('T')[0]);
+    res.json(fechas);
+  } catch (err) {
+    console.error('❌ Error al obtener días disponibles:', err);
+    res.status(500).json({ error: 'Error al obtener días disponibles' });
+  }
+});
+
 
 module.exports = router;
