@@ -169,4 +169,27 @@ router.get('/consultas/doctor/hoy', async (req, res) => {
   }
 });
 
+// GET /api/consultas/hoy/:medicoId
+router.get('/consultas/hoy/:medicoId', async (req, res) => {
+  const { medicoId } = req.params;
+  try {
+    const result = await pool.query(`
+      SELECT c.id, c.paciente_id, c.fecha_consulta, c.motivo_consulta, c.estado,
+             p.nombre AS paciente_nombre, p.rut
+      FROM consultas_telemedicina c
+      JOIN pacientes p ON p.id = c.paciente_id
+      WHERE c.medico_id = $1 AND DATE(c.fecha_consulta) = CURRENT_DATE
+      ORDER BY c.fecha_consulta ASC
+    `, [medicoId]);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error('❌ Error al obtener consultas del día:', err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+
+
+
 module.exports = router;

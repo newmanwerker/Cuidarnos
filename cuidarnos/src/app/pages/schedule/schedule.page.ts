@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-schedule',
@@ -9,89 +8,58 @@ import { ToastController } from '@ionic/angular';
   standalone: false
 })
 export class SchedulePage implements OnInit {
-  todayAppointments = [
-    { 
-      id: 1, 
-      patientName: 'Sebastian Rodriguez', 
-      patientId: '12345678',
-      time: '9:00 AM', 
-      type: 'Check-up', 
-      status: 'completed',
-      duration: 30
-    },
-    { 
-      id: 2, 
-      patientName: 'Ana Martinez', 
-      patientId: '87654321',
-      time: '9:30 AM', 
-      type: 'Follow-up', 
-      status: 'completed',
-      duration: 15
-    },
-    { 
-      id: 3, 
-      patientName: 'Carlos Perez', 
-      patientId: '11223344',
-      time: '10:00 AM', 
-      type: 'New Condition', 
-      status: 'upcoming',
-      duration: 45
-    },
-    { 
-      id: 4, 
-      patientName: 'Maria Lopez', 
-      patientId: '55667788',
-      time: '10:30 AM', 
-      type: 'Check-up', 
-      status: 'upcoming',
-      duration: 30
-    },
-    { 
-      id: 5, 
-      patientName: 'Juan Silva', 
-      patientId: '99887766',
-      time: '11:00 AM', 
-      type: 'Follow-up', 
-      status: 'in-progress',
-      duration: 15
-    }
-  ];
+  todayAppointments: any[] = [];
+  doctorId: number = 0;
 
-  constructor(
-    private router: Router,
-    private toastController: ToastController
-  ) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
+    const stored = localStorage.getItem('userData');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      this.doctorId = parsed.medico.id;
+
+      this.http.get<any[]>(`https://cuidarnos.up.railway.app/api/consultas/hoy/${this.doctorId}`)
+        .subscribe({
+          next: (res) => {
+            this.todayAppointments = res.map(apt => ({
+              id: apt.id,
+              patientName: apt.paciente_nombre,
+              patientId: apt.paciente_id,
+              time: new Date(apt.fecha_consulta).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
+              type: apt.motivo_consulta,
+              status: apt.estado === 'terminada' ? 'completed' : 'upcoming',
+              duration: 30 // puedes ajustar si tienes este dato
+            }));
+          },
+          error: (err) => {
+            console.error('❌ Error al cargar citas del día:', err);
+          }
+        });
+    }
   }
 
   getCurrentDate(): string {
-    const today = new Date();
-    const options: Intl.DateTimeFormatOptions = { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    };
-    return today.toLocaleDateString('en-US', options);
+    return new Date().toLocaleDateString('es-CL', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 
   getScheduleStatus(): string {
-    const completed = this.todayAppointments.filter(apt => apt.status === 'completed').length;
+    const completed = this.todayAppointments.filter(a => a.status === 'completed').length;
     const total = this.todayAppointments.length;
-    
-    if (completed === total) return 'All Complete';
-    if (completed === 0) return 'Not Started';
-    return 'In Progress';
+    if (total === 0) return 'Sin Citas';
+    if (completed === total) return 'Completado';
+    if (completed === 0) return 'No Iniciado';
+    return 'En progreso';
   }
 
   getStatusColor(): string {
-    const completed = this.todayAppointments.filter(apt => apt.status === 'completed').length;
-    const total = this.todayAppointments.length;
-    
-    if (completed === total) return 'success';
-    if (completed === 0) return 'medium';
-    return 'warning';
+    const status = this.getScheduleStatus();
+    return status === 'Completado' ? 'success' : status === 'En progreso' ? 'warning' : 'medium';
   }
 
   getStatusIcon(status: string): string {
@@ -113,31 +81,16 @@ export class SchedulePage implements OnInit {
   }
 
   async joinMeeting(appointment: any) {
-    const toast = await this.toastController.create({
-      message: `Joining meeting with ${appointment.patientName}...`,
-      duration: 2000,
-      position: 'bottom',
-      color: 'success'
-    });
-    await toast.present();
-    
-    // Here you would typically integrate with a video calling service
-    // For now, we'll just update the status
+    // Lógica real de videollamada
     appointment.status = 'in-progress';
   }
 
   async continueSession(appointment: any) {
-    const toast = await this.toastController.create({
-      message: `Continuing session with ${appointment.patientName}...`,
-      duration: 2000,
-      position: 'bottom',
-      color: 'primary'
-    });
-    await toast.present();
+    // Lógica real de continuar
   }
 
   viewNotes(appointment: any) {
-    // Navigate to appointment notes or open a modal
-    console.log('View notes for appointment:', appointment);
+    // Abrir notas
+    console.log('Ver notas de:', appointment);
   }
 }
