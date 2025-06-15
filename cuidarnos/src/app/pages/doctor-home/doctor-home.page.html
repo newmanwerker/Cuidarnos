@@ -20,12 +20,12 @@
           <ion-icon name="medical"></ion-icon>
         </div>
         <div class="profile-info">
-        <h1 class="doctor-name">Dr. {{doctor.name}}</h1>
-        <p class="doctor-specialty">{{doctor.specialty}}</p>
-        <p class="doctor-id">Centro Médico: {{doctor.centro}}</p>
+          <h1 class="doctor-name">{{doctor.name}}</h1>
+          <p class="doctor-specialty">{{doctor.specialty}}</p>
+          <p class="doctor-id">Centro Médico: {{doctor.centro}}</p>
         </div>
       </div>
-      
+
       <!-- Today's Summary -->
       <div class="daily-summary">
         <div class="summary-item">
@@ -33,8 +33,8 @@
             <ion-icon name="calendar"></ion-icon>
           </div>
           <div class="summary-text">
-            <span class="summary-label">Today's Appointments</span>
-            <span class="summary-value">{{todayAppointments.length}}</span>
+            <span class="summary-label">Reuniones de hoy</span>
+            <span class="summary-value">{{ totalAppointments }}</span>
           </div>
         </div>
         <div class="summary-item">
@@ -42,8 +42,8 @@
             <ion-icon name="people"></ion-icon>
           </div>
           <div class="summary-text">
-            <span class="summary-label">Patients Seen</span>
-            <span class="summary-value">{{completedAppointments}}/{{todayAppointments.length}}</span>
+            <span class="summary-label">Pacientes vistos</span>
+            <span class="summary-value">{{ completedAppointments }}/{{ totalAppointments }}</span>
           </div>
         </div>
       </div>
@@ -73,7 +73,6 @@
           <p class="action-description">View and manage your patient list</p>
         </div>
       </ion-card>
-
     </div>
   </div>
 </ion-content>
