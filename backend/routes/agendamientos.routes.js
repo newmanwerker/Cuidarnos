@@ -139,4 +139,34 @@ router.get('/consultas/existe', async (req, res) => {
   }
 });
 
+
+router.get('/consultas/doctor/hoy', async (req, res) => {
+  const { medicoId } = req.query;
+
+  if (!medicoId) {
+    return res.status(400).json({ error: 'Falta el ID del médico' });
+  }
+
+  try {
+    const result = await pool.query(`
+      SELECT estado
+      FROM consultas_telemedicina
+      WHERE medico_id = $1
+        AND DATE(fecha_consulta) = CURRENT_DATE
+    `, [medicoId]);
+
+    const total = result.rows.length;
+    const completadas = result.rows.filter(c => c.estado === 'terminada').length;
+
+    res.json({
+      total,
+      completadas
+    });
+
+  } catch (err) {
+    console.error('❌ Error al contar consultas del día:', err);
+    res.status(500).json({ error: 'Error al obtener estadísticas del médico' });
+  }
+});
+
 module.exports = router;
