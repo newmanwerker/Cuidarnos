@@ -82,10 +82,10 @@ router.post('/consultas', async (req, res) => {
       link_sala: meetingUrl,
       link_sala_host: hostRoomUrl
     });
-  } catch (err) {
-    console.error('❌ Error al agendar consulta:', err.message);
-    res.status(500).json({ error: 'Error al agendar consulta' });
-  }
+    } catch (err) {
+      console.error('❌ Error al agendar consulta:', err.response?.data || err.message);
+      res.status(500).json({ error: 'Error al agendar consulta' });
+    }
 });
 
 
