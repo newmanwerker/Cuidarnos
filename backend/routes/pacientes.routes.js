@@ -41,10 +41,12 @@ router.get('/:id/ficha-completa', async (req, res) => {
 
   try {
     // Obtener ficha
-    const fichaResult = await pool.query(`
-      SELECT * FROM ficha_paciente WHERE paciente_id = $1
-    `, [id]);
-
+      const fichaResult = await pool.query(`
+        SELECT f.*, c.nombre AS nombre_centro
+        FROM ficha_paciente f
+        LEFT JOIN centro_salud c ON f.centro_salud_id = c.id
+        WHERE f.paciente_id = $1
+      `, [id]);
     if (fichaResult.rows.length === 0) {
       return res.status(404).json({ error: 'Ficha no encontrada' });
     }

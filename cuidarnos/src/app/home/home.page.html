@@ -71,11 +71,11 @@
       <div class="medications-list">
         <div *ngFor="let medication of patient.medications" class="medication-item">
           <div class="medication-info">
-            <h3 class="medication-name">{{medication.name}}</h3>
-            <span class="medication-dosage">{{medication.dosage}} mg</span>
+            <h3 class="medication-name">{{medication.nombre}}</h3>
+            <span class="medication-dosage">{{medication.dosis_mg}} mg</span>
           </div>
           <div class="medication-schedule">
-            <span class="medication-frequency">{{medication.frequency}}</span>
+            <span class="medication-frequency">{{medication.frequencia}}</span>
             <ion-icon name="time-outline"></ion-icon>
           </div>
         </div>

@@ -34,7 +34,7 @@ export class MedicalFilePage implements OnInit {
           nombre: ficha.nombre,
           apellido: ficha.apellido,
           rut: this.formatRut(ficha.rut),
-          centro_salud: ficha.centro_salud_id,
+          centro_salud: ficha.nombre_centro || 'No definido',
           address: ficha.direccion,
           phone: ficha.celular,
           email: ficha.email,
@@ -66,14 +66,14 @@ export class MedicalFilePage implements OnInit {
           medications: Array.isArray(res.medicamentos)
             ? res.medicamentos.map((m: any) => ({
                 name: m.nombre,
-                dosage: m.dosis,
+                dosage: m.dosis_mg,
                 frequency: m.frecuencia,
                 startDate: this.datePipe.transform(m.fecha_inicio, 'dd/MM/yyyy'),
                 endDate: this.datePipe.transform(m.fecha_termino, 'dd/MM/yyyy'),
-                prescribedBy: `${m.medico_nombre} ${m.medico_apellido}`,
-                purpose: '',
-                sideEffects: [],
-                notes: '',
+                prescribedBy: `${m.nombre_medico_receta || ''} ${m.apellido_medico_receta || ''}`,
+                purpose: m.proposito || '',
+                sideEffects: m.efectos_secundarios ? m.efectos_secundarios.split(',').map((e: string) => e.trim()) : [],
+                notes: m.notas || '',
                 expanded: false
               }))
             : [],
