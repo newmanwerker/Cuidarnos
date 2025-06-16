@@ -33,6 +33,19 @@ export class EditPatientFilePage implements OnInit {
     notas: ''
   };
 
+agregandoMedicamento: boolean = false;
+medicamentoEditando: any = null;
+nuevaReceta: any = { fecha_termino: '', observacion: '' };
+nuevoMedicamento: any = {
+  nombre: '',
+  dosis_mg: '',
+  frecuencia: '',
+  proposito: '',
+  efectos_secundarios: '',
+  notas: '',
+  fecha_termino: ''
+};
+
   
 
   constructor(
@@ -193,9 +206,142 @@ eliminarAlergia(alergia: any) {
 
 
 
-  addMedicamento() {
-    // Lógica para abrir formulario o modal, y si no hay receta, crear una primero
+addMedicamento() {
+  this.agregandoMedicamento = true;
+  this.medicamentoEditando = null;
+  this.nuevoMedicamento = {
+    nombre: '',
+    dosis_mg: '',
+    frecuencia: '',
+    proposito: '',
+    efectos_secundarios: '',
+    notas: '',
+    fecha_termino: ''
+  };
+  this.nuevaReceta = {
+    fecha_termino: '',
+    observacion: ''
+  };
+}
+
+
+cancelarAgregarMedicamento() {
+  this.agregandoMedicamento = false;
+  this.medicamentoEditando = null;
+}
+
+
+
+guardarMedicamento() {
+  const usuario = this.authService.getUsuario();
+  const medicoId = usuario?.id;
+
+  if (!medicoId) {
+    console.warn('⚠️ No se encontró ID del médico');
+    return;
   }
+
+  const medicamentoPayload = {
+    paciente_id: this.ficha.paciente_id,
+    nombre: this.nuevoMedicamento.nombre,
+    dosis_mg: this.nuevoMedicamento.dosis_mg,
+    frecuencia: this.nuevoMedicamento.frecuencia,
+    proposito: this.nuevoMedicamento.proposito,
+    efectos_secundarios: this.nuevoMedicamento.efectos_secundarios,
+    notas: this.nuevoMedicamento.notas,
+    medico_id: medicoId,
+    fecha_termino: this.nuevoMedicamento.fecha_termino
+  };
+
+  const guardarMed = (idReceta: number) => {
+    if (this.medicamentoEditando) {
+      // Edición
+      this.http.put(`https://cuidarnos.up.railway.app/api/pacientes/medicamentos/${this.medicamentoEditando.id}`, {
+        ...medicamentoPayload
+      }).subscribe({
+        next: (res: any) => {
+          const idx = this.medicamentos.findIndex(m => m.id === this.medicamentoEditando.id);
+          if (idx !== -1) this.medicamentos[idx] = res.medicamento;
+          this.cancelarAgregarMedicamento();
+        },
+        error: (err) => {
+          console.error('❌ Error al editar medicamento:', err);
+        }
+      });
+    } else {
+      // Creación
+      this.http.post('https://cuidarnos.up.railway.app/api/pacientes/medicamentos', {
+        ...medicamentoPayload,
+        id_receta: idReceta
+      }).subscribe({
+        next: (res: any) => {
+          this.medicamentos.push(res.medicamento);
+          this.receta = this.receta || { id_receta: idReceta };
+          this.cancelarAgregarMedicamento();
+        },
+        error: (err) => {
+          console.error('❌ Error al guardar medicamento:', err);
+        }
+      });
+    }
+  };
+
+  if (!this.receta) {
+    // Crear receta primero si no existe
+    const recetaPayload = {
+      id_paciente: this.ficha.paciente_id,
+      fecha_termino: this.nuevaReceta.fecha_termino,
+      observacion: this.nuevaReceta.observacion
+    };
+
+    this.http.post('https://cuidarnos.up.railway.app/api/pacientes/recetas', recetaPayload)
+      .subscribe({
+        next: (res: any) => {
+          console.log('📋 Receta creada:', res.receta);
+          guardarMed(res.receta.id_receta);
+        },
+        error: (err) => {
+          console.error('❌ Error al crear receta:', err);
+        }
+      });
+  } else {
+    guardarMed(this.receta.id_receta);
+  }
+}
+
+
+editarMedicamento(medicamento: any) {
+  this.medicamentoEditando = medicamento;
+  this.agregandoMedicamento = true;
+
+  this.nuevoMedicamento = {
+    nombre: medicamento.nombre,
+    dosis_mg: medicamento.dosis_mg,
+    frecuencia: medicamento.frecuencia,
+    proposito: medicamento.proposito,
+    efectos_secundarios: medicamento.efectos_secundarios,
+    notas: medicamento.notas,
+    fecha_termino: medicamento.fecha_termino
+  };
+}
+
+
+eliminarMedicamento(medicamento: any) {
+  if (!confirm('¿Estás seguro de eliminar este medicamento?')) return;
+
+  this.http.delete(`https://cuidarnos.up.railway.app/api/pacientes/medicamentos/${medicamento.id}`)
+    .subscribe({
+      next: () => {
+        this.medicamentos = this.medicamentos.filter(m => m.id !== medicamento.id);
+      },
+      error: (err) => {
+        console.error('❌ Error al eliminar medicamento:', err);
+      }
+    });
+}
+
+
+
 
   guardarCambios() {
     const payload = {
@@ -260,6 +406,13 @@ resetFormularioCondicion() {
     notas: ''
   };
 }
+
+formatDate(dateString: string): string {
+  if (!dateString) return 'No especificado';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
 
 
 }

@@ -160,19 +160,102 @@
   </ion-card-content>
 </ion-card>
 
-    <!-- Medicamentos -->
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Medicamentos</ion-card-title>
-        <ion-button fill="clear" size="small" (click)="addMedicamento()">
-          <ion-icon name="add-circle-outline" slot="start"></ion-icon>Agregar
-        </ion-button>
-      </ion-card-header>
-      <ion-card-content>
-        <!-- Aquí se listarán los medicamentos -->
-        <!-- Si no hay receta, se deberá crear una antes de insertar medicamentos -->
-      </ion-card-content>
-    </ion-card>
+<!-- Medicamentos -->
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Medicamentos</ion-card-title>
+    <ion-button fill="clear" size="small" (click)="addMedicamento()">
+      <ion-icon name="add-circle-outline" slot="start"></ion-icon>Agregar
+    </ion-button>
+  </ion-card-header>
+
+  <ion-card-content>
+    <!-- Formulario de nuevo medicamento -->
+    <div *ngIf="agregandoMedicamento" class="form-medicamento">
+
+      <!-- Campos de receta si aún no existe -->
+      <ion-item *ngIf="!receta">
+        <ion-label position="stacked">Fecha de expiración de la receta</ion-label>
+        <ion-datetime presentation="date" [(ngModel)]="nuevaReceta.fecha_termino"></ion-datetime>
+      </ion-item>
+
+      <ion-item *ngIf="!receta">
+        <ion-label position="stacked">Observación de la receta</ion-label>
+        <ion-textarea [(ngModel)]="nuevaReceta.observacion"></ion-textarea>
+      </ion-item>
+
+      <!-- Datos del medicamento -->
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input [(ngModel)]="nuevoMedicamento.nombre" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Dosis (mg)</ion-label>
+        <ion-input type="number" [(ngModel)]="nuevoMedicamento.dosis_mg"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Frecuencia</ion-label>
+        <ion-input [(ngModel)]="nuevoMedicamento.frecuencia"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Propósito</ion-label>
+        <ion-textarea [(ngModel)]="nuevoMedicamento.proposito"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Efectos secundarios</ion-label>
+        <ion-textarea [(ngModel)]="nuevoMedicamento.efectos_secundarios"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Notas</ion-label>
+        <ion-textarea [(ngModel)]="nuevoMedicamento.notas"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Fecha término</ion-label>
+        <ion-datetime presentation="date" [(ngModel)]="nuevoMedicamento.fecha_termino"></ion-datetime>
+      </ion-item>
+
+      <ion-button expand="block" color="success" (click)="guardarMedicamento()">Guardar Medicamento</ion-button>
+      <ion-button expand="block" fill="clear" color="medium" (click)="cancelarAgregarMedicamento()">Cancelar</ion-button>
+    </div>
+
+    <!-- Lista de medicamentos existentes -->
+    <ion-list *ngIf="medicamentos.length > 0">
+      <ion-item-sliding *ngFor="let m of medicamentos">
+        <ion-item>
+          <ion-label>
+            <h2>{{ m.nombre }}</h2>
+            <p><strong>Dosis:</strong> {{ m.dosis_mg }}mg</p>
+            <p><strong>Frecuencia:</strong> {{ m.frecuencia }}</p>
+            <p><strong>Propósito:</strong> {{ m.proposito || 'No especificado' }}</p>
+            <p><strong>Inicio:</strong> {{ formatDate(m.fecha_inicio) }}</p>
+            <p><strong>Término:</strong> {{ m.fecha_termino ? formatDate(m.fecha_termino) : 'Indefinido' }}</p>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button color="warning" (click)="editarMedicamento(m)">
+              <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button color="danger" (click)="eliminarMedicamento(m)">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
+
+
+
+
+
+
+
 
     <!-- Botón para guardar todos los cambios -->
     <ion-footer>

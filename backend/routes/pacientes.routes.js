@@ -310,6 +310,138 @@ router.delete('/alergias/:id', async (req, res) => {
 });
 
 
+// POST /api/pacientes/recetas
+router.post('/recetas', async (req, res) => {
+  const { id_paciente, fecha_termino, observacion } = req.body;
+
+  if (!id_paciente) {
+    return res.status(400).json({ error: 'Falta el id del paciente' });
+  }
+
+  try {
+    const result = await pool.query(`
+      INSERT INTO receta (id_paciente, fecha_emision, fecha_termino, observacion)
+      VALUES ($1, CURRENT_DATE, $2, $3)
+      RETURNING *
+    `, [id_paciente, fecha_termino || null, observacion || null]);
+
+    res.status(201).json({ message: 'Receta creada', receta: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error al crear receta:', err);
+    res.status(500).json({ error: 'Error al crear receta' });
+  }
+});
+
+
+
+
+// POST /api/pacientes/medicamentos
+router.post('/medicamentos', async (req, res) => {
+  const {
+    paciente_id,
+    nombre,
+    dosis_mg,
+    frecuencia,
+    proposito,
+    efectos_secundarios,
+    notas,
+    medico_id,
+    fecha_termino,
+    id_receta
+  } = req.body;
+
+  if (!paciente_id || !nombre || !dosis_mg || !frecuencia || !medico_id || !id_receta) {
+    return res.status(400).json({ error: 'Faltan datos obligatorios' });
+  }
+
+  try {
+    const result = await pool.query(`
+      INSERT INTO medicamento (
+        paciente_id, nombre, dosis_mg, frecuencia, proposito, efectos_secundarios,
+        notas, medico_id, fecha_inicio, fecha_termino, id_receta
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_DATE, $9, $10)
+      RETURNING *
+    `, [
+      paciente_id,
+      nombre,
+      dosis_mg,
+      frecuencia,
+      proposito || null,
+      efectos_secundarios || null,
+      notas || null,
+      medico_id,
+      fecha_termino || null,
+      id_receta
+    ]);
+
+    res.status(201).json({ message: 'Medicamento añadido', medicamento: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error al añadir medicamento:', err);
+    res.status(500).json({ error: 'Error al añadir medicamento' });
+  }
+});
+
+
+
+
+router.put('/medicamentos/:id', async (req, res) => {
+  const { id } = req.params;
+  const {
+    nombre,
+    dosis_mg,
+    frecuencia,
+    proposito,
+    efectos_secundarios,
+    notas,
+    fecha_termino
+  } = req.body;
+
+  try {
+    const result = await pool.query(`
+      UPDATE medicamento
+      SET nombre = $1,
+          dosis_mg = $2,
+          frecuencia = $3,
+          proposito = $4,
+          efectos_secundarios = $5,
+          notas = $6,
+          fecha_termino = $7
+      WHERE id = $8
+      RETURNING *
+    `, [
+      nombre,
+      dosis_mg,
+      frecuencia,
+      proposito || null,
+      efectos_secundarios || null,
+      notas || null,
+      fecha_termino || null,
+      id
+    ]);
+
+    res.json({ message: 'Medicamento actualizado', medicamento: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error al actualizar medicamento:', err);
+    res.status(500).json({ error: 'Error al actualizar medicamento' });
+  }
+});
+
+
+
+router.delete('/medicamentos/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query('DELETE FROM medicamento WHERE id = $1', [id]);
+    res.json({ message: 'Medicamento eliminado' });
+  } catch (err) {
+    console.error('❌ Error al eliminar medicamento:', err);
+    res.status(500).json({ error: 'Error al eliminar medicamento' });
+  }
+});
+
+
 
 
 module.exports = router;
