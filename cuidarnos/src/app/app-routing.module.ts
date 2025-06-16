@@ -27,6 +27,11 @@ const routes: Routes = [
     path: 'view-patient-file/:id',
     loadChildren: () => import('./pages/view-patient-file/view-patient-file.module').then( m => m.ViewPatientFilePageModule)
   },
+  {
+    path: 'edit-patient-file/:id',
+    loadChildren: () => import('./pages/edit-patient-file/edit-patient-file.module').then( m => m.EditPatientFilePageModule)
+  },
+
 
 ];
 

@@ -1,0 +1,28 @@
+.edit-patient-container {
+  padding: 16px;
+
+  ion-card {
+    margin-bottom: 20px;
+  }
+
+  ion-card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  ion-footer {
+    padding: 0 16px 16px;
+  }
+
+  ion-input,
+  ion-textarea {
+    --padding-start: 8px;
+    --padding-end: 8px;
+  }
+
+  ion-button[fill="clear"] {
+    font-size: 14px;
+    margin-top: 6px;
+  }
+}

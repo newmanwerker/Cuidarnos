@@ -137,6 +137,48 @@ router.get('/centro/:centroSaludId', async (req, res) => {
 });
 
 
+// PUT /api/pacientes/:id/ficha
+router.put('/:id/ficha', async (req, res) => {
+  const { id } = req.params;
+  const {
+    contacto_emergencia,
+    parentezco_contacto,
+    altura,
+    peso
+  } = req.body;
+
+  try {
+    // Actualizar la ficha del paciente
+    const result = await pool.query(`
+      UPDATE ficha_paciente
+      SET
+        contacto_emergencia = $1,
+        parentezco_contacto = $2,
+        altura = $3,
+        peso = $4
+      WHERE paciente_id = $5
+      RETURNING *
+    `, [
+      contacto_emergencia || null,
+      parentezco_contacto || null,
+      altura || null,
+      peso || null,
+      id
+    ]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Ficha del paciente no encontrada' });
+    }
+
+    res.json({ message: 'Ficha actualizada correctamente', ficha: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error al actualizar ficha del paciente:', err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+
+
 
 
 module.exports = router;

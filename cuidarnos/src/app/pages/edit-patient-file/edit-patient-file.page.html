@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/doctor/patient-search"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Ficha del Paciente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="edit-patient-container">
+
+    <!-- Datos básicos de ficha médica -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Datos Personales</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Contacto de emergencia</ion-label>
+          <ion-input [(ngModel)]="ficha.contacto_emergencia" placeholder="Nombre del contacto"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Parentesco</ion-label>
+          <ion-input [(ngModel)]="ficha.parentezco_contacto" placeholder="Ej: Madre, Hermano"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Altura (cm)</ion-label>
+          <ion-input type="number" [(ngModel)]="ficha.altura"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Peso (kg)</ion-label>
+          <ion-input type="number" [(ngModel)]="ficha.peso"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Condiciones médicas -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Condiciones Médicas</ion-card-title>
+        <ion-button fill="clear" size="small" (click)="addCondicion()">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>Agregar
+        </ion-button>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Aquí se listarán las condiciones existentes -->
+        <!-- Formulario o lista editable -->
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Alergias -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Alergias</ion-card-title>
+        <ion-button fill="clear" size="small" (click)="addAlergia()">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>Agregar
+        </ion-button>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Aquí se listarán las alergias existentes -->
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Medicamentos -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Medicamentos</ion-card-title>
+        <ion-button fill="clear" size="small" (click)="addMedicamento()">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>Agregar
+        </ion-button>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Aquí se listarán los medicamentos -->
+        <!-- Si no hay receta, se deberá crear una antes de insertar medicamentos -->
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botón para guardar todos los cambios -->
+    <ion-footer>
+      <ion-toolbar>
+        <ion-button expand="block" color="primary" (click)="guardarCambios()">Guardar Cambios</ion-button>
+      </ion-toolbar>
+    </ion-footer>
+
+  </div>
+</ion-content>

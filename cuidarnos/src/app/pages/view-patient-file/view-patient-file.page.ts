@@ -74,6 +74,6 @@ export class ViewPatientFilePage implements OnInit {
   toggleMedication(m: any) { m.expanded = !m.expanded; }
 
   editPatientFile() {
-    this.router.navigate(['/edit-patient', this.patientId]);
+    this.router.navigate(['/edit-patient-file', this.patientId]);
   }
 }

@@ -69,6 +69,6 @@ export class PatientSearchPage implements OnInit {
   }
 
   editPatientFile(patient: any) {
-    this.router.navigate(['/doctor/edit-patient', patient.id]);
+    this.router.navigate(['/edit-patient-file', patient.id]);
   }
 }
