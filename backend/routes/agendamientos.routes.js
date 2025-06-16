@@ -97,6 +97,7 @@ router.post('/consultas', async (req, res) => {
 
 
 
+
 // GET /api/doctores
 router.get('/doctores', async (req, res) => {
   try {
