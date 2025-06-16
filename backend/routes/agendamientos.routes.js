@@ -52,14 +52,24 @@ router.post('/consultas', async (req, res) => {
       return res.status(403).json({ error: 'Solo puedes agendar con médicos de tu centro de salud.' });
     }
 
+    // 🛑 Validar si ya existe una consulta ese día para el paciente
+    const consultaExistente = await pool.query(`
+      SELECT 1 FROM consultas_telemedicina
+      WHERE paciente_id = $1 AND DATE(fecha_consulta) = $2
+    `, [pacienteId, fecha]);
+
+    if (consultaExistente.rowCount > 0) {
+      return res.status(400).json({ error: 'Ya tienes una consulta agendada para este día.' });
+    }
+
     console.log('🕓 Agendando para:', fechaHora);
 
-    // Convertir fechaHora a UTC considerando zona horaria de Chile (UTC−4)
+    // Convertir a UTC con zona horaria de Chile
     const fechaHoraLocal = new Date(`${fechaHora}-04:00`);
     const startDate = fechaHoraLocal.toISOString();
     const endDate = new Date(fechaHoraLocal.getTime() + 20 * 60000).toISOString();
 
-    // Crear sala de Whereby usando su API
+    // Crear sala en Whereby
     const axios = require('axios');
     const apiKey = process.env.WHEREBY_API_KEY;
 
@@ -67,7 +77,7 @@ router.post('/consultas', async (req, res) => {
       startDate,
       endDate,
       roomMode: 'normal',
-      fields: ['hostRoomUrl']
+      fields: ['hostRoomUrl', 'viewerRoomUrl'],
     }, {
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -75,14 +85,14 @@ router.post('/consultas', async (req, res) => {
       }
     });
 
-    const { meetingUrl, hostRoomUrl } = roomResponse.data;
+    const { hostRoomUrl, viewerRoomUrl } = roomResponse.data;
 
-    // Guardar en la base de datos
+    // Guardar consulta con enlaces
     await pool.query(`
       INSERT INTO consultas_telemedicina 
         (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado, link_sala_paciente, link_sala_medico)
       VALUES ($1, $2, $3::timestamp, $4, $5, 'pendiente', $6, $7)
-    `, [pacienteId, medicoId, fechaHora, tipo, notas, meetingUrl, hostRoomUrl]);
+    `, [pacienteId, medicoId, fechaHora, tipo, notas, viewerRoomUrl, hostRoomUrl]);
 
     res.json({
       message: 'Consulta agendada con éxito',
@@ -94,6 +104,7 @@ router.post('/consultas', async (req, res) => {
     res.status(500).json({ error: 'Error al agendar consulta' });
   }
 });
+
 
 
 
