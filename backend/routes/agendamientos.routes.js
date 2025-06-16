@@ -52,13 +52,20 @@ router.post('/consultas', async (req, res) => {
       return res.status(403).json({ error: 'Solo puedes agendar con médicos de tu centro de salud.' });
     }
 
-    // 🔹 Crear sala de Whereby usando su API
+    console.log('🕓 Agendando para:', fechaHora);
+
+    // Convertir fechaHora a UTC considerando zona horaria de Chile (UTC−4)
+    const fechaHoraLocal = new Date(`${fechaHora}-04:00`);
+    const startDate = fechaHoraLocal.toISOString();
+    const endDate = new Date(fechaHoraLocal.getTime() + 20 * 60000).toISOString();
+
+    // Crear sala de Whereby usando su API
     const axios = require('axios');
     const apiKey = process.env.WHEREBY_API_KEY;
 
     const roomResponse = await axios.post('https://api.whereby.dev/v1/meetings', {
-      startDate: fechaHora,
-      endDate: new Date(new Date(fechaHora).getTime() + 20 * 60000).toISOString(), // 20 min
+      startDate,
+      endDate,
       roomMode: 'normal',
       fields: ['hostRoomUrl']
     }, {
@@ -70,7 +77,7 @@ router.post('/consultas', async (req, res) => {
 
     const { meetingUrl, hostRoomUrl } = roomResponse.data;
 
-    // 🔹 Guardar consulta con enlaces generados
+    // Guardar en la base de datos
     await pool.query(`
       INSERT INTO consultas_telemedicina 
         (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado, link_sala, link_sala_host)
@@ -82,11 +89,12 @@ router.post('/consultas', async (req, res) => {
       link_sala: meetingUrl,
       link_sala_host: hostRoomUrl
     });
-    } catch (err) {
-      console.error('❌ Error al agendar consulta:', err.response?.data || err.message);
-      res.status(500).json({ error: 'Error al agendar consulta' });
-    }
+  } catch (err) {
+    console.error('❌ Error al agendar consulta:', err.message);
+    res.status(500).json({ error: 'Error al agendar consulta' });
+  }
 });
+
 
 
 // GET /api/doctores
