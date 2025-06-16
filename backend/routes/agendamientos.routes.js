@@ -157,13 +157,17 @@ router.get('/consultas/doctor/hoy', async (req, res) => {
       SELECT estado
       FROM consultas_telemedicina
       WHERE medico_id = $1
-        AND DATE(fecha_consulta) = CURRENT_DATE
+        AND DATE(fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'Chile/Continental') = CURRENT_DATE
     `, [medicoId]);
 
     const total = result.rows.length;
     const completadas = result.rows.filter(c => c.estado === 'terminada').length;
 
-    res.json({ total, completadas });
+    res.json({
+      total,
+      completadas
+    });
+
   } catch (err) {
     console.error('❌ Error al contar consultas del día:', err);
     res.status(500).json({ error: 'Error al obtener estadísticas del médico' });
