@@ -157,34 +157,37 @@ router.get('/consultas/doctor/hoy', async (req, res) => {
       SELECT estado
       FROM consultas_telemedicina
       WHERE medico_id = $1
-        AND DATE(fecha_consulta AT TIME ZONE 'UTC' AT TIME ZONE 'Chile/Continental') = CURRENT_DATE
+        AND fecha_consulta::date = (NOW() AT TIME ZONE 'Chile/Continental')::date
     `, [medicoId]);
 
     const total = result.rows.length;
     const completadas = result.rows.filter(c => c.estado === 'terminada').length;
 
-    res.json({
-      total,
-      completadas
-    });
-
+    res.json({ total, completadas });
   } catch (err) {
     console.error('❌ Error al contar consultas del día:', err);
     res.status(500).json({ error: 'Error al obtener estadísticas del médico' });
   }
 });
 
+// GET /api/consultas/hoy/:medicoId
 router.get('/consultas/hoy/:medicoId', async (req, res) => {
   const { medicoId } = req.params;
 
   try {
     const result = await pool.query(`
-      SELECT c.id, c.paciente_id, c.fecha_consulta, c.motivo_consulta, c.estado,
-             CONCAT(p.nombre, ' ', p.apellido) AS paciente_nombre, p.rut
+      SELECT 
+        c.id, 
+        c.paciente_id, 
+        c.fecha_consulta, 
+        c.motivo_consulta, 
+        c.estado,
+        CONCAT(p.nombre, ' ', p.apellido) AS paciente_nombre, 
+        p.rut
       FROM consultas_telemedicina c
       JOIN pacientes p ON p.id = c.paciente_id
-      WHERE c.medico_id = $1 
-        AND DATE(c.fecha_consulta) = CURRENT_DATE
+      WHERE c.medico_id = $1
+        AND c.fecha_consulta::date = (NOW() AT TIME ZONE 'Chile/Continental')::date
       ORDER BY c.fecha_consulta ASC
     `, [medicoId]);
 
