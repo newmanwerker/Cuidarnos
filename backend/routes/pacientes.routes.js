@@ -92,11 +92,11 @@ router.get('/:id/ficha-completa', async (req, res) => {
     const receta = recetaResult.rows[0] || null;
 
     // Alergias
-    const alergias = await pool.query(`
-      SELECT descripcion, severidad, causa
-      FROM alergia
-      WHERE paciente_id = $1
-    `, [id]);
+      const alergias = await pool.query(`
+        SELECT id, descripcion, severidad, causa
+        FROM alergia
+        WHERE paciente_id = $1
+      `, [id]);
 
     res.json({
       ficha,

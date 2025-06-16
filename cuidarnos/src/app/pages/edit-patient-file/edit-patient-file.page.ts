@@ -135,6 +135,7 @@ cancelarAgregarAlergia() {
 }
 
 editarAlergia(alergia: any) {
+  console.log('🩺 Editando alergia:', alergia);
   this.alergiaEditando = alergia;
   this.agregandoAlergia = true;
   this.nuevaAlergia = { ...alergia };
