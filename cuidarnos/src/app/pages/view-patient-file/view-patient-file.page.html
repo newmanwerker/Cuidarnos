@@ -90,7 +90,7 @@
               <strong>Propósito:</strong> {{m.proposito || 'No especificado'}}<br>
               <strong>Efectos secundarios:</strong> {{m.efectos_secundarios || 'No registrados'}}<br>
               <strong>Inicio:</strong> {{formatDate(m.fecha_inicio)}}<br>
-              <strong>Término:</strong> {{m.fecha_termino ? formatDate(m.fecha_termino) : 'Indefinido'}}
+              <strong>Término:</strong> {{m.fecha_termino ? formatDate(m.fecha_termino) : 'Indefinido'}}<br>
               <strong>Prescrito por:</strong> {{ m.nombre_medico_receta }} {{ m.apellido_medico_receta || '' }}<br>
             </p>
           </ion-label>

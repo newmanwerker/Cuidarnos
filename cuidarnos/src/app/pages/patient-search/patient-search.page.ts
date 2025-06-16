@@ -11,7 +11,9 @@ import { Router } from '@angular/router';
 })
 export class PatientSearchPage implements OnInit {
   searchTerm: string = '';
+  allPatients: any[] = [];
   filteredPatients: any[] = [];
+  centroSaludId: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -19,42 +21,47 @@ export class PatientSearchPage implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const usuario = this.authService.getUsuario();
+    console.log('👤 Usuario cargado:', usuario);
 
-  onSearchInput(event: any) {
-    const value = event.target.value.trim();
-    this.searchTerm = value;
+    this.centroSaludId = usuario?.centro_salud?.id || usuario?.id_centro_salud;
 
-    if (value.length < 2) {
-      this.filteredPatients = [];
+    if (!this.centroSaludId) {
+      console.warn('⚠️ Usuario sin centro de salud asignado');
       return;
     }
 
-      const usuario = this.authService.getUsuario();
-      console.log('👤 Usuario cargado:', usuario);
+    this.loadAllPatients();
+  }
 
-const centroSaludId = usuario?.centro_salud?.id || usuario?.id_centro_salud;
+  loadAllPatients() {
+    this.http.get<any[]>(`https://cuidarnos.up.railway.app/api/pacientes/centro/${this.centroSaludId}`)
+      .subscribe({
+        next: (data) => {
+          this.allPatients = data;
+          this.filteredPatients = data;
+        },
+        error: (err) => {
+          console.error('❌ Error al cargar pacientes:', err);
+        }
+      });
+  }
 
-if (!centroSaludId) {
-  console.warn('⚠️ Usuario sin centro de salud asignado');
-  return;
-}
+  onSearchInput(event: any) {
+    const value = event.target.value.trim().toLowerCase();
+    this.searchTerm = value;
 
+    if (!value) {
+      this.filteredPatients = this.allPatients;
+      return;
+    }
 
-    this.http.get<any[]>('https://cuidarnos.up.railway.app/api/pacientes/busqueda', {
-      params: {
-        centroSaludId: centroSaludId.toString(),
-        query: value
-      }
-    }).subscribe({
-      next: (data) => {
-        this.filteredPatients = data;
-      },
-      error: (err) => {
-        console.error('❌ Error al buscar pacientes:', err);
-        this.filteredPatients = [];
-      }
-    });
+    this.filteredPatients = this.allPatients.filter(p =>
+      p.nombre.toLowerCase().includes(value) ||
+      p.apellido.toLowerCase().includes(value) ||
+      p.rut.toLowerCase().includes(value)
+    );
   }
 
   viewPatientFile(patient: any) {

@@ -21,7 +21,6 @@
         </div>
         <div class="profile-info">
           <h1 class="doctor-name">{{doctor.name}}</h1>
-          <p class="doctor-specialty">{{doctor.specialty}}</p>
           <p class="doctor-id">Centro Médico: {{ doctor.centro?.nombre }}</p>
         </div>
       </div>
@@ -56,8 +55,8 @@
           <ion-icon name="videocam"></ion-icon>
         </div>
         <div class="action-content">
-          <h3 class="action-title">Today's Schedule</h3>
-          <p class="action-description">Join scheduled meetings with patients</p>
+          <h3 class="action-title">Agenda de hoy</h3>
+          <p class="action-description">Unirse a las videollamadas con pacientes</p>
           <span class="action-badge" *ngIf="upcomingAppointments > 0">
             {{upcomingAppointments}} upcoming
           </span>
@@ -69,8 +68,8 @@
           <ion-icon name="people-circle"></ion-icon>
         </div>
         <div class="action-content">
-          <h3 class="action-title">Patient Management</h3>
-          <p class="action-description">View and manage your patient list</p>
+          <h3 class="action-title">Administrar Pacientes</h3>
+          <p class="action-description">Busca y edita la ficha de tus pacientes</p>
         </div>
       </ion-card>
     </div>

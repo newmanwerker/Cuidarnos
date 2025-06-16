@@ -113,6 +113,30 @@ router.get('/:id/ficha-completa', async (req, res) => {
 });
 
 
+// GET /api/pacientes/centro/:centroSaludId
+router.get('/centro/:centroSaludId', async (req, res) => {
+  const { centroSaludId } = req.params;
+
+  if (!centroSaludId) {
+    return res.status(400).json({ error: 'Falta el ID del centro de salud' });
+  }
+
+  try {
+    const result = await pool.query(`
+      SELECT id, nombre, apellido, rut
+      FROM pacientes
+      WHERE id_centro_salud = $1
+      ORDER BY nombre
+    `, [centroSaludId]);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error('❌ Error al obtener pacientes del centro:', err);
+    res.status(500).json({ error: 'Error al obtener pacientes' });
+  }
+});
+
+
 
 
 module.exports = router;
