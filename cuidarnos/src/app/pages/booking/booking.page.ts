@@ -339,6 +339,7 @@ confirmAppointment() {
 
   this.http.post('https://cuidarnos.up.railway.app/api/consultas', payload).subscribe({
     next: () => {
+      alert('✅ Consulta agendada exitosamente!');
       // 🔄 Actualizar disponibilidad
       this.loadAvailableTimeSlots(this.selectedDate!, this.selectedDoctor!);
 

@@ -96,7 +96,7 @@ router.post('/consultas', async (req, res) => {
 
     res.json({
       message: 'Consulta agendada con éxito',
-      link_sala: meetingUrl,
+      link_sala: viewerRoomUrl,
       link_sala_host: hostRoomUrl
     });
   } catch (err) {
