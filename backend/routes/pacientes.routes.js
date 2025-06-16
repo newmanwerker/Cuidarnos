@@ -221,6 +221,39 @@ router.post('/condiciones', async (req, res) => {
 });
 
 
+router.put('/condiciones/:id', async (req, res) => {
+  const { id } = req.params;
+  const { nombre, severidad, estado, notas, doctor_tratante_id } = req.body;
+
+  try {
+    const result = await pool.query(`
+      UPDATE condicion_medica
+      SET nombre = $1, severidad = $2, estado = $3, notas = $4, doctor_tratante_id = $5
+      WHERE id = $6
+      RETURNING *
+    `, [nombre, severidad, estado, notas, doctor_tratante_id, id]);
+
+    res.json({ message: 'Condición actualizada', condicion: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error al actualizar condición médica:', err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+
+router.delete('/condiciones/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query('DELETE FROM condicion_medica WHERE id = $1', [id]);
+    res.json({ message: 'Condición eliminada' });
+  } catch (err) {
+    console.error('❌ Error al eliminar condición médica:', err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+
 
 
 module.exports = router;

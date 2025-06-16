@@ -16,6 +16,7 @@ export class EditPatientFilePage implements OnInit {
   alergias: any[] = [];
   medicamentos: any[] = [];
   receta: any = null;
+  condicionEditando: any = null;
 
   agregandoCondicion: boolean = false;
   nuevaCondicion: any = {
@@ -67,31 +68,47 @@ export class EditPatientFilePage implements OnInit {
     this.agregandoCondicion = false;
   }
 
-  guardarCondicion() {
-    const usuario = this.authService.getUsuario();
-    const doctorId = usuario?.id;
+guardarCondicion() {
+  const usuario = this.authService.getUsuario();
+  const doctorId = usuario?.id;
 
-    const payload = {
-      ficha_paciente_id: this.ficha.id,
-      nombre: this.nuevaCondicion.nombre,
-      severidad: this.nuevaCondicion.severidad,
-      estado: this.nuevaCondicion.estado,
-      notas: this.nuevaCondicion.notes,
-      doctor_tratante_id: doctorId
-    };
+  const payload = {
+    ficha_paciente_id: this.ficha.id,
+    nombre: this.nuevaCondicion.nombre,
+    severidad: this.nuevaCondicion.severidad,
+    estado: this.nuevaCondicion.estado,
+    notas: this.nuevaCondicion.notas,
+    doctor_tratante_id: doctorId
+  };
 
+  // Si es edición
+  if (this.condicionEditando) {
+    this.http.put(`https://cuidarnos.up.railway.app/api/pacientes/condiciones/${this.condicionEditando.id}`, payload)
+      .subscribe({
+        next: (res: any) => {
+          const index = this.condiciones.findIndex(c => c.id === this.condicionEditando.id);
+          if (index !== -1) this.condiciones[index] = res.condicion;
+          this.resetFormularioCondicion();
+        },
+        error: (err) => {
+          console.error('❌ Error al editar condición:', err);
+        }
+      });
+  } else {
+    // Crear nueva
     this.http.post('https://cuidarnos.up.railway.app/api/pacientes/condiciones', payload)
       .subscribe({
         next: (res: any) => {
-          console.log('✅ Condición médica guardada:', res);
           this.condiciones.push(res.condicion);
-          this.agregandoCondicion = false;
+          this.resetFormularioCondicion();
         },
         error: (err) => {
           console.error('❌ Error al guardar condición médica:', err);
         }
       });
   }
+}
+
 
   addAlergia() {
     // Lógica para abrir un modal o formulario de nueva alergia
@@ -132,4 +149,38 @@ export class EditPatientFilePage implements OnInit {
         }
       });
   }
+
+  editarCondicion(condicion: any) {
+  this.condicionEditando = condicion;
+  this.agregandoCondicion = true;
+  this.nuevaCondicion = { ...condicion };
+}
+
+eliminarCondicion(condicion: any) {
+  if (!confirm('¿Estás seguro de eliminar esta condición médica?')) return;
+
+  this.http.delete(`https://cuidarnos.up.railway.app/api/pacientes/condiciones/${condicion.id}`)
+    .subscribe({
+      next: () => {
+        this.condiciones = this.condiciones.filter(c => c.id !== condicion.id);
+      },
+      error: (err) => {
+        console.error('❌ Error al eliminar condición médica:', err);
+      }
+    });
+}
+
+
+resetFormularioCondicion() {
+  this.agregandoCondicion = false;
+  this.condicionEditando = null;
+  this.nuevaCondicion = {
+    nombre: '',
+    severidad: '',
+    estado: '',
+    notas: ''
+  };
+}
+
+
 }
