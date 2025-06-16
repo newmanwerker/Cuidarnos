@@ -179,7 +179,8 @@ router.get('/consultas/hoy/:medicoId', async (req, res) => {
              CONCAT(p.nombre, ' ', p.apellido) AS paciente_nombre, p.rut
       FROM consultas_telemedicina c
       JOIN pacientes p ON p.id = c.paciente_id
-      WHERE c.medico_id = $1 AND DATE(c.fecha_consulta) = CURRENT_DATE
+      WHERE c.medico_id = $1 
+        AND DATE(c.fecha_consulta) = CURRENT_DATE
       ORDER BY c.fecha_consulta ASC
     `, [medicoId]);
 

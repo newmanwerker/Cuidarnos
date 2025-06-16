@@ -115,13 +115,9 @@ export class HomePage {
   }
 
 getFormattedHour(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleTimeString('es-CL', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'America/Santiago'
-  });
+  // Extrae solo la parte de la hora (HH:MM)
+  const hora = dateStr.split('T')[1]?.slice(0, 5); // "08:00"
+  return hora ?? 'Hora inválida';
 }
 
 }
