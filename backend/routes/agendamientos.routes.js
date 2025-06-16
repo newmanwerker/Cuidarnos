@@ -35,18 +35,24 @@ router.post('/consultas', async (req, res) => {
   const { pacienteId, medicoId, fecha, hora, tipo, notas } = req.body;
 
   try {
-    const pendienteResult = await pool.query(`
-      SELECT 1
-      FROM consultas_telemedicina
-      WHERE paciente_id = $1 AND estado = 'pendiente'
-    `, [pacienteId]);
-
-    if (pendienteResult.rows.length > 0) {
-      return res.status(409).json({ error: 'Ya tienes una consulta pendiente. Finalízala antes de agendar otra.' });
-    }
+    // ... validación de consulta pendiente ...
 
     const horaRecortada = hora.slice(0, 5);
     const fechaHora = `${fecha}T${horaRecortada}:00`;
+
+    // 🔍 Verificar que paciente y médico pertenezcan al mismo centro
+    const [pacienteCentro, medicoCentro] = await Promise.all([
+      pool.query(`SELECT id_centro_salud FROM pacientes WHERE id = $1`, [pacienteId]),
+      pool.query(`SELECT id_centro_salud FROM medicos WHERE id = $1`, [medicoId])
+    ]);
+
+    if (
+      pacienteCentro.rows.length === 0 ||
+      medicoCentro.rows.length === 0 ||
+      pacienteCentro.rows[0].id_centro_salud !== medicoCentro.rows[0].id_centro_salud
+    ) {
+      return res.status(403).json({ error: 'Solo puedes agendar con médicos de tu centro de salud.' });
+    }
 
     console.log('🕓 Agendando para:', fechaHora);
 
@@ -63,6 +69,7 @@ router.post('/consultas', async (req, res) => {
   }
 });
 
+
 // GET /api/doctores
 router.get('/doctores', async (req, res) => {
   try {
@@ -78,8 +85,13 @@ router.get('/doctores', async (req, res) => {
   }
 });
 
+// GET /api/doctor-disponible?fecha=2025-06-20&centroSaludId=1
 router.get('/doctor-disponible', async (req, res) => {
-  const { fecha } = req.query;
+  const { fecha, centroSaludId } = req.query;
+
+  if (!fecha || !centroSaludId) {
+    return res.status(400).json({ error: 'Faltan parámetros requeridos (fecha o centroSaludId)' });
+  }
 
   try {
     const result = await pool.query(`
@@ -87,14 +99,15 @@ router.get('/doctor-disponible', async (req, res) => {
       FROM disponibilidad_medica d
       JOIN medicos m ON d.doctor_id = m.id
       WHERE d.fecha = $1
+        AND m.id_centro_salud = $2
       ORDER BY m.id
       LIMIT 1
-    `, [fecha]);
+    `, [fecha, centroSaludId]);
 
     if (result.rows.length > 0) {
       res.json(result.rows[0]);
     } else {
-      res.status(404).json({ error: 'No hay médico disponible ese día' });
+      res.status(404).json({ error: 'No hay médico disponible ese día en tu centro' });
     }
   } catch (err) {
     console.error('❌ Error al obtener doctor disponible:', err);
@@ -102,14 +115,26 @@ router.get('/doctor-disponible', async (req, res) => {
   }
 });
 
+
+
+// GET /api/dias-disponibles?centroSaludId=1
+
 router.get('/dias-disponibles', async (req, res) => {
+  const { centroSaludId } = req.query;
+
+  if (!centroSaludId) {
+    return res.status(400).json({ error: 'Falta el ID del centro de salud' });
+  }
+
   try {
     const result = await pool.query(`
-      SELECT DISTINCT fecha
-      FROM disponibilidad_medica
-      WHERE fecha >= (NOW() AT TIME ZONE 'Chile/Continental')::date
-      ORDER BY fecha
-    `);
+      SELECT DISTINCT d.fecha
+      FROM disponibilidad_medica d
+      JOIN medicos m ON d.doctor_id = m.id
+      WHERE d.fecha >= (NOW() AT TIME ZONE 'Chile/Continental')::date
+        AND m.id_centro_salud = $1
+      ORDER BY d.fecha
+    `, [centroSaludId]);
 
     const fechas = result.rows.map(row => row.fecha.toISOString().split('T')[0]);
     res.json(fechas);
