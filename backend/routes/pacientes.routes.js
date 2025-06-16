@@ -11,6 +11,8 @@ router.get('/busqueda', async (req, res) => {
   }
 
   try {
+    const centroIdParsed = parseInt(centroSaludId, 10);
+
     const result = await pool.query(`
       SELECT id, nombre, apellido, rut
       FROM pacientes
@@ -22,7 +24,7 @@ router.get('/busqueda', async (req, res) => {
         )
       ORDER BY nombre
       LIMIT 20
-    `, [centroSaludId, query]);
+    `, [centroIdParsed, query]);
 
     res.json(result.rows);
   } catch (err) {
@@ -30,5 +32,6 @@ router.get('/busqueda', async (req, res) => {
     res.status(500).json({ error: 'Error del servidor al buscar pacientes' });
   }
 });
+
 
 module.exports = router;
