@@ -66,7 +66,8 @@
               <strong>Severidad:</strong> {{c.severidad}}<br>
               <strong>Estado:</strong> {{c.estado}}<br>
               <strong>Notas:</strong> {{c.notas || 'Sin notas'}}<br>
-              <strong>Médico tratante:</strong> {{c.doctor_tratante_id || 'N/A'}}
+              <strong>Médico tratante:</strong> 
+              {{ c.nombre_doctor_tratante }} {{ c.apellido_doctor_tratante || '' }}
             </p>
           </ion-label>
           <ion-icon [name]="c.expanded ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
@@ -90,6 +91,7 @@
               <strong>Efectos secundarios:</strong> {{m.efectos_secundarios || 'No registrados'}}<br>
               <strong>Inicio:</strong> {{formatDate(m.fecha_inicio)}}<br>
               <strong>Término:</strong> {{m.fecha_termino ? formatDate(m.fecha_termino) : 'Indefinido'}}
+              <strong>Prescrito por:</strong> {{ m.nombre_medico_receta }} {{ m.apellido_medico_receta || '' }}<br>
             </p>
           </ion-label>
           <ion-icon [name]="m.expanded ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
@@ -97,20 +99,6 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Resultados de laboratorio -->
-    <ion-card *ngIf="examenes.length > 0">
-      <ion-card-header>
-        <ion-card-title>Exámenes de Laboratorio</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item *ngFor="let ex of examenes">
-          <ion-label>
-            <h2>{{ex.descripcion}}</h2>
-            <p><strong>Fecha:</strong> {{formatDate(ex.fecha)}}</p>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
 
     <!-- Receta Médica -->
 <ion-card class="info-card" *ngIf="receta">

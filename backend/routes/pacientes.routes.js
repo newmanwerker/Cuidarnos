@@ -53,7 +53,10 @@ router.get('/:id/ficha-completa', async (req, res) => {
 
     // Condiciones médicas
     const condiciones = await pool.query(`
-      SELECT cm.*, m.nombre AS nombre_doctor_tratante
+      SELECT 
+        cm.*, 
+        m.nombre AS nombre_doctor_tratante,
+        m.apellido AS apellido_doctor_tratante
       FROM condicion_medica cm
       LEFT JOIN medicos m ON cm.doctor_tratante_id = m.id
       WHERE cm.ficha_paciente_id = $1
@@ -61,7 +64,10 @@ router.get('/:id/ficha-completa', async (req, res) => {
 
     // Medicamentos
     const medicamentos = await pool.query(`
-      SELECT med.*, m.nombre AS nombre_medico_receta
+      SELECT 
+        med.*, 
+        m.nombre AS nombre_medico_receta,
+        m.apellido AS apellido_medico_receta
       FROM medicamento med
       LEFT JOIN medicos m ON med.medico_id = m.id
       WHERE med.paciente_id = $1
