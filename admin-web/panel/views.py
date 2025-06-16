@@ -3,7 +3,7 @@ import psycopg2
 import bcrypt
 import os
 from dotenv import load_dotenv
-from .models import Sucursal, AdmUser
+from .models import Sucursal, AdmUser, Rol
 import json
 from django.http import JsonResponse
 from django.utils import timezone
@@ -16,11 +16,9 @@ def login_admin(request):
         print("📩 Email recibido:", email)
         print("🔒 Password recibido:", password)
 
-        # Aca podemos agregar variables para el entorno pero por ahora no lo estoy usando
         load_dotenv()
 
         try:
-            # Conexión a PostgreSQL
             conn = psycopg2.connect(
                 dbname=os.getenv("PG_DBNAME"),
                 user=os.getenv("PG_USER"),
@@ -31,12 +29,11 @@ def login_admin(request):
             print("✅ Conexión a la base de datos exitosa")
 
             cur = conn.cursor()
+
+            # Verificar si es SUPER ADMIN
             cur.execute("SELECT super_psw FROM super_adm WHERE super_email = %s", (email,))
             result = cur.fetchone()
-            print("🧠 Resultado desde DB:", result)
-
-            cur.close()
-            conn.close()
+            print("🧠 Resultado desde DB (super_adm):", result)
 
             if result:
                 db_hash = result[0]
@@ -46,13 +43,31 @@ def login_admin(request):
                 print("✅ ¿Coincide la contraseña?:", match)
 
                 if match:
-                    print("🎉 Login exitoso")
+                    print("🎉 Login exitoso como Super Admin")
                     return redirect('dashboard')
-                else:
-                    print("❌ Contraseña incorrecta")
-            else:
-                print("❌ No se encontró el usuario")
 
+            # Verificar si es ADMIN DE SUCURSAL
+            cur.execute("SELECT adm_id, adm_password FROM adm_user WHERE adm_email = %s", (email,))
+            adm_result = cur.fetchone()
+            print("🧠 Resultado desde DB (adm_user):", adm_result)
+
+            if adm_result:
+                su_adm_id = adm_result[0]
+                db_hash = adm_result[1]
+                print("🔐 Hash recuperado:", db_hash)
+
+                match = bcrypt.checkpw(password.encode(), db_hash.encode())
+                print("✅ ¿Coincide la contraseña?:", match)
+
+                if match:
+                    print("🎉 Login exitoso como Admin de Sucursal")
+                    request.session['admin_id'] = su_adm_id  # Guardar el ID en sesión
+                    return redirect('dashboard_admin_sucursal')
+
+            cur.close()
+            conn.close()
+
+            print("❌ Usuario no autenticado")
             return render(request, 'login.html', {'error': 'Credenciales incorrectas'})
 
         except Exception as e:
@@ -61,12 +76,12 @@ def login_admin(request):
 
     return render(request, 'login.html')
 
+
 def dashboard(request):
     now = timezone.now()
     ultimas_sucursales = Sucursal.objects.order_by('-id')[:3]
     total_sucursales = Sucursal.objects.count()
 
-    #Filtrar sucursales creadas el ultimo mes
     sucursales_ult_mes = Sucursal.objects.filter(
         creado_el__year=now.year,
         creado_el__month=now.month
@@ -76,14 +91,16 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', {
         'ultimas_sucursales': ultimas_sucursales,
-        'total_sucursales':total_sucursales,
+        'total_sucursales': total_sucursales,
         'sucursales_ult_mes': sucursales_ult_mes,
         'usuarios_recientes': usuarios_recientes
     })
 
+
 def sucursales(request):
     sucursales = Sucursal.objects.all()
     return render(request, 'sucursales.html', {'sucursales': sucursales})
+
 
 def crear_sucursal(request):
     if request.method == "POST":
@@ -98,6 +115,29 @@ def crear_sucursal(request):
         return JsonResponse({'status': 'ok', 'id': nueva.id})
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
+
 def users(request):
     usuarios = AdmUser.objects.select_related('sucursal', 'rol_id').all()
     return render(request, 'users.html', {'usuarios': usuarios})
+
+
+# Vista de administrador de sucursal
+def dashboard_admin_sucursal(request):
+    adm_id = request.session.get('admin_id')
+    try:
+        centro = Sucursal.objects.get(adm_id=adm_id)
+    except Sucursal.DoesNotExist:
+        return render(request, 'login.html', {'error': 'Sucursal no encontrada'})
+
+    from .models import Medico, Paciente, Insumo  # Asegúrate de tenerlos definidos
+
+    total_medicos = Medico.objects.filter(id_centro_salud=centro.id).count()
+    total_pacientes = Paciente.objects.filter(id_centro_salud=centro.id).count()
+    insumos = Insumo.objects.filter(id_centro_salud=centro.id)
+
+    return render(request, 'AdminSucursal/dashboard-admin-sucursal.html', {
+        'centro': centro,
+        'total_medicos': total_medicos,
+        'total_pacientes': total_pacientes,
+        'insumos': insumos
+    })

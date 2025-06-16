@@ -61,3 +61,61 @@ class Rol(models.Model):
     
     def __str__(self):
         return self.rol_name
+    
+class Medico(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    nombre = models.TextField()
+    apellido = models.TextField()
+    especialidad = models.TextField()
+    telefono = models.TextField()
+    email = models.TextField()
+    password = models.TextField(null=True)
+    rut = models.TextField()
+    esp_id = models.IntegerField()
+    id_centro_salud = models.IntegerField()
+
+    class Meta:
+        db_table = 'medicos'
+        managed = False
+
+    def __str__(self):
+        return f"{self.nombre} {self.apellido}"
+    
+class Paciente(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    nombre = models.TextField()
+    apellido = models.TextField()
+    fecha_nacimiento = models.DateField()
+    genero = models.TextField()
+    direccion = models.TextField()
+    telefono = models.TextField()
+    email = models.TextField()
+    rut = models.TextField()
+    id_ficha_paciente = models.BigIntegerField()
+    id_centro_salud = models.BigIntegerField()
+
+    class Meta:
+        db_table = 'pacientes'
+        managed = False
+
+    def __str__(self):
+        return f"{self.nombre} {self.apellido}"
+    
+class Insumo(models.Model):
+
+    insumo_id = models.BigAutoField(primary_key=True)
+    nombre = models.TextField(db_column='nombre_insumo')   
+    descripcion = models.TextField()
+    cantidad = models.IntegerField()
+    id_centro_salud = models.ForeignKey(
+        Sucursal,
+        on_delete=models.SET_NULL,
+        null=True,
+        db_column='id_centro_salud'
+    )
+    class Meta:
+        db_table = 'insumo'
+        managed = False
+
+    def __str__(self):
+        return self.nombre
