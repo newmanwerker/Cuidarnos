@@ -35,12 +35,10 @@ router.post('/consultas', async (req, res) => {
   const { pacienteId, medicoId, fecha, hora, tipo, notas } = req.body;
 
   try {
-    // ... validación de consulta pendiente ...
-
     const horaRecortada = hora.slice(0, 5);
     const fechaHora = `${fecha}T${horaRecortada}:00`;
 
-    // 🔍 Verificar que paciente y médico pertenezcan al mismo centro
+    // Validar pertenencia al mismo centro
     const [pacienteCentro, medicoCentro] = await Promise.all([
       pool.query(`SELECT id_centro_salud FROM pacientes WHERE id = $1`, [pacienteId]),
       pool.query(`SELECT id_centro_salud FROM medicos WHERE id = $1`, [medicoId])
@@ -56,18 +54,39 @@ router.post('/consultas', async (req, res) => {
 
     console.log('🕓 Agendando para:', fechaHora);
 
+    // 🔹 Crear sala de Whereby
+    const response = await axios.post(
+      'https://api.whereby.dev/v1/meetings',
+      {
+        endDate: new Date(Date.now() + 60 * 60 * 1000).toISOString(), // 1 hora
+        roomNamePrefix: 'consulta',
+        roomMode: 'normal',
+        fields: ['hostRoomUrl', 'viewerRoomUrl']
+      },
+      {
+        headers: {
+          Authorization: process.env.WHEREBY_API_KEY,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const { hostRoomUrl, viewerRoomUrl } = response.data;
+
+    // 🔹 Insertar en base de datos
     await pool.query(`
       INSERT INTO consultas_telemedicina 
-        (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado)
-      VALUES ($1, $2, $3::timestamp, $4, $5, 'pendiente')
-    `, [pacienteId, medicoId, fechaHora, tipo, notas]);
+        (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado, link_sala_medico, link_sala_paciente)
+      VALUES ($1, $2, $3::timestamp, $4, $5, 'pendiente', $6, $7)
+    `, [pacienteId, medicoId, fechaHora, tipo, notas, hostRoomUrl, viewerRoomUrl]);
 
-    res.json({ message: 'Consulta agendada con éxito' });
+    res.json({ message: 'Consulta agendada con éxito', links: { hostRoomUrl, viewerRoomUrl } });
   } catch (err) {
-    console.error('❌ Error al agendar consulta:', err.message);
+    console.error('❌ Error al agendar consulta:', err.response?.data || err.message);
     res.status(500).json({ error: 'Error al agendar consulta' });
   }
 });
+
 
 
 // GET /api/doctores
