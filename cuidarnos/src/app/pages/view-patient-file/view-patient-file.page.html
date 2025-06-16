@@ -100,35 +100,6 @@
     </ion-card>
 
 
-    <!-- Receta Médica -->
-<ion-card class="info-card" *ngIf="receta">
-  <ion-card-header>
-    <ion-card-title>
-      <ion-icon name="document-text-outline"></ion-icon>
-      Receta Médica
-    </ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="info-label">Fecha de Emisión</span>
-        <span class="info-value">{{ receta.fecha_emision | date:'dd-MM-yyyy' }}</span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Fecha de Término</span>
-        <span class="info-value">{{ receta.fecha_termino | date:'dd-MM-yyyy' }}</span>
-      </div>
-    </div>
-    <div style="margin-top: 10px;">
-      <ion-textarea
-        readonly
-        auto-grow="true"
-        [value]="receta.observacion"
-        placeholder="Sin observaciones"
-      ></ion-textarea>
-    </div>
-  </ion-card-content>
-</ion-card>
 
 <!-- Alergias -->
 <ion-card class="info-card" *ngIf="alergias?.length">
@@ -160,23 +131,6 @@
   </ion-card-content>
 </ion-card>
 
-<!-- Exámenes con link a PDF -->
-<ion-card *ngIf="examenes.length > 0">
-  <ion-card-header>
-    <ion-card-title>Exámenes de Laboratorio</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-item *ngFor="let ex of examenes">
-      <ion-label>
-        <h2>{{ex.descripcion}}</h2>
-        <p><strong>Fecha:</strong> {{formatDate(ex.fecha)}}</p>
-        <p *ngIf="ex.archivo_pdf">
-          <a [href]="ex.archivo_pdf" target="_blank">Ver PDF</a>
-        </p>
-      </ion-label>
-    </ion-item>
-  </ion-card-content>
-</ion-card>
 
 
   </div>
