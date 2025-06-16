@@ -89,11 +89,9 @@ router.get('/doctores', async (req, res) => {
 router.get('/doctor-disponible', async (req, res) => {
   const { fecha, centroSaludId } = req.query;
 
-  if (!fecha || !centroSaludId) {
-    return res.status(400).json({ error: 'Faltan parámetros requeridos (fecha o centroSaludId)' });
-  }
-
   try {
+    console.log('🔍 Buscando doctor en fecha:', fecha, 'y centro:', centroSaludId); // 👈 agrega esta línea
+
     const result = await pool.query(`
       SELECT DISTINCT ON (m.id) m.id, m.nombre, m.especialidad
       FROM disponibilidad_medica d
@@ -107,7 +105,7 @@ router.get('/doctor-disponible', async (req, res) => {
     if (result.rows.length > 0) {
       res.json(result.rows[0]);
     } else {
-      res.status(404).json({ error: 'No hay médico disponible ese día en tu centro' });
+      res.status(404).json({ error: 'No hay médico disponible ese día' });
     }
   } catch (err) {
     console.error('❌ Error al obtener doctor disponible:', err);
@@ -223,5 +221,7 @@ router.get('/consultas/hoy/:medicoId', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener consultas del día' });
   }
 });
+
+
 
 module.exports = router;

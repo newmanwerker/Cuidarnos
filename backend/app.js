@@ -6,18 +6,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//Rutes
+// 🔹 Importar rutas
 const authRoutes = require('./routes/auth.routes');
-app.use('/api', authRoutes);
+const centrosRoutes = require('./routes/centros.routes');
+const agendamientosRoutes = require('./routes/agendamientos.routes');
+const pacientesRoutes = require('./routes/pacientes.routes');
 
-//Server
+// 🔹 Usar rutas
+app.use('/api', authRoutes);
+app.use('/api', centrosRoutes);
+app.use('/api', agendamientosRoutes);
+app.use('/api', pacientesRoutes);
+
+// 🔹 Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ BE server running on http://0.0.0.0:${PORT}`);
 });
-
-const centrosRoutes = require('./routes/centros.routes');
-app.use('/api', centrosRoutes);
-
-const agendamientosRoutes = require('./routes/agendamientos.routes');
-app.use('/api', agendamientosRoutes);

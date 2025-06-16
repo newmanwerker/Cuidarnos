@@ -65,9 +65,13 @@ ngOnInit() {
   this.doctors = [];
   this.filteredDoctors = [];
   this.selectedDoctor = null;
+  const usuario = this.authService.getUsuario();
+  const centroSaludId = usuario?.centro_salud?.id || usuario?.id_centro_salud;
 
   // Obtener fechas disponibles y luego actualizar calendario
-  this.http.get<string[]>('https://cuidarnos.up.railway.app/api/dias-disponibles').subscribe({
+  this.http.get<string[]>('https://cuidarnos.up.railway.app/api/dias-disponibles', {
+  params: { centroSaludId: centroSaludId?.toString() }
+}).subscribe({
     next: (fechas) => {
       this.availableDates = fechas;
       console.log('✅ Fechas con disponibilidad:', this.availableDates);
@@ -216,12 +220,16 @@ selectDate(date: Date) {
   const mm = (date.getMonth() + 1).toString().padStart(2, '0');
   const dd = date.getDate().toString().padStart(2, '0');
   const formattedDate = `${yyyy}-${mm}-${dd}`;
-
+  const usuario = this.authService.getUsuario();
+  const centroSaludId = usuario?.centro_salud?.id || usuario?.id_centro_salud;
   this.selectedDate = formattedDate;
 
-  this.http.get<any>('https://cuidarnos.up.railway.app/api/doctor-disponible', {
-    params: { fecha: formattedDate }
-  }).subscribe({
+this.http.get<any>('https://cuidarnos.up.railway.app/api/doctor-disponible', {
+  params: {
+    fecha: formattedDate,
+    centroSaludId: centroSaludId?.toString()
+  }
+}).subscribe({
     next: (doctor) => {
       if (doctor) {
         // Asegúrate de que los datos vengan bien formateados
