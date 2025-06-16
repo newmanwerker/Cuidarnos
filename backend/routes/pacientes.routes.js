@@ -177,6 +177,48 @@ router.put('/:id/ficha', async (req, res) => {
   }
 });
 
+// POST /api/condiciones
+router.post('/condiciones', async (req, res) => {
+  const {
+    ficha_paciente_id,
+    nombre,
+    severidad,
+    estado,
+    notas,
+    doctor_tratante_id
+  } = req.body;
+
+  if (!ficha_paciente_id || !nombre || !doctor_tratante_id) {
+    return res.status(400).json({ error: 'Faltan datos obligatorios (ficha_paciente_id, nombre, doctor_tratante_id)' });
+  }
+
+  try {
+    const result = await pool.query(`
+      INSERT INTO condicion_medica (
+        ficha_paciente_id,
+        nombre,
+        severidad,
+        estado,
+        notas,
+        doctor_tratante_id
+      )
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *
+    `, [
+      ficha_paciente_id,
+      nombre,
+      severidad || null,
+      estado || null,
+      notas || null,
+      doctor_tratante_id
+    ]);
+
+    res.status(201).json({ message: 'Condición médica añadida', condicion: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error al insertar condición médica:', err);
+    res.status(500).json({ error: 'Error al insertar condición médica' });
+  }
+});
 
 
 

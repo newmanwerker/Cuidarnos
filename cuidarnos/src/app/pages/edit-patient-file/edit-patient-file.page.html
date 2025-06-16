@@ -45,6 +45,38 @@
         <ion-button fill="clear" size="small" (click)="addCondicion()">
           <ion-icon name="add-circle-outline" slot="start"></ion-icon>Agregar
         </ion-button>
+        <ion-card-content>
+  <!-- Formulario para nueva condición médica -->
+  <div *ngIf="agregandoCondicion" class="form-condicion">
+    <ion-item>
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input [(ngModel)]="nuevaCondicion.nombre" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Severidad</ion-label>
+      <ion-select [(ngModel)]="nuevaCondicion.severidad">
+        <ion-select-option value="Severa">Severa</ion-select-option>
+        <ion-select-option value="Moderada">Moderada</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Estado</ion-label>
+      <ion-input [(ngModel)]="nuevaCondicion.estado"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Notas</ion-label>
+      <ion-textarea [(ngModel)]="nuevaCondicion.notas" autoGrow="true"></ion-textarea>
+    </ion-item>
+
+    <ion-button expand="block" color="success" (click)="guardarCondicion()">Guardar Condición</ion-button>
+    <ion-button expand="block" fill="clear" color="medium" (click)="cancelarAgregarCondicion()">Cancelar</ion-button>
+  </div>
+
+  <!-- Lista de condiciones existentes (a futuro) -->
+</ion-card-content>
       </ion-card-header>
       <ion-card-content>
         <!-- Aquí se listarán las condiciones existentes -->
