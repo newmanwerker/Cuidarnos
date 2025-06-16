@@ -30,8 +30,22 @@ export class PatientSearchPage implements OnInit {
       return;
     }
 
-    const usuario = this.authService.getUsuario();
-    const centroSaludId = usuario?.centro_salud?.id || usuario?.id_centro_salud;
+      const usuario = this.authService.getUsuario();
+      console.log('👤 Usuario cargado:', usuario);
+
+      let centroSaludId: number | undefined;
+
+      if (usuario?.tipo === 'medico') {
+        centroSaludId = usuario?.centro_salud?.id || usuario?.id_centro_salud;
+      } else if (usuario?.tipo === 'paciente') {
+        centroSaludId = usuario?.centro_salud?.id || usuario?.id_centro_salud;
+      }
+
+if (!centroSaludId) {
+  console.warn('⚠️ Usuario sin centro de salud asignado');
+  return;
+}
+
 
     this.http.get<any[]>('https://cuidarnos.up.railway.app/api/pacientes/busqueda', {
       params: {

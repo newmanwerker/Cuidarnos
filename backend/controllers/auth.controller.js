@@ -147,7 +147,10 @@ const consultaPendiente = consultasResult.rows[0] || null;
             apellido: medico.apellido,
             email: medico.email,
             especialidad: medico.especialidad,
-            centro_salud: medico.centro_salud
+            centro_salud: {
+            id: medico.id_centro_salud,
+            nombre: medico.centro_salud
+          }
           }
         });
       }
