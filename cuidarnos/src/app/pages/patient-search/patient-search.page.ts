@@ -58,7 +58,7 @@ if (!centroSaludId) {
   }
 
   viewPatientFile(patient: any) {
-    this.router.navigate(['/doctor/view-patient', patient.id]);
+    this.router.navigate(['/view-patient-file', patient.id]);
   }
 
   editPatientFile(patient: any) {

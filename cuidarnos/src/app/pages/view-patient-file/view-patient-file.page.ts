@@ -14,6 +14,8 @@ export class ViewPatientFilePage implements OnInit {
   condiciones: any[] = [];
   medicamentos: any[] = [];
   examenes: any[] = [];
+  receta: any = null;
+  alergias: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -34,6 +36,8 @@ export class ViewPatientFilePage implements OnInit {
           this.condiciones = data.condiciones || [];
           this.medicamentos = data.medicamentos || [];
           this.examenes = data.examenes || [];
+          this.receta = data.receta || null;
+          this.alergias = data.alergias || [];
         },
         error: (err) => {
           console.error('❌ Error al cargar ficha del paciente:', err);
@@ -70,6 +74,6 @@ export class ViewPatientFilePage implements OnInit {
   toggleMedication(m: any) { m.expanded = !m.expanded; }
 
   editPatientFile() {
-    this.router.navigate(['/doctor/edit-patient', this.patientId]);
+    this.router.navigate(['/edit-patient', this.patientId]);
   }
 }

@@ -51,44 +51,61 @@ router.get('/:id/ficha-completa', async (req, res) => {
 
     const ficha = fichaResult.rows[0];
 
-    // Obtener condiciones médicas
+    // Condiciones médicas
     const condiciones = await pool.query(`
-    SELECT 
-    cm.*, 
-    m.nombre AS nombre_doctor_tratante
-    FROM condicion_medica cm
-    LEFT JOIN medicos m ON cm.doctor_tratante_id = m.id
-    WHERE cm.ficha_paciente_id = $1
-
+      SELECT cm.*, m.nombre AS nombre_doctor_tratante
+      FROM condicion_medica cm
+      LEFT JOIN medicos m ON cm.doctor_tratante_id = m.id
+      WHERE cm.ficha_paciente_id = $1
     `, [ficha.id]);
 
-    // Obtener medicamentos
+    // Medicamentos
     const medicamentos = await pool.query(`
-      SELECT 
-      med.*, 
-      m.nombre AS nombre_medico_receta
+      SELECT med.*, m.nombre AS nombre_medico_receta
       FROM medicamento med
       LEFT JOIN medicos m ON med.medico_id = m.id
       WHERE med.paciente_id = $1
-
     `, [id]);
 
-    // Obtener resultados de laboratorio
+    // Resultados laboratorio
     const examenes = await pool.query(`
-      SELECT id, descripcion, fecha FROM resultado_laboratorio WHERE paciente_id = $1 ORDER BY fecha DESC
+      SELECT id, descripcion, fecha, archivo_pdf
+      FROM resultado_laboratorio
+      WHERE paciente_id = $1
+      ORDER BY fecha DESC
+    `, [id]);
+
+    // Receta más reciente
+    const recetaResult = await pool.query(`
+      SELECT *
+      FROM receta
+      WHERE id_paciente = $1
+      ORDER BY fecha_emision DESC
+      LIMIT 1
+    `, [id]);
+    const receta = recetaResult.rows[0] || null;
+
+    // Alergias
+    const alergias = await pool.query(`
+      SELECT descripcion, severidad, causa
+      FROM alergia
+      WHERE paciente_id = $1
     `, [id]);
 
     res.json({
       ficha,
       condiciones: condiciones.rows,
       medicamentos: medicamentos.rows,
-      examenes: examenes.rows
+      examenes: examenes.rows,
+      receta: receta,
+      alergias: alergias.rows
     });
   } catch (err) {
     console.error('❌ Error al obtener ficha completa:', err);
     res.status(500).json({ error: 'Error del servidor' });
   }
 });
+
 
 
 

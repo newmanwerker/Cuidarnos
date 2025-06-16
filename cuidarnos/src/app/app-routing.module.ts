@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: 'booking', loadChildren: () => import('./pages/booking/booking.module').then( m => m.BookingPageModule)},
   { path: 'settings', loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)},
   { path: 'accessibility', loadChildren: () => import('./pages/accessibility/accessibility.module').then( m => m.AccessibilityPageModule)},
-  { path: 'video-call', loadChildren: () => import('./pages/video-call/video-call.module').then( m => m.VideoCallPageModule)},  {
+  { path: 'video-call', loadChildren: () => import('./pages/video-call/video-call.module').then( m => m.VideoCallPageModule)},
+  {
     path: 'doctor-home',
     loadChildren: () => import('./pages/doctor-home/doctor-home.module').then( m => m.DoctorHomePageModule)
   },
@@ -23,7 +24,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/patient-search/patient-search.module').then( m => m.PatientSearchPageModule)
   },
   {
-    path: 'view-patient-file',
+    path: 'view-patient-file/:id',
     loadChildren: () => import('./pages/view-patient-file/view-patient-file.module').then( m => m.ViewPatientFilePageModule)
   },
 
