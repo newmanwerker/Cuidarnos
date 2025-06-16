@@ -80,7 +80,7 @@ router.post('/consultas', async (req, res) => {
     // Guardar en la base de datos
     await pool.query(`
       INSERT INTO consultas_telemedicina 
-        (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado, link_sala, link_sala_host)
+        (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado, link_sala_paciente, link_sala_medico)
       VALUES ($1, $2, $3::timestamp, $4, $5, 'pendiente', $6, $7)
     `, [pacienteId, medicoId, fechaHora, tipo, notas, meetingUrl, hostRoomUrl]);
 
