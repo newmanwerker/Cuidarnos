@@ -1,0 +1,620 @@
+ion-content {
+  --background: none;
+  background: linear-gradient(-50deg, #1e3a8a, #1e40af, #3b82f6, #1e3a8a);
+  background-size: 400% 400%;
+  animation: gradientMove 6s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+ion-header ion-toolbar {
+  --background: #1e3a8a;
+  --color: white;
+}
+
+.view-patient-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Cards */
+ion-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 0;
+  backdrop-filter: blur(10px);
+}
+
+/* Patient Header */
+.patient-header-card {
+  padding: 20px;
+}
+
+.patient-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.patient-avatar {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(30, 58, 138, 0.3);
+}
+
+.patient-avatar ion-icon {
+  color: white;
+  font-size: 28px;
+}
+
+.patient-basic-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.patient-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 0 0 4px 0;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.patient-id {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+
+.patient-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.patient-meta span {
+  font-size: 12px;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.patient-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.last-visit {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-card {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-icon {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon ion-icon {
+  color: #1e40af;
+  font-size: 20px;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Section Cards */
+.info-section-card {
+  padding: 20px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.section-header ion-icon {
+  color: #1e3a8a;
+  font-size: 20px;
+}
+
+.section-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin: 0;
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.info-row.full-width {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 14px;
+  color: #1e3a8a;
+  font-weight: 500;
+  text-align: right;
+  word-break: break-word;
+}
+
+.info-row.full-width .info-value {
+  text-align: left;
+}
+
+/* Conditions */
+.conditions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.condition-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.condition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.condition-header:hover {
+  background: #f1f5f9;
+}
+
+.condition-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.condition-name {
+  font-weight: 500;
+  color: #1e3a8a;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.condition-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.condition-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.condition-details {
+  padding: 12px;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Medications */
+.medications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.medication-item {
+  border: 2px solid #059669;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.medication-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f0fdf4;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.medication-header:hover {
+  background: #dcfce7;
+}
+
+.medication-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.medication-name {
+  font-weight: 500;
+  color: #1e3a8a;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.medication-dosage {
+  font-size: 12px;
+  color: #059669;
+  font-weight: 500;
+}
+
+.medication-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.medication-frequency {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.medication-details {
+  padding: 12px;
+  background: white;
+  border-top: 1px solid #059669;
+}
+
+/* Detail Rows */
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.detail-value {
+  font-size: 14px;
+  color: #1e3a8a;
+  font-weight: 500;
+  text-align: right;
+  word-break: break-word;
+}
+
+.detail-notes {
+  margin-top: 8px;
+}
+
+.notes-text {
+  font-size: 14px;
+  color: #374151;
+  margin: 4px 0 0 0;
+  line-height: 1.4;
+}
+
+/* Allergies */
+.allergies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.allergy-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #fef2f2;
+  border-radius: 10px;
+  border-left: 4px solid #ef4444;
+}
+
+.allergy-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.allergy-name {
+  font-weight: 500;
+  color: #1e3a8a;
+}
+
+.allergy-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.allergy-reaction {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Medical History */
+.history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.history-item {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.history-date {
+  flex-shrink: 0;
+  width: 80px;
+}
+
+.date-text {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.history-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin: 0 0 4px 0;
+}
+
+.history-details {
+  font-size: 13px;
+  color: #374151;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.history-facility {
+  font-size: 11px;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Lab Results */
+.lab-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lab-result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border-left: 4px solid #3b82f6;
+}
+
+.lab-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.lab-name {
+  font-weight: 500;
+  color: #1e3a8a;
+  font-size: 14px;
+}
+
+.lab-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.lab-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.lab-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+/* Empty State */
+.empty-card {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.empty-content ion-icon {
+  font-size: 48px;
+  color: #9ca3af;
+}
+
+.empty-content h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.empty-content p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 300px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .view-patient-container {
+    padding: 12px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .patient-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .patient-status {
+    align-items: center;
+  }
+  
+  .condition-header,
+  .medication-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .condition-meta,
+  .medication-meta {
+    justify-content: space-between;
+  }
+  
+  .history-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .history-date {
+    width: auto;
+  }
+}
+
+/* Badge Styling */
+ion-badge {
+  --padding-start: 6px;
+  --padding-end: 6px;
+  --padding-top: 3px;
+  --padding-bottom: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+/* Smooth Transitions */
+* {
+  transition: all 0.2s ease;
+}

@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'patient-search',
     loadChildren: () => import('./pages/patient-search/patient-search.module').then( m => m.PatientSearchPageModule)
   },
+  {
+    path: 'view-patient-file',
+    loadChildren: () => import('./pages/view-patient-file/view-patient-file.module').then( m => m.ViewPatientFilePageModule)
+  },
 
 ];
 

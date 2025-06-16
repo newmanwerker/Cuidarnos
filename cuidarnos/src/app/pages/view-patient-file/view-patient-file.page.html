@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/doctor/patient-search"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Ficha del Paciente</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="editPatientFile()">
+        <ion-icon slot="start" name="create"></ion-icon>
+        Editar
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="view-patient-container">
+
+    <!-- Encabezado del paciente -->
+    <ion-card class="patient-header-card">
+      <div class="patient-header">
+        <div class="patient-avatar">
+          <ion-icon name="person"></ion-icon>
+        </div>
+        <div class="patient-basic-info">
+          <h1>{{ficha.nombre}} {{ficha.apellido}}</h1>
+          <p>ID del Paciente: {{ficha.id}}</p>
+          <div class="patient-meta">
+            <span>{{calculateAge(ficha.fecha_nac)}} años</span>
+            <span>{{ficha.tipo_sangre || 'Sin especificar'}}</span>
+          </div>
+        </div>
+        <div class="patient-status">
+          <ion-badge color="success">Activo</ion-badge>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Información personal -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Información Personal</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>RUT:</strong> {{ficha.rut}}</p>
+        <p><strong>Fecha de nacimiento:</strong> {{formatDate(ficha.fecha_nac)}}</p>
+        <p><strong>Edad:</strong> {{calculateAge(ficha.fecha_nac)}} años</p>
+        <p><strong>Dirección:</strong> {{ficha.direccion}}</p>
+        <p><strong>Celular:</strong> {{ficha.celular}}</p>
+        <p><strong>Email:</strong> {{ficha.email}}</p>
+        <p><strong>Contacto de emergencia:</strong> {{ficha.contacto_emergencia}}</p>
+        <p><strong>Parentesco del contacto:</strong> {{ficha.parentezco_contacto}}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Condiciones médicas -->
+    <ion-card *ngIf="condiciones.length > 0">
+      <ion-card-header>
+        <ion-card-title>Condiciones Médicas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item *ngFor="let c of condiciones" (click)="toggleCondition(c)">
+          <ion-label>
+            <h2>{{c.nombre}}</h2>
+            <p *ngIf="c.expanded">
+              <strong>Severidad:</strong> {{c.severidad}}<br>
+              <strong>Estado:</strong> {{c.estado}}<br>
+              <strong>Notas:</strong> {{c.notas || 'Sin notas'}}<br>
+              <strong>Médico tratante:</strong> {{c.doctor_tratante_id || 'N/A'}}
+            </p>
+          </ion-label>
+          <ion-icon [name]="c.expanded ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Medicamentos -->
+    <ion-card *ngIf="medicamentos.length > 0">
+      <ion-card-header>
+        <ion-card-title>Medicamentos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item *ngFor="let m of medicamentos" (click)="toggleMedication(m)">
+          <ion-label>
+            <h2>{{m.nombre}}</h2>
+            <p *ngIf="m.expanded">
+              <strong>Dosis:</strong> {{m.dosis_mg}}mg<br>
+              <strong>Frecuencia:</strong> {{m.frecuencia}}<br>
+              <strong>Propósito:</strong> {{m.proposito || 'No especificado'}}<br>
+              <strong>Efectos secundarios:</strong> {{m.efectos_secundarios || 'No registrados'}}<br>
+              <strong>Inicio:</strong> {{formatDate(m.fecha_inicio)}}<br>
+              <strong>Término:</strong> {{m.fecha_termino ? formatDate(m.fecha_termino) : 'Indefinido'}}
+            </p>
+          </ion-label>
+          <ion-icon [name]="m.expanded ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Resultados de laboratorio -->
+    <ion-card *ngIf="examenes.length > 0">
+      <ion-card-header>
+        <ion-card-title>Exámenes de Laboratorio</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item *ngFor="let ex of examenes">
+          <ion-label>
+            <h2>{{ex.descripcion}}</h2>
+            <p><strong>Fecha:</strong> {{formatDate(ex.fecha)}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>
