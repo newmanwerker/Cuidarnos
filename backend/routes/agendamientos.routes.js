@@ -35,12 +35,10 @@ router.post('/consultas', async (req, res) => {
   const { pacienteId, medicoId, fecha, hora, tipo, notas } = req.body;
 
   try {
-    // ... validación de consulta pendiente ...
-
     const horaRecortada = hora.slice(0, 5);
     const fechaHora = `${fecha}T${horaRecortada}:00`;
 
-    // 🔍 Verificar que paciente y médico pertenezcan al mismo centro
+    // Verificar que paciente y médico pertenezcan al mismo centro
     const [pacienteCentro, medicoCentro] = await Promise.all([
       pool.query(`SELECT id_centro_salud FROM pacientes WHERE id = $1`, [pacienteId]),
       pool.query(`SELECT id_centro_salud FROM medicos WHERE id = $1`, [medicoId])
@@ -54,15 +52,36 @@ router.post('/consultas', async (req, res) => {
       return res.status(403).json({ error: 'Solo puedes agendar con médicos de tu centro de salud.' });
     }
 
-    console.log('🕓 Agendando para:', fechaHora);
+    // 🔹 Crear sala de Whereby usando su API
+    const axios = require('axios');
+    const apiKey = process.env.WHEREBY_API_KEY;
 
+    const roomResponse = await axios.post('https://api.whereby.dev/v1/meetings', {
+      startDate: fechaHora,
+      endDate: new Date(new Date(fechaHora).getTime() + 20 * 60000).toISOString(), // 20 min
+      roomMode: 'normal',
+      fields: ['hostRoomUrl']
+    }, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const { meetingUrl, hostRoomUrl } = roomResponse.data;
+
+    // 🔹 Guardar consulta con enlaces generados
     await pool.query(`
       INSERT INTO consultas_telemedicina 
-        (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado)
-      VALUES ($1, $2, $3::timestamp, $4, $5, 'pendiente')
-    `, [pacienteId, medicoId, fechaHora, tipo, notas]);
+        (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado, link_sala, link_sala_host)
+      VALUES ($1, $2, $3::timestamp, $4, $5, 'pendiente', $6, $7)
+    `, [pacienteId, medicoId, fechaHora, tipo, notas, meetingUrl, hostRoomUrl]);
 
-    res.json({ message: 'Consulta agendada con éxito' });
+    res.json({
+      message: 'Consulta agendada con éxito',
+      link_sala: meetingUrl,
+      link_sala_host: hostRoomUrl
+    });
   } catch (err) {
     console.error('❌ Error al agendar consulta:', err.message);
     res.status(500).json({ error: 'Error al agendar consulta' });
