@@ -18,6 +18,10 @@ const routes: Routes = [
     path: 'schedule',
     loadChildren: () => import('./pages/schedule/schedule.module').then( m => m.SchedulePageModule)
   },
+  {
+    path: 'patient-search',
+    loadChildren: () => import('./pages/patient-search/patient-search.module').then( m => m.PatientSearchPageModule)
+  },
 
 ];
 

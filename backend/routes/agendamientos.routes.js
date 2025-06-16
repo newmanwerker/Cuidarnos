@@ -107,7 +107,7 @@ router.get('/dias-disponibles', async (req, res) => {
     const result = await pool.query(`
       SELECT DISTINCT fecha
       FROM disponibilidad_medica
-      WHERE fecha >= CURRENT_DATE
+      WHERE fecha >= (NOW() AT TIME ZONE 'Chile/Continental')::date
       ORDER BY fecha
     `);
 
@@ -118,6 +118,7 @@ router.get('/dias-disponibles', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener días disponibles' });
   }
 });
+
 
 // GET /api/consultas/existe
 router.get('/consultas/existe', async (req, res) => {

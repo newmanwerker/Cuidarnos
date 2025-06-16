@@ -27,11 +27,10 @@ ngOnInit() {
       next: (data) => {
         this.todayAppointments = data.map((a: any) => ({
           ...a,
-          hora: new Date(a.fecha_consulta).toLocaleTimeString('es-CL', {
+          hora: new Date(new Date(a.fecha_consulta).getTime() + 4 * 60 * 60 * 1000).toLocaleTimeString('es-CL', {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: false,
-            timeZone: 'America/Santiago' // ✅ Correcta conversión
+            hour12: false
           })
         }));
       },

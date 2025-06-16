@@ -48,7 +48,7 @@ ngOnInit() {
   }
 
   goToPatientSearch() {
-    this.router.navigate(['/doctor/patient-search']);
+    this.router.navigate(['/patient-search']);
   }
 
   goToPatientManagement() {
