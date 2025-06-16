@@ -40,17 +40,27 @@
     </ion-card>
 
     <!-- Medical Conditions Card -->
-    <ion-card class="info-card" *ngIf="patient?.ficha_medica?.historial_medico?.length">
-      <div class="card-header">
-        <ion-icon name="heart"></ion-icon>
-        <h2>Condiciones Médicas</h2>
-      </div>
-      <div class="conditions-container">
-        <div *ngFor="let condition of patient.ficha_medica.historial_medico" class="condition-badge">
-          <span>{{ condition }}</span>
-        </div>
-      </div>
-    </ion-card>
+<ion-card class="info-card" *ngIf="patient?.condiciones?.length">
+  <div class="card-header">
+    <ion-icon name="heart"></ion-icon>
+    <h2>Condiciones Médicas</h2>
+  </div>
+
+  <ion-list>
+    <ion-item button *ngFor="let c of patient.condiciones" (click)="c.expanded = !c.expanded">
+      <ion-label>
+        <h2>{{ c.nombre }}</h2>
+        <p *ngIf="c.expanded">
+          <strong>Severidad:</strong> {{ c.severidad }}<br>
+          <strong>Estado:</strong> {{ c.estado }}<br>
+          <strong>Notas:</strong> {{ c.notas || 'Sin notas' }}<br>
+          <strong>Tratante:</strong> {{ c.nombre_doctor_tratante }} {{ c.apellido_doctor_tratante }}
+        </p>
+      </ion-label>
+      <ion-icon [name]="c.expanded ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-card>
 
     <!-- Medications Card -->
     <ion-card class="info-card">

@@ -12,18 +12,18 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="patient?.nombre; else cargando">
   <div class="medical-file-container">
 
-    <!-- Patient Basic Information -->
+    <!-- Información Básica -->
     <ion-card class="patient-card">
       <div class="patient-header">
         <div class="avatar-circle large">
           <ion-icon name="person"></ion-icon>
         </div>
         <div class="patient-info">
-          <h1 class="patient-name">{{patient.nombre}} {{patient.apellido}}</h1>
-          <p class="patient-id">Sucursal: {{patient.centro_salud}}</p>
+          <h1 class="patient-name">{{ patient.nombre }} {{ patient.apellido }}</h1>
+          <p class="patient-id">Sucursal: {{ patient.centro_salud }}</p>
           <div class="patient-tags">
             <ion-badge color="success">Activo</ion-badge>
             <ion-badge *ngIf="patient.insurance" color="success">Insured</ion-badge>
@@ -32,84 +32,81 @@
       </div>
     </ion-card>
 
-    <!-- Personal Information Section -->
+    <!-- Información Personal -->
     <ion-card class="info-card">
       <ion-card-header>
         <ion-card-title>
-          <ion-icon name="person-outline"></ion-icon>
-          Información Personal
+          <ion-icon name="person-outline"></ion-icon> Información Personal
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <div class="info-grid">
-          <div class="info-item">
+          <div class="info-item" *ngIf="patient.dateOfBirth">
             <span class="info-label">Fecha de Nacimiento</span>
-            <span class="info-value">{{patient.dateOfBirth}}</span>
+            <span class="info-value">{{ patient.dateOfBirth }}</span>
           </div>
-          <div class="info-item">
+          <div class="info-item" *ngIf="patient.age">
             <span class="info-label">Edad</span>
-            <span class="info-value">{{patient.age}} años</span>
+            <span class="info-value">{{ patient.age }} años</span>
           </div>
-          <div class="info-item">
+          <div class="info-item" *ngIf="patient.height">
             <span class="info-label">Altura</span>
-            <span class="info-value">{{patient.height}} cm</span>
+            <span class="info-value">{{ patient.height }} cm</span>
           </div>
-          <div class="info-item">
+          <div class="info-item" *ngIf="patient.weight">
             <span class="info-label">Peso</span>
-            <span class="info-value">{{patient.weight}} kg</span>
+            <span class="info-value">{{ patient.weight }} kg</span>
           </div>
-          <div class="info-item">
+          <div class="info-item" *ngIf="patient.bloodType">
             <span class="info-label">Tipo de Sangre</span>
-            <span class="info-value">{{patient.bloodType}}</span>
+            <span class="info-value">{{ patient.bloodType }}</span>
           </div>
-          <div class="info-item">
+          <div class="info-item" *ngIf="patient.rut">
             <span class="info-label">RUT</span>
-            <span class="info-value">{{patient.rut}}</span>
+            <span class="info-value">{{ patient.rut }}</span>
           </div>
         </div>
 
         <div class="contact-info">
-          <div class="contact-item">
+          <div class="contact-item" *ngIf="patient.address">
             <ion-icon name="home-outline"></ion-icon>
             <div>
               <span class="info-label">Dirección</span>
-              <span class="info-value full-width">{{patient.address}}</span>
+              <span class="info-value full-width">{{ patient.address }}</span>
             </div>
           </div>
-          <div class="contact-item">
+          <div class="contact-item" *ngIf="patient.phone">
             <ion-icon name="call-outline"></ion-icon>
             <div>
               <span class="info-label">Celular</span>
-              <span class="info-value">{{patient.phone}}</span>
+              <span class="info-value">{{ patient.phone }}</span>
             </div>
           </div>
-          <div class="contact-item">
+          <div class="contact-item" *ngIf="patient.email">
             <ion-icon name="mail-outline"></ion-icon>
             <div>
               <span class="info-label">Email</span>
-              <span class="info-value">{{patient.email}}</span>
+              <span class="info-value">{{ patient.email }}</span>
             </div>
           </div>
-          <div class="contact-item">
+          <div class="contact-item" *ngIf="patient.emergencyContact?.name">
             <ion-icon name="alert-circle-outline"></ion-icon>
             <div>
               <span class="info-label">Contacto de emergencia</span>
               <span class="info-value full-width">
-                {{patient.emergencyContact.name}} ({{patient.emergencyContact.relation}})
+                {{ patient.emergencyContact.name }} ({{ patient.emergencyContact.relation }})
               </span>
-
             </div>
           </div>
         </div>
       </ion-card-content>
     </ion-card>
 
-    <!-- Condiciones médicas -->
+    <!-- Condiciones Médicas -->
     <ion-card class="info-card" *ngIf="patient.medicalConditions?.length">
       <ion-card-header>
         <ion-card-title>
-          <ion-icon name="fitness-outline"></ion-icon>
-          Condiciones Médicas
+          <ion-icon name="fitness-outline"></ion-icon> Condiciones Médicas
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
@@ -118,31 +115,31 @@
             <div class="condition-header" (click)="toggleCondition(condition)">
               <div class="condition-name-container">
                 <ion-icon name="medical" color="danger"></ion-icon>
-                <span class="condition-name">{{condition.name}}</span>
+                <span class="condition-name">{{ condition.name }}</span>
               </div>
               <div class="condition-meta">
-                <span class="condition-date">{{condition.diagnosisDate}}</span>
+                <span class="condition-date">{{ condition.diagnosisDate }}</span>
                 <ion-icon [name]="condition.expanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
               </div>
             </div>
             <div class="condition-details" *ngIf="condition.expanded">
               <div class="detail-item">
                 <span class="detail-label">Dr tratante</span>
-                <span class="detail-value">Dr. {{condition.treatingPhysician}}</span>
+                <span class="detail-value">Dr. {{ condition.treatingPhysician }}</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Severidad</span>
                 <ion-badge [color]="condition.severity === 'Severa' ? 'danger' : condition.severity === 'Moderada' ? 'warning' : 'success'">
-                  {{condition.severity}}
+                  {{ condition.severity }}
                 </ion-badge>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Estado</span>
-                <span class="detail-value">{{condition.status}}</span>
+                <span class="detail-value">{{ condition.status }}</span>
               </div>
               <div class="detail-notes">
                 <span class="detail-label">Notas</span>
-                <p class="notes-text">{{condition.notes}}</p>
+                <p class="notes-text">{{ condition.notes }}</p>
               </div>
             </div>
           </div>
@@ -348,3 +345,11 @@
     </ion-card>
   </div>
 </ion-content>
+
+
+<ng-template #cargando>
+  <ion-content>
+    <ion-spinner name="crescent"></ion-spinner>
+    <div class="ion-text-center" style="margin-top: 16px;">Cargando ficha médica...</div>
+  </ion-content>
+</ng-template>

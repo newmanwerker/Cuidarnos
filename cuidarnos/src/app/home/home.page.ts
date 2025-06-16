@@ -1,81 +1,78 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
   standalone: false
 })
-export class HomePage {
-  patient: any = null;
+export class HomePage implements OnInit {
+  patient: any;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
-  ionViewWillEnter() {
-    this.loadPacienteData();
-  }
+  ngOnInit() {
+    const usuario = this.authService.getUsuario();
 
-  loadPacienteData() {
-    const storedUserData = localStorage.getItem('userData');
-
-    if (!storedUserData) {
-      console.warn('No hay datos en localStorage, redirigiendo al login...');
+    if (!usuario || !usuario.id) {
+      console.warn('⚠️ No hay sesión activa');
       this.router.navigate(['/login']);
       return;
     }
 
-    try {
-      const parsed = JSON.parse(storedUserData);
-      const paciente = parsed.paciente;
-
-      if (!paciente) {
-        console.warn('No se encontró el objeto paciente en los datos.');
-        this.router.navigate(['/login']);
-        return;
-      }
-
-      const ficha = paciente.ficha_medica;
-
-      this.patient = {
-        ...paciente,
-        centro_salud: paciente.centro_salud,
-        ficha_medica: ficha || {},
-        medications: Array.isArray(paciente.medications)
-          ? paciente.medications.map((m: any) => ({
-              name: m.nombre,
-              dosage: m.dosis,
-              frequency: m.frecuencia,
-              startDate: m.fecha_inicio || '',
-              endDate: m.fecha_termino || '',
-              prescribedBy: m.medico_nombre || 'Desconocido'
-            }))
-          : [],
-        appointments: Array.isArray(paciente.appointments) ? paciente.appointments : []
-      };
-    } catch (e) {
-      console.error('Error al parsear userData:', e);
-      this.router.navigate(['/login']);
-    }
+    // Cargar datos actualizados desde el backend
+    this.http.get<any>(`https://cuidarnos.up.railway.app/api/pacientes/${usuario.id}/ficha-completa`)
+      .subscribe({
+        next: (res) => {
+        this.patient = {
+          ...usuario,
+          ficha_medica: res.ficha,
+          medications: res.medicamentos,
+          receta: res.receta,
+          allergies: res.alergias,
+          labResults: res.examenes,
+          condiciones: res.condiciones // <-- Agregado
+        };
+        },
+        error: (err) => {
+          console.error('❌ Error al cargar datos actualizados del paciente:', err);
+        }
+      });
   }
 
-  getFullName(): string{
-    if (!this.patient) return '';
-    return `${this.patient.nombre} ${this.patient.apellido}`;
+  getFullName() {
+    return `${this.patient?.nombre || ''} ${this.patient?.apellido || ''}`;
   }
 
-  getSucursal(): string {
-    return this.patient?.centro_salud || 'No Data';
+  getSucursal() {
+    return this.patient?.centro_salud?.nombre || this.patient?.centro_salud || 'No definida';
   }
 
-  getMonth(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleString('default', { month: 'short' });
+  getMonth(date: string): string {
+    return new Date(date).toLocaleDateString('es-CL', { month: 'short' });
   }
 
-  getDay(dateString: string): string {
-    const date = new Date(dateString);
-    return date.getDate().toString();
+  getDay(date: string): string {
+    return new Date(date).getDate().toString();
+  }
+
+  getFormattedHour(date: string): string {
+    return new Date(date).toLocaleTimeString('es-CL', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  }
+
+  goToCall() {
+    this.router.navigate(['/videollamada']);
   }
 
   goToMedicalFile() {
@@ -86,38 +83,16 @@ export class HomePage {
     this.router.navigate(['/booking']);
   }
 
+  goToAccessibility() {
+    this.router.navigate(['/accessibility']);
+  }
+
   goToSettings() {
     this.router.navigate(['/settings']);
   }
 
-  goToAccessibility() {
-  this.router.navigate(['/accessibility']);
-  }
-
-  goToCall(){
-    this.router.navigate(['/video-call']);
-  }
-
-  isToday(dateStr: string): boolean {
-  const today = new Date();
-  const date = new Date(dateStr);
-  return (
-    today.getFullYear() === date.getFullYear() &&
-    today.getMonth() === date.getMonth() &&
-    today.getDate() === date.getDate()
-  );
-}
   logout() {
-    localStorage.removeItem('auth');
-    localStorage.removeItem('paciente');
-    localStorage.removeItem('userData');
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
-
-getFormattedHour(dateStr: string): string {
-  // Extrae solo la parte de la hora (HH:MM)
-  const hora = dateStr.split('T')[1]?.slice(0, 5); // "08:00"
-  return hora ?? 'Hora inválida';
-}
-
 }
