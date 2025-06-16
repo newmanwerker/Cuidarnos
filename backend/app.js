@@ -16,7 +16,8 @@ const pacientesRoutes = require('./routes/pacientes.routes');
 app.use('/api', authRoutes);
 app.use('/api', centrosRoutes);
 app.use('/api', agendamientosRoutes);
-app.use('/api', pacientesRoutes);
+app.use('/api/pacientes', pacientesRoutes);
+
 
 // 🔹 Iniciar servidor
 const PORT = process.env.PORT || 3000;
