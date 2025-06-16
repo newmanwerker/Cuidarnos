@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin Sucursal</title>
+  <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">Centro de Salud: {{ centro.nombre }}</h1>
+
+    <!-- Resumen de Totales -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold text-gray-700">Total de Médicos</h2>
+        <p class="text-3xl font-bold text-indigo-600 mt-2">{{ total_medicos }}</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold text-gray-700">Total de Pacientes</h2>
+        <p class="text-3xl font-bold text-green-600 mt-2">{{ total_pacientes }}</p>
+      </div>
+    </div>
+
+    <!-- Insumos disponibles -->
+    <div class="bg-white p-6 rounded-lg shadow mb-10">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Insumos Disponibles</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="bg-gray-200 text-gray-700">
+              <th class="text-left p-3">Nombre</th>
+              <th class="text-left p-3">Cantidad</th>
+              <th class="text-left p-3">Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for insumo in insumos %}
+            <tr class="border-b">
+              <td class="p-3">{{ insumo.nombre }}</td>
+              <td class="p-3">{{ insumo.cantidad }}</td>
+              <td class="p-3">{{ insumo.descripcion }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="p-3 text-gray-500">No hay insumos registrados</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Botón para agregar médico -->
+    <div class="flex justify-end">
+      <a href="#" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
+        + Agregar Médico
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>
