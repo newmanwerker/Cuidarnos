@@ -104,16 +104,61 @@
 
     <!-- Alergias -->
     <ion-card>
-      <ion-card-header>
-        <ion-card-title>Alergias</ion-card-title>
-        <ion-button fill="clear" size="small" (click)="addAlergia()">
-          <ion-icon name="add-circle-outline" slot="start"></ion-icon>Agregar
-        </ion-button>
-      </ion-card-header>
-      <ion-card-content>
-        <!-- Aquí se listarán las alergias existentes -->
-      </ion-card-content>
-    </ion-card>
+  <ion-card-header>
+    <ion-card-title>Alergias</ion-card-title>
+    <ion-button fill="clear" size="small" (click)="addAlergia()">
+      <ion-icon name="add-circle-outline" slot="start"></ion-icon>Agregar
+    </ion-button>
+  </ion-card-header>
+
+  <ion-card-content>
+    <!-- Formulario de nueva alergia -->
+    <div *ngIf="agregandoAlergia" class="form-alergia">
+      <ion-item>
+        <ion-label position="stacked">Descripción</ion-label>
+        <ion-input [(ngModel)]="nuevaAlergia.descripcion" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Severidad</ion-label>
+        <ion-select [(ngModel)]="nuevaAlergia.severidad">
+          <ion-select-option value="Leve">Leve</ion-select-option>
+          <ion-select-option value="Moderada">Moderada</ion-select-option>
+          <ion-select-option value="Severa">Severa</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Causa</ion-label>
+        <ion-input [(ngModel)]="nuevaAlergia.causa"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" color="success" (click)="guardarAlergia()">Guardar Alergia</ion-button>
+      <ion-button expand="block" fill="clear" color="medium" (click)="cancelarAgregarAlergia()">Cancelar</ion-button>
+    </div>
+
+    <!-- Lista de alergias -->
+    <ion-list *ngIf="alergias.length > 0">
+      <ion-item-sliding *ngFor="let a of alergias">
+        <ion-item>
+          <ion-label>
+            <h2>{{ a.descripcion }}</h2>
+            <p><strong>Severidad:</strong> {{ a.severidad }}</p>
+            <p><strong>Causa:</strong> {{ a.causa || 'No especificada' }}</p>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button color="warning" (click)="editarAlergia(a)">
+              <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button color="danger" (click)="eliminarAlergia(a)">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
 
     <!-- Medicamentos -->
     <ion-card>

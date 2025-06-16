@@ -17,6 +17,13 @@ export class EditPatientFilePage implements OnInit {
   medicamentos: any[] = [];
   receta: any = null;
   condicionEditando: any = null;
+  agregandoAlergia: boolean = false;
+  alergiaEditando: any = null;
+  nuevaAlergia: any = {
+    descripcion: '',
+    severidad: '',
+    causa: ''
+  };
 
   agregandoCondicion: boolean = false;
   nuevaCondicion: any = {
@@ -25,6 +32,8 @@ export class EditPatientFilePage implements OnInit {
     estado: '',
     notas: ''
   };
+
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -110,9 +119,78 @@ guardarCondicion() {
 }
 
 
-  addAlergia() {
-    // Lógica para abrir un modal o formulario de nueva alergia
+addAlergia() {
+  this.agregandoAlergia = true;
+  this.alergiaEditando = null;
+  this.nuevaAlergia = {
+    descripcion: '',
+    severidad: '',
+    causa: ''
+  };
+}
+
+cancelarAgregarAlergia() {
+  this.agregandoAlergia = false;
+  this.alergiaEditando = null;
+}
+
+editarAlergia(alergia: any) {
+  this.alergiaEditando = alergia;
+  this.agregandoAlergia = true;
+  this.nuevaAlergia = { ...alergia };
+}
+
+guardarAlergia() {
+  const payload = {
+    paciente_id: this.ficha.paciente_id,
+    descripcion: this.nuevaAlergia.descripcion,
+    severidad: this.nuevaAlergia.severidad,
+    causa: this.nuevaAlergia.causa
+  };
+
+  if (this.alergiaEditando) {
+    // Editar
+    this.http.put(`https://cuidarnos.up.railway.app/api/pacientes/alergias/${this.alergiaEditando.id}`, payload)
+      .subscribe({
+        next: (res: any) => {
+          const index = this.alergias.findIndex(a => a.id === this.alergiaEditando.id);
+          if (index !== -1) this.alergias[index] = res.alergia;
+          this.cancelarAgregarAlergia();
+        },
+        error: (err) => {
+          console.error('❌ Error al editar alergia:', err);
+        }
+      });
+  } else {
+    // Crear
+    this.http.post('https://cuidarnos.up.railway.app/api/pacientes/alergias', payload)
+      .subscribe({
+        next: (res: any) => {
+          this.alergias.push(res.alergia);
+          this.cancelarAgregarAlergia();
+        },
+        error: (err) => {
+          console.error('❌ Error al guardar alergia:', err);
+        }
+      });
   }
+}
+
+eliminarAlergia(alergia: any) {
+  if (!confirm('¿Deseas eliminar esta alergia?')) return;
+
+  this.http.delete(`https://cuidarnos.up.railway.app/api/pacientes/alergias/${alergia.id}`)
+    .subscribe({
+      next: () => {
+        this.alergias = this.alergias.filter(a => a.id !== alergia.id);
+      },
+      error: (err) => {
+        console.error('❌ Error al eliminar alergia:', err);
+      }
+    });
+}
+
+
 
   addMedicamento() {
     // Lógica para abrir formulario o modal, y si no hay receta, crear una primero

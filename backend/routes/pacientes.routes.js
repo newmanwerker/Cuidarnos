@@ -254,6 +254,62 @@ router.delete('/condiciones/:id', async (req, res) => {
 });
 
 
+router.post('/alergias', async (req, res) => {
+  const { paciente_id, descripcion, severidad, causa } = req.body;
+
+  if (!paciente_id || !descripcion) {
+    return res.status(400).json({ error: 'Faltan datos obligatorios' });
+  }
+
+  try {
+    const result = await pool.query(`
+      INSERT INTO alergia (paciente_id, descripcion, severidad, causa)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *
+    `, [paciente_id, descripcion, severidad || null, causa || null]);
+
+    res.status(201).json({ message: 'Alergia añadida', alergia: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error al insertar alergia:', err);
+    res.status(500).json({ error: 'Error al insertar alergia' });
+  }
+});
+
+
+router.put('/alergias/:id', async (req, res) => {
+  const { id } = req.params;
+  const { descripcion, severidad, causa } = req.body;
+
+  try {
+    const result = await pool.query(`
+      UPDATE alergia
+      SET descripcion = $1, severidad = $2, causa = $3
+      WHERE id = $4
+      RETURNING *
+    `, [descripcion, severidad, causa, id]);
+
+    res.json({ message: 'Alergia actualizada', alergia: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error al actualizar alergia:', err);
+    res.status(500).json({ error: 'Error al actualizar alergia' });
+  }
+});
+
+
+
+router.delete('/alergias/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query('DELETE FROM alergia WHERE id = $1', [id]);
+    res.json({ message: 'Alergia eliminada' });
+  } catch (err) {
+    console.error('❌ Error al eliminar alergia:', err);
+    res.status(500).json({ error: 'Error al eliminar alergia' });
+  }
+});
+
+
 
 
 module.exports = router;
