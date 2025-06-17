@@ -99,6 +99,9 @@ async joinMeeting(appointment: any) {
       position: 'bottom'
     });
     await toast.present();
+    this.router.navigate(['/video-call'], {
+    queryParams: { url: appointment.link_sala_medico }
+  });
   }
 
   viewNotes(appointment: any) {
