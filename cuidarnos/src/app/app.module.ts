@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 
@@ -22,6 +22,7 @@ registerLocaleData(localeEs);
     HttpClientModule
   ],
   providers: [
+    InAppBrowser,
     { provide: LOCALE_ID, useValue: 'es' },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

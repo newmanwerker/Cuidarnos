@@ -1,0 +1,9 @@
+.video-call-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+iframe {
+  flex: 1;
+}

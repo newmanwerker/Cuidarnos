@@ -7,15 +7,28 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="!loading && videoUrl">
-  <iframe [src]="videoUrl" width="100%" height="100%" allow="camera; microphone; fullscreen" style="border:none;"></iframe>
-</ion-content>
+<ion-content [fullscreen]="true" class="video-call-container">
+  <ng-container *ngIf="error; else content">
+    <div class="error-message">
+      <p>Error al cargar la videollamada.</p>
+    </div>
+  </ng-container>
 
-<ion-content *ngIf="loading">
-  <ion-spinner></ion-spinner>
-  <p class="ion-text-center">Cargando videollamada...</p>
-</ion-content>
+  <ng-template #content>
+    <ng-container *ngIf="loading">
+      <ion-spinner></ion-spinner>
+      <p class="ion-text-center">Cargando videollamada...</p>
+    </ng-container>
 
-<ion-content *ngIf="error && !loading">
-  <p class="ion-text-center">No tienes una consulta activa.</p>
+    <ng-container *ngIf="!loading && !isMobile && videoUrl">
+      <iframe
+        [src]="videoUrl"
+        allow="camera; microphone; fullscreen"
+        frameborder="0"
+        width="100%"
+        height="100%"
+        style="border: none; display: block;"
+      ></iframe>
+    </ng-container>
+  </ng-template>
 </ion-content>

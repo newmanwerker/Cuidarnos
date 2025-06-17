@@ -48,20 +48,19 @@ onSubmit() {
   if (this.loginForm.valid) {
     let { nombre, rut } = this.loginForm.value;
 
-    // 🔹 Tomar solo el primer nombre (con tildes intactas)
     let primerNombreRaw = nombre.trim().split(' ')[0];
-
-    // 🔹 Capitalizar (primera letra mayúscula, resto minúsculas)
     let primerNombre = primerNombreRaw.charAt(0).toUpperCase() + primerNombreRaw.slice(1).toLowerCase();
-
-    // 🔹 Limpiar RUT (sin puntos, con K mayúscula)
     rut = rut.replace(/\./g, '').toUpperCase();
 
     console.log('Enviando login con:', primerNombre, rut);
 
+    // ✅ Borra todo lo viejo ANTES del login
+    localStorage.clear();
+
     this.authService.login({ nombre: primerNombre, rut }).subscribe({
       next: (res: any) => {
         console.log('✅ Login exitoso', res);
+
         localStorage.setItem('auth', 'true');
         localStorage.setItem('userData', JSON.stringify(res));
 
@@ -72,7 +71,7 @@ onSubmit() {
           this.router.navigateByUrl('/home');
         } else if (tipo === 'medico') {
           localStorage.setItem('medico', JSON.stringify(res.medico));
-          this.router.navigateByUrl('/doctor-home'); // ajusta si la ruta es diferente
+          this.router.navigateByUrl('/doctor-home');
         } else {
           alert('Tipo de usuario no reconocido');
         }

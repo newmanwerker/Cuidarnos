@@ -366,22 +366,25 @@ confirmAppointment() {
       const rut = this.authService.getUsuario().rut;
       const nombre = this.authService.getUsuario().nombre;
 
-      this.http.post('https://cuidarnos.up.railway.app/api/auth/login', { rut, nombre }).subscribe({
-        next: (updatedData: any) => {
-          console.log('✅ Datos nuevos del paciente:', updatedData);
-          localStorage.setItem('userData', JSON.stringify(updatedData));
+this.http.post('https://cuidarnos.up.railway.app/api/auth/login', { rut, nombre }).subscribe({
+  next: (updatedData: any) => {
+    console.log('✅ Datos nuevos del paciente:', updatedData);
+    localStorage.setItem('userData', JSON.stringify(updatedData));
+    localStorage.setItem('paciente', JSON.stringify(updatedData.paciente)); // 💡 refuerza esto también
 
-          setTimeout(() => {
-            this.router.navigateByUrl('/home');
-          }, 300);
-        },
-        error: () => {
-          alert('Consulta agendada, pero no se pudo actualizar la sesión. Recarga manualmente.');
-          setTimeout(() => {
-            this.router.navigateByUrl('/home');
-          }, 300);
-        }
+    setTimeout(() => {
+      this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/home']);
       });
+    }, 300);
+  },
+  error: () => {
+    alert('Consulta agendada, pero no se pudo actualizar la sesión. Recarga manualmente.');
+    setTimeout(() => {
+      this.router.navigateByUrl('/home');
+    }, 300);
+  }
+});
     },
     error: (err) => {
       if (err.status === 409) {

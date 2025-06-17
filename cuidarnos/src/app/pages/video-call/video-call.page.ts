@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { Platform } from '@ionic/angular';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-video-call',
@@ -9,51 +11,46 @@ import { HttpClient } from '@angular/common/http';
   standalone: false
 })
 export class VideoCallPage implements OnInit {
-  videoUrl: SafeResourceUrl | null = null;
-  loading = true;
-  error = false;
+  loading: boolean = true;
+  error: boolean = false;
+  videoUrl: SafeResourceUrl = '';
+  isMobile: boolean = false;
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
+  constructor(
+    private route: ActivatedRoute,
+    private iab: InAppBrowser,
+    private platform: Platform,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit() {
-    // 1️⃣ Primero intentamos obtener desde localStorage
-    const storedLink = localStorage.getItem('videocallLink');
+    this.route.queryParams.subscribe(params => {
+      const url = params['url'];
+      this.isMobile = this.platform.is('capacitor');
 
-    if (storedLink) {
-      this.setVideoUrl(storedLink);
-      return;
-    }
+      console.log('🔗 URL recibida:', url);
+      console.log('📱 Es móvil:', this.isMobile);
 
-    // 2️⃣ Si no hay en localStorage, obtenemos desde ficha
-    const stored = localStorage.getItem('userData');
-    const id = stored ? JSON.parse(stored).paciente?.id : null;
-
-    if (!id) {
-      this.error = true;
-      this.loading = false;
-      return;
-    }
-
-    this.http.get<any>(`https://cuidarnos.up.railway.app/api/pacientes/${id}/ficha-completa`)
-      .subscribe({
-        next: (res) => {
-          const link = res.consulta_pendiente?.link_sala_paciente;
-          if (link) {
-            this.setVideoUrl(link);
-          } else {
-            this.error = true;
-          }
-          this.loading = false;
-        },
-        error: () => {
-          this.error = true;
+      if (url) {
+        if (this.isMobile) {
+          this.videoUrl = url;
+          this.openInApp(); // Abre en navegador del sistema (no WebView)
+        } else {
+          this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
           this.loading = false;
         }
-      });
+      } else {
+        this.error = true;
+        this.loading = false;
+      }
+    });
   }
 
-  setVideoUrl(link: string) {
-    this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(link);
-    this.loading = false;
+  openInApp() {
+    const browser = this.iab.create(this.videoUrl as string, '_system', {
+      location: 'no',
+      zoom: 'no'
+    });
+    browser.show();
   }
 }

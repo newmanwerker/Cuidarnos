@@ -83,31 +83,35 @@
     </ion-card>
 
     <!-- Appointments Card -->
-<ion-card class="info-card" *ngIf="patient?.appointments?.length">
-  <div class="card-header">
-    <ion-icon name="calendar"></ion-icon>
-    <h2>Reunión Pendiente</h2>
-  </div>
-
-  <div class="appointments-list">
+<ion-card class="info-card">
+<div class="appointments-list">
+  <ng-container *ngIf="patient?.appointments?.length > 0; else noAppointments">
     <div *ngFor="let appointment of patient.appointments" class="appointment-item">
       <div class="appointment-date">
         <div class="date-box">
           <span class="date-month">{{ getMonth(appointment.date) }}</span>
           <span class="date-day">{{ getDay(appointment.date) }}</span>
         </div>
-          <span class="appointment-time">{{ getFormattedHour(appointment.fecha_consulta) }}</span>
+        <span class="appointment-time">{{ getFormattedHour(appointment.date) }}</span>
       </div>
       <div class="appointment-details">
+        <h3 class="appointment-type">{{ appointment.motivo_consulta }}</h3>
         <h3 class="appointment-type">{{ appointment.type }}</h3>
-        <span class="appointment-doctor">{{ appointment.doctor }} </span>
+        <span class="appointment-doctor">{{ appointment.doctor }}</span>
 
         <button class="join-button" (click)="goToCall(appointment.link)">
-  Ingresar a la consulta médica
-</button>
+          Ingresar a la consulta médica
+        </button>
       </div>
     </div>
-  </div>
+  </ng-container>
+
+  <ng-template #noAppointments>
+    <div class="appointment-item">
+      <p style="text-align: center; width: 100%;">No tienes una reunión agendada todavía.</p>
+    </div>
+  </ng-template>
+</div>
 </ion-card>
 
     <div class="toolbar-spacer"></div>

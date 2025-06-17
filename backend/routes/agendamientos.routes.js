@@ -92,7 +92,7 @@ router.post('/consultas', async (req, res) => {
       INSERT INTO consultas_telemedicina 
         (paciente_id, medico_id, fecha_consulta, motivo_consulta, nota, estado, link_sala_paciente, link_sala_medico)
       VALUES ($1, $2, $3::timestamp, $4, $5, 'pendiente', $6, $7)
-    `, [pacienteId, medicoId, fechaHora, tipo, notas, roomUrl, hostRoomUrl]);
+    `, [pacienteId, medicoId, fechaHora, tipo, notas, viewerRoomUrl, hostRoomUrl]);
 
     res.json({
       message: 'Consulta agendada con éxito',
@@ -245,6 +245,7 @@ router.get('/consultas/hoy/:medicoId', async (req, res) => {
         c.fecha_consulta, 
         c.motivo_consulta, 
         c.estado,
+        c.link_sala_medico,  -- 🔹 añade esto
         CONCAT(p.nombre, ' ', p.apellido) AS paciente_nombre, 
         p.rut
       FROM consultas_telemedicina c
