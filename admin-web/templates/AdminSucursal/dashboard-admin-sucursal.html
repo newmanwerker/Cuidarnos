@@ -89,9 +89,16 @@
     <!-- Contenido Tab: Personal -->
     <div id="contenidoPersonal" class="hidden">
       <div class="bg-white rounded-xl shadow p-6">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">Médicos Registrados</h2>
-        <p class="text-sm text-gray-500">Aquí puedes visualizar el personal médico asignado a este centro de salud.</p>
-        <!-- tabla de medicos -->
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Médicos Registrados</h2>
+            <p class="text-sm text-gray-500">Aquí puedes visualizar el personal médico asignado a este centro de salud.</p>
+          </div>
+          <button onclick="abrirModalMedico()" class="bg-white border border-gray-300 rounded-full px-6 py-2 text-sm font-semibold shadow hover:bg-gray-50 transition">
+            + Agregar Médico
+          </button>
+        </div>
+        <!-- tabla de médicos aquí -->
       </div>
     </div>
 
@@ -190,6 +197,81 @@
         </form>
       </div>
     </div>
+
+    <!-- Modal para agregar médico -->
+    <div id="modalAgregarMedico" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 relative">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Agregar Nuevo Médico</h2>
+        <form id="form-medico" class="space-y-4">
+          <div>
+            <label for="nombre_medico" class="block text-sm font-medium text-gray-700">Nombre</label>
+            <input type="text" name="nombre" id="nombre_medico" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+          </div>
+          <div>
+            <label for="apellido_medico" class="block text-sm font-medium text-gray-700">Apellido</label>
+            <input type="text" name="apellido" id="apellido_medico" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+          </div>
+          <div>
+            <label for="esp_id" class="block text-sm font-medium text-gray-700">Especialidad</label>
+            <select name="esp_id" id="esp_id" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+              <option value="">Seleccione...</option>
+              <option value="1">Médico General</option>
+              <option value="2">Médico Internista</option>
+              <option value="3">Pediatra</option>
+              <option value="4">Ginecólogo / Obstetra</option>
+              <option value="5">Cardiólogo</option>
+              <option value="6">Neurólogo</option>
+              <option value="7">Psiquiatra</option>
+              <option value="8">Psicólogo Clínico</option>
+              <option value="9">Endocrinólogo</option>
+              <option value="10">Otorrinolaringólogo</option>
+              <option value="11">Oftalmólogo</option>
+              <option value="12">Odontólogo / Dentista</option>
+              <option value="13">Dermatólogo</option>
+              <option value="14">Infectólogo</option>
+              <option value="15">Inmunólogo / Alergólogo</option>
+              <option value="16">Gastroenterólogo</option>
+              <option value="17">Urólogo</option>
+              <option value="18">Traumatólogo / Ortopedista</option>
+              <option value="19">Reumatólogo</option>
+              <option value="20">Geriatra</option>
+              <option value="21">Radiólogo</option>
+              <option value="22">Laboratorista Clínico</option>
+              <option value="23">Cirujano General</option>
+              <option value="24">Cirujano Plástico</option>
+              <option value="25">Neurocirujano</option>
+              <option value="26">Médico del Deporte</option>
+              <option value="27">Médico Ocupacional</option>
+              <option value="28">Patólogo</option>
+              <option value="29">Anestesiólogo</option>
+            </select>
+            <input type="hidden" name="especialidad" id="especialidad_nombre">
+          </div>
+          <div>
+            <label for="telefono_medico" class="block text-sm font-medium text-gray-700">Teléfono</label>
+            <input type="text" name="telefono" id="telefono_medico" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+          </div>
+          <div>
+            <label for="email_medico" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" name="email" id="email_medico" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+          </div>
+          <div>
+            <label for="rut_medico" class="block text-sm font-medium text-gray-700">RUT</label>
+            <input type="text" name="rut" id="rut_medico" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
+          </div>
+          <div>
+            <label for="password_medico" class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input type="password" name="password" id="password_medico" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Opcional">
+          </div>
+          <input type="hidden" name="id_centro_salud" value="{{ centro.id }}">
+          <div class="flex justify-end gap-2 pt-4">
+            <button type="button" onclick="cerrarModalMedico()" class="px-4 py-2 rounded-md border text-gray-700 hover:bg-gray-100">Cancelar</button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
 
   </div>
   <script src="{% static 'js/sucursalAdmin.js' %}"></script>

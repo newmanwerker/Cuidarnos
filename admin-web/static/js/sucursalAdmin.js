@@ -80,6 +80,67 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+function abrirModalMedico() {
+  const modal = document.getElementById("modalAgregarMedico");
+  if (modal) {
+    modal.classList.remove("hidden");
+  }
+}
+
+function cerrarModalMedico() {
+  const modal = document.getElementById("modalAgregarMedico");
+  if (modal) {
+    modal.classList.add("hidden");
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const formMedico = document.getElementById('form-medico');
+  if (!formMedico) return;
+
+  // Capturar especialidad por nombre
+  const selectEspecialidad = document.getElementById('esp_id');
+  const inputEspecialidad = document.getElementById('especialidad_nombre');
+
+  if (selectEspecialidad && inputEspecialidad) {
+    selectEspecialidad.addEventListener('change', function () {
+      const selectedOption = selectEspecialidad.options[selectEspecialidad.selectedIndex];
+      inputEspecialidad.value = selectedOption.text;
+    });
+  }
+
+  formMedico.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(formMedico);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/crear_medico/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result.status === 'ok') {
+        alert('Médico creado correctamente');
+        cerrarModalMedico();
+        location.reload();
+      } else {
+        alert('Error al crear médico');
+        console.error(result.error);
+      }
+    } catch (error) {
+      console.error('Error al crear médico:', error);
+    }
+  });
+});
+
 // Helper para obtener el token CSRF (si es necesario)
 function getCookie(name) {
   let cookieValue = null;

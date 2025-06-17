@@ -177,6 +177,34 @@ def crear_paciente(request):
 
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
+@csrf_exempt
+def crear_medico(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            # Si se envía una contraseña, encriptarla
+            hashed_password = None
+            if data.get("password"):
+                hashed_password = bcrypt.hashpw(data["password"].encode(), bcrypt.gensalt()).decode()
+
+            nuevo_medico = Medico.objects.create(
+                nombre=data["nombre"],
+                apellido=data["apellido"],
+                esp_id=int(data["esp_id"]),
+                telefono=data["telefono"],
+                email=data["email"],
+                rut=data["rut"],
+                id_centro_salud=data["id_centro_salud"],
+                password=hashed_password
+            )
+
+            return JsonResponse({"status": "ok", "medico_id": nuevo_medico.id})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Método no permitido"}, status=405)
+
 
 def dashboard_admin_sucursal(request):
     centro_id = request.session.get("centro_id")
