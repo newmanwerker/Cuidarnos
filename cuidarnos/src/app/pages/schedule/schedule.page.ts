@@ -127,5 +127,33 @@ async joinMeeting(appointment: any) {
     }
   }
 
+
+  endSession(appointment: any) {
+  this.http.put(`https://cuidarnos.up.railway.app/api/consultas/${appointment.id}/finalizar`, {})
+    .subscribe({
+      next: async (res) => {
+        appointment.estado = 'terminada';
+
+        const toast = await this.toastController.create({
+          message: `Consulta con ${appointment.paciente_nombre} finalizada.`,
+          duration: 2000,
+          color: 'medium',
+          position: 'bottom'
+        });
+        toast.present();
+      },
+      error: async (err) => {
+        console.error('❌ Error al finalizar consulta:', err);
+        const toast = await this.toastController.create({
+          message: 'Error al finalizar consulta.',
+          duration: 2000,
+          color: 'danger',
+          position: 'bottom'
+        });
+        toast.present();
+      }
+    });
+}
+
   
 }

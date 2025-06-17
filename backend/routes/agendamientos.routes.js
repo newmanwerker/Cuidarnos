@@ -264,4 +264,28 @@ router.get('/consultas/hoy/:medicoId', async (req, res) => {
 
 
 
+// PUT /api/consultas/:id/finalizar
+router.put('/consultas/:id/finalizar', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(`
+      UPDATE consultas_telemedicina
+      SET estado = 'terminada'
+      WHERE id = $1
+      RETURNING *;
+    `, [id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Consulta no encontrada' });
+    }
+
+    res.json({ message: 'Consulta marcada como terminada', consulta: result.rows[0] });
+  } catch (err) {
+    console.error('❌ Error al finalizar consulta:', err);
+    res.status(500).json({ error: 'Error al finalizar la consulta' });
+  }
+});
+
+
 module.exports = router;

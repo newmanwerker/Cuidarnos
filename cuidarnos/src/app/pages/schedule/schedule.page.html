@@ -59,12 +59,15 @@
                   <ion-icon slot="start" name="play-circle"></ion-icon>
                   Continuar
                 </ion-button>
-
+                <ion-button *ngIf="appointment.estado === 'en curso'" color="danger" (click)="endSession(appointment)">
+                  <ion-icon slot="start" name="stop-circle"></ion-icon>
+                  Finalizar
+                </ion-button>
                 <ion-button *ngIf="appointment.estado === 'terminada'" fill="outline" (click)="viewNotes(appointment)">
                   <ion-icon slot="start" name="document-text"></ion-icon>
                   Ver Notas
                 </ion-button>
-              </div>
+            </div>
             </div>
 
             <div class="appointment-status">
