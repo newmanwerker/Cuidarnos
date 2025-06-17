@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 import psycopg2
 import bcrypt
+from django.views.decorators.csrf import csrf_exempt
 import os
 from dotenv import load_dotenv
-from .models import Sucursal, AdmUser, Rol
+from .models import Sucursal, AdmUser, Rol, FichaPaciente, Paciente, Medico, Insumo
 import json
 from django.http import JsonResponse
 from django.utils import timezone
@@ -61,7 +62,18 @@ def login_admin(request):
 
                 if match:
                     print("🎉 Login exitoso como Admin de Sucursal")
-                    request.session['admin_id'] = su_adm_id  # Guardar el ID en sesión
+
+                    # Obtener también el centro_id desde la base de datos
+                    cur.execute("SELECT adm_centro_salud FROM adm_user WHERE adm_id = %s", (su_adm_id,))
+                    centro_result = cur.fetchone()
+                    centro_id = centro_result[0] if centro_result else None
+
+                    # Guardar en sesión
+                    request.session['admin_id'] = su_adm_id
+                    request.session['centro_id'] = centro_id
+
+                    print("💾 Centro guardado en sesión:", centro_id)
+
                     return redirect('dashboard_admin_sucursal')
 
             cur.close()
@@ -121,23 +133,78 @@ def users(request):
     return render(request, 'users.html', {'usuarios': usuarios})
 
 
-# Vista de administrador de sucursal
+
+
+@csrf_exempt
+def crear_paciente(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            # Obtener datos de paciente
+            paciente = Paciente.objects.create(
+                nombre=data["nombre"],
+                apellido=data["apellido"],
+                fecha_nacimiento=data["fecha_nacimiento"],
+                genero=data["genero"],
+                direccion=data["direccion"],
+                telefono=data["telefono"],
+                email=data["email"],
+                rut=data["rut"],
+                id_centro_salud=data["id_centro_salud"]
+            )
+
+            # Crear ficha del paciente
+            ficha = FichaPaciente.objects.create(
+                paciente_id=paciente.id,
+                centro_salud_id=data["id_centro_salud"],
+                fecha_creacion=timezone.now(),
+                historial_medico=data["historial_medico"],
+                tipo_sangre=data["tipo_sangre"],
+                contacto_emergencia=data["contacto_emergencia"],
+                activo=data.get("activo", True),
+                altura=data["altura"],
+                peso=data["peso"],
+                parentesco_contacto=data["parentesco_contacto"]
+            )
+
+            paciente.id_ficha_paciente = ficha.id
+            paciente.save()
+
+            return JsonResponse({"status": "ok", "paciente_id": paciente.id})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Método no permitido"}, status=405)
+
+
 def dashboard_admin_sucursal(request):
-    adm_id = request.session.get('admin_id')
-    try:
-        centro = Sucursal.objects.get(adm_id=adm_id)
-    except Sucursal.DoesNotExist:
-        return render(request, 'login.html', {'error': 'Sucursal no encontrada'})
+    centro_id = request.session.get("centro_id")
+    centro = Sucursal.objects.get(id=centro_id)
 
-    from .models import Medico, Paciente, Insumo  # Asegúrate de tenerlos definidos
+    medicos = Medico.objects.filter(id_centro_salud=centro.id)
+    total_medicos = medicos.count()
 
-    total_medicos = Medico.objects.filter(id_centro_salud=centro.id).count()
-    total_pacientes = Paciente.objects.filter(id_centro_salud=centro.id).count()
-    insumos = Insumo.objects.filter(id_centro_salud=centro.id)
+    pacientes = Paciente.objects.filter(id_centro_salud=centro.id)
+    
+    from datetime import date
+    def calcular_edad(fecha_nacimiento):
+        today = date.today()
+        return today.year - fecha_nacimiento.year - ((today.month, today.day) < (fecha_nacimiento.month, fecha_nacimiento.day))
 
-    return render(request, 'AdminSucursal/dashboard-admin-sucursal.html', {
-        'centro': centro,
-        'total_medicos': total_medicos,
-        'total_pacientes': total_pacientes,
-        'insumos': insumos
+    for paciente in pacientes:
+        try:
+            ficha = FichaPaciente.objects.get(paciente_id=paciente.id)
+            paciente.edad = calcular_edad(paciente.fecha_nacimiento)
+        except FichaPaciente.DoesNotExist:
+            paciente.edad = "N/A"
+
+    insumos = Insumo.objects.filter(id_centro_salud=centro)
+
+    return render(request, "AdminSucursal/dashboard-admin-sucursal.html", {
+        "centro": centro,
+        "medicos": medicos,
+        "pacientes": pacientes,
+        "insumos": insumos,
+        "total_medicos": total_medicos
     })
