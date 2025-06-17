@@ -104,24 +104,30 @@ router.get('/:id/ficha-completa', async (req, res) => {
 
     // Reunión pendiente más próxima
     const reunion = await pool.query(`
-      SELECT link_sala_paciente
-      FROM consultas_telemedicina
-      WHERE paciente_id = $1 AND estado = 'pendiente'
-      ORDER BY fecha_consulta ASC
+      SELECT 
+        ct.fecha_consulta,
+        ct.motivo_consulta,
+        ct.link_sala_paciente,
+        m.nombre || ' ' || m.apellido AS nombre_medico
+      FROM consultas_telemedicina ct
+      LEFT JOIN medicos m ON ct.medico_id = m.id
+      WHERE ct.paciente_id = $1 AND ct.estado = 'pendiente'
+      ORDER BY ct.fecha_consulta ASC
       LIMIT 1
     `, [id]);
 
-    const linkSalaPaciente = reunion.rows[0]?.link_sala_paciente || null;
+    const consulta_pendiente = reunion.rows[0] || null;
 
-    res.json({
-      ficha,
-      condiciones: condiciones.rows,
-      medicamentos: medicamentos.rows,
-      examenes: examenes.rows,
-      receta,
-      alergias: alergias.rows,
-      linkSalaPaciente // <--- se incluye en la respuesta
-    });
+
+      res.json({
+        ficha,
+        condiciones: condiciones.rows,
+        medicamentos: medicamentos.rows,
+        examenes: examenes.rows,
+        receta,
+        alergias: alergias.rows,
+        consulta_pendiente // ← importante
+      });
   } catch (err) {
     console.error('❌ Error al obtener ficha completa:', err);
     res.status(500).json({ error: 'Error del servidor' });

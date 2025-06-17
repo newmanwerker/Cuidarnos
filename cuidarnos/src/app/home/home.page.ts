@@ -18,19 +18,20 @@ export class HomePage implements OnInit {
     private authService: AuthService
   ) {}
 
-  ngOnInit() {
-    const usuario = this.authService.getUsuario();
+ngOnInit() {
+  const usuario = this.authService.getUsuario();
 
-    if (!usuario || !usuario.id) {
-      console.warn('⚠️ No hay sesión activa');
-      this.router.navigate(['/login']);
-      return;
-    }
+  if (!usuario || !usuario.id) {
+    console.warn('⚠️ No hay sesión activa');
+    this.router.navigate(['/login']);
+    return;
+  }
 
-    // Cargar datos actualizados desde el backend
-    this.http.get<any>(`https://cuidarnos.up.railway.app/api/pacientes/${usuario.id}/ficha-completa`)
-      .subscribe({
-        next: (res) => {
+  this.http.get<any>(`https://cuidarnos.up.railway.app/api/pacientes/${usuario.id}/ficha-completa`)
+    .subscribe({
+      next: (res) => {
+        console.log('📦 Ficha completa recibida:', res);
+
         this.patient = {
           ...usuario,
           ficha_medica: res.ficha,
@@ -38,14 +39,21 @@ export class HomePage implements OnInit {
           receta: res.receta,
           allergies: res.alergias,
           labResults: res.examenes,
-          condiciones: res.condiciones // <-- Agregado
+          condiciones: res.condiciones,
+          appointments: res.consulta_pendiente ? [{
+            date: res.consulta_pendiente.fecha_consulta,
+            type: res.consulta_pendiente.motivo_consulta,
+            doctor: res.consulta_pendiente.nombre_medico,
+            link: res.consulta_pendiente.link_sala_paciente
+          }] : []
         };
-        },
-        error: (err) => {
-          console.error('❌ Error al cargar datos actualizados del paciente:', err);
-        }
-      });
-  }
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar datos actualizados del paciente:', err);
+      }
+    });
+}
+
 
   getFullName() {
     return `${this.patient?.nombre || ''} ${this.patient?.apellido || ''}`;
