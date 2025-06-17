@@ -77,7 +77,7 @@ router.post('/consultas', async (req, res) => {
       startDate,
       endDate,
       roomMode: 'normal',
-      fields: ['hostRoomUrl', 'viewerRoomUrl'],
+      fields: ['hostRoomUrl', 'roomUrl '],
     }, {
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -85,7 +85,7 @@ router.post('/consultas', async (req, res) => {
       }
     });
 
-    const { hostRoomUrl, viewerRoomUrl } = roomResponse.data;
+    const { hostRoomUrl, roomUrl  } = roomResponse.data;
 
     // Guardar consulta con enlaces
     await pool.query(`
@@ -96,7 +96,7 @@ router.post('/consultas', async (req, res) => {
 
     res.json({
       message: 'Consulta agendada con éxito',
-      link_sala: viewerRoomUrl,
+      link_sala: roomUrl ,
       link_sala_host: hostRoomUrl
     });
   } catch (err) {
