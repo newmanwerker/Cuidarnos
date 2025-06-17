@@ -88,7 +88,6 @@ def login_admin(request):
 
     return render(request, 'login.html')
 
-
 def dashboard(request):
     now = timezone.now()
     ultimas_sucursales = Sucursal.objects.order_by('-id')[:3]
@@ -108,11 +107,9 @@ def dashboard(request):
         'usuarios_recientes': usuarios_recientes
     })
 
-
 def sucursales(request):
     sucursales = Sucursal.objects.all()
     return render(request, 'sucursales.html', {'sucursales': sucursales})
-
 
 def crear_sucursal(request):
     if request.method == "POST":
@@ -127,21 +124,24 @@ def crear_sucursal(request):
         return JsonResponse({'status': 'ok', 'id': nueva.id})
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-
 def users(request):
     usuarios = AdmUser.objects.select_related('sucursal', 'rol_id').all()
     return render(request, 'users.html', {'usuarios': usuarios})
-
-
-
 
 @csrf_exempt
 def crear_paciente(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
+            print("📦 Datos recibidos del formulario:", data)
 
-            # Obtener datos de paciente
+            # Calcular edad a partir de la fecha de nacimiento
+            from datetime import date
+            fecha_nac = date.fromisoformat(data["fecha_nacimiento"])
+            today = date.today()
+            edad = today.year - fecha_nac.year - ((today.month, today.day) < (fecha_nac.month, fecha_nac.day))
+
+            # Crear paciente
             paciente = Paciente.objects.create(
                 nombre=data["nombre"],
                 apellido=data["apellido"],
@@ -165,14 +165,24 @@ def crear_paciente(request):
                 activo=data.get("activo", True),
                 altura=data["altura"],
                 peso=data["peso"],
-                parentesco_contacto=data["parentesco_contacto"]
+                parentesco_contacto=data["parentesco_contacto"],
+                nombre=data["nombre"],
+                apellido=data["apellido"],
+                rut=data["rut"],
+                email=data["email"],
+                celular=data["telefono"],
+                direccion=data["direccion"],
+                fecha_nac=data["fecha_nacimiento"],
+                edad=edad
             )
 
             paciente.id_ficha_paciente = ficha.id
             paciente.save()
 
             return JsonResponse({"status": "ok", "paciente_id": paciente.id})
+
         except Exception as e:
+            print("🧨 Error en crear_paciente:", e)
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Método no permitido"}, status=405)
@@ -183,7 +193,6 @@ def crear_medico(request):
         try:
             data = json.loads(request.body)
 
-            # Si se envía una contraseña, encriptarla
             hashed_password = None
             if data.get("password"):
                 hashed_password = bcrypt.hashpw(data["password"].encode(), bcrypt.gensalt()).decode()
@@ -206,7 +215,6 @@ def crear_medico(request):
 
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
-
 def dashboard_admin_sucursal(request):
     centro_id = request.session.get("centro_id")
     centro = Sucursal.objects.get(id=centro_id)
@@ -215,7 +223,7 @@ def dashboard_admin_sucursal(request):
     total_medicos = medicos.count()
 
     pacientes = Paciente.objects.filter(id_centro_salud=centro.id)
-    
+
     from datetime import date
     def calcular_edad(fecha_nacimiento):
         today = date.today()

@@ -133,9 +133,19 @@ class FichaPaciente(models.Model):
     peso = models.IntegerField()
     parentesco_contacto = models.CharField(db_column="parentezco_contacto", max_length=100)
 
+    # Campos adicionales necesarios para que el formulario no falle:
+    nombre = models.TextField(null=True)
+    apellido = models.TextField(null=True)
+    rut = models.TextField(null=True)
+    email = models.TextField(null=True)
+    celular = models.TextField(null=True)
+    direccion = models.TextField(null=True)
+    fecha_nac = models.DateField(null=True)
+    edad = models.IntegerField(null=True)  
+
     class Meta:
         db_table = 'ficha_paciente'
-        managed = False
+        managed = False 
 
     def __str__(self):
         return f"Ficha {self.id} - Paciente {self.paciente_id}"
