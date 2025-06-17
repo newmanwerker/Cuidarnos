@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { formatDate } from '@angular/common';
 import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
 @Component({
   selector: 'app-schedule',
@@ -12,10 +14,12 @@ import { ToastController } from '@ionic/angular';
 export class SchedulePage implements OnInit {
   todayAppointments: any[] = [];
 
-  constructor(
-    private http: HttpClient,
-    private toastController: ToastController
-  ) {}
+constructor(
+  private http: HttpClient,
+  private toastController: ToastController,
+  private router: Router,
+  private iab: InAppBrowser
+) {}
 
 ngOnInit() {
   const stored = localStorage.getItem('userData');
@@ -66,17 +70,26 @@ ngOnInit() {
     return 'warning';
   }
 
-  async joinMeeting(appointment: any) {
-    const toast = await this.toastController.create({
-      message: `Ingresando a reunión con ${appointment.paciente_nombre}...`,
-      duration: 2000,
-      color: 'success',
-      position: 'bottom'
-    });
-    await toast.present();
+async joinMeeting(appointment: any) {
+  const toast = await this.toastController.create({
+    message: `Ingresando a reunión con ${appointment.paciente_nombre}...`,
+    duration: 2000,
+    color: 'success',
+    position: 'bottom'
+  });
+  await toast.present();
 
-    appointment.estado = 'en curso';
-  }
+  appointment.estado = 'en curso';
+
+  // Abre en vista video-call (método más controlado)
+  this.router.navigate(['/video-call'], {
+    queryParams: { url: appointment.link_sala_medico }
+  });
+
+  // 👉 O si prefieres abrir directamente con InAppBrowser (opcional):
+  // const browser = this.iab.create(appointment.link_sala_medico, '_system');
+  // browser.show();
+}
 
   async continueSession(appointment: any) {
     const toast = await this.toastController.create({
@@ -110,4 +123,6 @@ ngOnInit() {
       default: return 'medium';
     }
   }
+
+  
 }

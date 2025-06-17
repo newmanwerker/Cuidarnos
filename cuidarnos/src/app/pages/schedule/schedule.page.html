@@ -1,89 +1,89 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/doctor/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Agenda del Día</ion-title>
-  </ion-toolbar>
-</ion-header>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/doctor/home"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Agenda del Día</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-<ion-content>
-  <div class="schedule-container">
+  <ion-content>
+    <div class="schedule-container">
 
-    <!-- Cabecera con Fecha -->
-    <ion-card class="date-card">
-      <div class="date-header">
-        <div class="date-info">
-          <h2 class="current-date">{{ getCurrentDate() }}</h2>
-          <p class="appointments-count">{{ todayAppointments.length }} consulta(s) agendada(s)</p>
+      <!-- Cabecera con Fecha -->
+      <ion-card class="date-card">
+        <div class="date-header">
+          <div class="date-info">
+            <h2 class="current-date">{{ getCurrentDate() }}</h2>
+            <p class="appointments-count">{{ todayAppointments.length }} consulta(s) agendada(s)</p>
+          </div>
+          <div class="schedule-status">
+            <ion-badge [color]="getStatusColor()">{{ getScheduleStatus() }}</ion-badge>
+          </div>
         </div>
-        <div class="schedule-status">
-          <ion-badge [color]="getStatusColor()">{{ getScheduleStatus() }}</ion-badge>
-        </div>
-      </div>
-    </ion-card>
+      </ion-card>
 
-    <!-- Lista de Consultas -->
-    <div class="appointments-list" *ngIf="todayAppointments.length > 0">
-      <div *ngFor="let appointment of todayAppointments" class="appointment-card">
-        <ion-card [ngClass]="{
-            'completed': appointment.estado === 'terminada',
-            'in-progress': appointment.estado === 'en curso',
-            'upcoming': appointment.estado === 'pendiente'
-          }">
+      <!-- Lista de Consultas -->
+      <div class="appointments-list" *ngIf="todayAppointments.length > 0">
+        <div *ngFor="let appointment of todayAppointments" class="appointment-card">
+          <ion-card [ngClass]="{
+              'completed': appointment.estado === 'terminada',
+              'in-progress': appointment.estado === 'en curso',
+              'upcoming': appointment.estado === 'pendiente'
+            }">
 
-          <div class="appointment-content">
-            <div class="appointment-time">
-              <div class="time-display">{{ appointment.hora }}</div>
-              <div class="duration">30 min</div>
-            </div>
+            <div class="appointment-content">
+              <div class="appointment-time">
+                <div class="time-display">{{ appointment.hora }}</div>
+                <div class="duration">30 min</div>
+              </div>
 
-            <div class="appointment-details">
-              <h3 class="patient-name">{{ appointment.paciente_nombre }}</h3>
-              <p class="appointment-type">{{ appointment.motivo_consulta }}</p>
-              <div class="patient-info">
-                <span class="appointment-method">
-                  <ion-icon name="videocam"></ion-icon>
-                  Consulta en línea
-                </span>
+              <div class="appointment-details">
+                <h3 class="patient-name">{{ appointment.paciente_nombre }}</h3>
+                <p class="appointment-type">{{ appointment.motivo_consulta }}</p>
+                <div class="patient-info">
+                  <span class="appointment-method">
+                    <ion-icon name="videocam"></ion-icon>
+                    Consulta en línea
+                  </span>
+                </div>
+              </div>
+
+              <div class="appointment-actions">
+                <ion-button *ngIf="appointment.estado === 'pendiente'" color="primary" (click)="joinMeeting(appointment)">
+                  <ion-icon slot="start" name="videocam"></ion-icon>
+                  Ingresar
+                </ion-button>
+
+                <ion-button *ngIf="appointment.estado === 'en curso'" color="success" (click)="continueSession(appointment)">
+                  <ion-icon slot="start" name="play-circle"></ion-icon>
+                  Continuar
+                </ion-button>
+
+                <ion-button *ngIf="appointment.estado === 'terminada'" fill="outline" (click)="viewNotes(appointment)">
+                  <ion-icon slot="start" name="document-text"></ion-icon>
+                  Ver Notas
+                </ion-button>
               </div>
             </div>
 
-            <div class="appointment-actions">
-              <ion-button *ngIf="appointment.estado === 'pendiente'" color="primary" (click)="joinMeeting(appointment)">
-                <ion-icon slot="start" name="videocam"></ion-icon>
-                Ingresar
-              </ion-button>
-
-              <ion-button *ngIf="appointment.estado === 'en curso'" color="success" (click)="continueSession(appointment)">
-                <ion-icon slot="start" name="play-circle"></ion-icon>
-                Continuar
-              </ion-button>
-
-              <ion-button *ngIf="appointment.estado === 'terminada'" fill="outline" (click)="viewNotes(appointment)">
-                <ion-icon slot="start" name="document-text"></ion-icon>
-                Ver Notas
-              </ion-button>
+            <div class="appointment-status">
+              <ion-icon [name]="getStatusIcon(appointment.estado)" [color]="getStatusIconColor(appointment.estado)"></ion-icon>
             </div>
-          </div>
+          </ion-card>
+        </div>
+      </div>
 
-          <div class="appointment-status">
-            <ion-icon [name]="getStatusIcon(appointment.estado)" [color]="getStatusIconColor(appointment.estado)"></ion-icon>
+      <!-- Estado vacío -->
+      <div *ngIf="todayAppointments.length === 0" class="empty-state">
+        <ion-card>
+          <div class="empty-content">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <h3>Sin consultas para hoy</h3>
+            <p>No tienes reuniones agendadas este día.</p>
           </div>
         </ion-card>
       </div>
-    </div>
 
-    <!-- Estado vacío -->
-    <div *ngIf="todayAppointments.length === 0" class="empty-state">
-      <ion-card>
-        <div class="empty-content">
-          <ion-icon name="calendar-outline"></ion-icon>
-          <h3>Sin consultas para hoy</h3>
-          <p>No tienes reuniones agendadas este día.</p>
-        </div>
-      </ion-card>
     </div>
-
-  </div>
-</ion-content>
+  </ion-content>
