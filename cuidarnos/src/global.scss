@@ -57,32 +57,254 @@ html, body {
 }
 }
 
-
-    // Elegir colores para edición de alto contraste
+/* Enhanced High Contrast Mode - Better Colors */
 body.high-contrast {
+  // CSS Variables for consistent theming
   --ion-background-color: #000000;
-  --ion-text-color: #FFFF00;
+  --ion-text-color: #FFFFFF;
   --ion-card-background: #000000;
-  --ion-color-primary: #FFFF00;
+  --ion-color-primary: #00D4FF;
+  --ion-color-secondary: #FFFFFF;
+  --ion-color-success: #00FF88;
+  --ion-color-warning: #FFB800;
+  --ion-color-danger: #FF4444;
 
+  // Override content backgrounds
+  ion-content {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    // Remove gradients and animations
+    animation: none !important;
+    background-image: none !important;
+  }
+
+  // Headers and toolbars
+  ion-header ion-toolbar {
+    --background: #000000 !important;
+    --color: #FFFFFF !important;
+    border-bottom: 2px solid #00D4FF !important;
+  }
+
+  // Cards and containers
   ion-card, ion-item {
     background-color: #000000 !important;
-    color: #FFFF00 !important;
-    border: 2px solid #FFFF00;
+    color: #FFFFFF !important;
+    border: 2px solid #00D4FF !important;
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3) !important;
   }
 
+  // Card headers and sections
+  .card-header,
+  .accessibility-section,
+  .info-card,
+  .patient-card,
+  .profile-card {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border-color: #00D4FF !important;
+  }
+
+  .card-header h2,
+  .card-header h3,
+  .accessibility-section h3,
+  .patient-name,
+  .profile-name {
+    color: #FFFFFF !important;
+  }
+
+  // Remove gradient backgrounds
+  .card-header::before,
+  .info-card::before,
+  .accessibility-section::before,
+  .patient-card::before,
+  .profile-card::before {
+    background: #00D4FF !important;
+  }
+
+  // Icons - use bright cyan for visibility
   ion-icon {
-    color: #FFFF00 !important;
+    color: #00D4FF !important;
   }
 
-  .toolbar-item span {
-    color: #FFFF00 !important;
-  }
-
+  // Buttons - primary actions in cyan, secondary in white
   button, ion-button {
-    background-color: #FFFF00 !important;
-    color: #000 !important;
-    font-weight: bold;
-    border: 2px solid #FFFF00 !important;
+    background-color: #00D4FF !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+    border: 2px solid #00D4FF !important;
+  }
+
+  // Secondary buttons (outline style)
+  ion-button[fill="outline"] {
+    background-color: transparent !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFFFFF !important;
+  }
+
+  // Disabled buttons
+  ion-button[disabled] {
+    background-color: #333333 !important;
+    color: #666666 !important;
+    border-color: #666666 !important;
+  }
+
+  // Toggle switches
+  ion-toggle {
+    --background: #333333 !important;
+    --background-checked: #00D4FF !important;
+    --handle-background: #FFFFFF !important;
+    --handle-background-checked: #000000 !important;
+  }
+
+  // Text elements
+  .toolbar-item span,
+  .patient-id,
+  .profile-id,
+  .info-label,
+  .detail-label,
+  .condition-date,
+  .medication-dosage,
+  .appointment-doctor {
+    color: #FFFFFF !important;
+  }
+
+  // Special containers
+  .toggle-container,
+  .text-size-controls,
+  .appointment-item,
+  .medication-item,
+  .condition-item {
+    background: #000000 !important;
+    border: 2px solid #00D4FF !important;
+    color: #FFFFFF !important;
+  }
+
+  // Badges - different colors for different types
+  ion-badge {
+    font-weight: bold !important;
+    border: 1px solid !important;
+  }
+
+  ion-badge[color="success"] {
+    background: #00FF88 !important;
+    color: #000000 !important;
+    border-color: #00FF88 !important;
+  }
+
+  ion-badge[color="danger"] {
+    background: #FF4444 !important;
+    color: #FFFFFF !important;
+    border-color: #FF4444 !important;
+  }
+
+  ion-badge[color="warning"] {
+    background: #FFB800 !important;
+    color: #000000 !important;
+    border-color: #FFB800 !important;
+  }
+
+  ion-badge[color="primary"] {
+    background: #00D4FF !important;
+    color: #000000 !important;
+    border-color: #00D4FF !important;
+  }
+
+  ion-badge[color="medium"] {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border-color: #FFFFFF !important;
+  }
+
+  // Special elements
+  .avatar-circle,
+  .date-box,
+  .status-icon,
+  .feedback-icon {
+    background: #00D4FF !important;
+    color: #000000 !important;
+  }
+
+  .text-size-preview {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border: 2px solid #FFFFFF !important;
+  }
+
+  .text-size-value {
+    background: #00D4FF !important;
+    color: #000000 !important;
+  }
+
+  // Tips and feedback sections
+  .tips-card {
+    background: #000000 !important;
+    border: 2px solid #00FF88 !important;
+    color: #FFFFFF !important;
+  }
+
+  .tips-header h4 {
+    color: #FFFFFF !important;
+  }
+
+  .tips-list li {
+    color: #FFFFFF !important;
+  }
+
+  .tips-list li::before {
+    background: #00FF88 !important;
+    color: #000000 !important;
+  }
+
+  // Focus states for accessibility
+  ion-button:focus,
+  ion-toggle:focus,
+  .toggle-container:focus-within,
+  button:focus {
+    outline: 3px solid #00D4FF !important;
+    outline-offset: 2px;
+  }
+
+  // Remove all gradients and animations
+  * {
+    background-image: none !important;
+    animation: none !important;
+    text-shadow: none !important;
+  }
+
+  // Ensure proper contrast for all text
+  p, span, div, h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF !important;
+  }
+
+  // Loading states
+  ion-spinner {
+    --color: #00D4FF !important;
+  }
+
+  // Bottom toolbar
+  .bottom-toolbar {
+    background: #000000 !important;
+    border-top: 2px solid #00D4FF !important;
+  }
+
+  .toolbar-item {
+    color: #FFFFFF !important;
+  }
+
+  .toolbar-item:hover {
+    background: #1a1a1a !important;
+  }
+
+  // Empty states
+  .empty-icon {
+    background: #333333 !important;
+  }
+
+  .empty-title {
+    color: #FFFFFF !important;
+  }
+
+  .empty-message {
+    color: #CCCCCC !important;
   }
 }

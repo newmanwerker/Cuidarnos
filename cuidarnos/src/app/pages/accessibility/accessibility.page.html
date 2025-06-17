@@ -3,66 +3,113 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-    </ion-buttons>
+    <ion-title>Accesibilidad</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+
+<ion-content [class.high-contrast]="highContrast">
   <div class="accessibility-container">
+    
+    <!-- Main Accessibility Card -->
     <ion-card class="info-card">
       <div class="card-header">
         <ion-icon name="accessibility"></ion-icon>
-        <h2>Accesibilidad</h2>
+        <h2>Opciones de Accesibilidad</h2>
       </div>
       
+      <!-- Text Size Section -->
       <div class="accessibility-section">
-        <h3>Tamaño del texto</h3>
-        <p>Ajusta el tamaño del texto para una mejor lectura</p>
+        <h3>Tamaño del Texto</h3>
+        <p>Ajusta el tamaño del texto para una mejor lectura y comodidad visual</p>
+        
         <div class="text-size-controls">
-          <ion-button fill="clear" (click)="decreaseFontSize()">
-            <ion-icon name="remove-circle"></ion-icon>
-          </ion-button>
-          <div class="text-size-preview" [style.fontSize.%]="fontSize">Aa</div>
-          <ion-button fill="clear" (click)="increaseFontSize()">
-            <ion-icon name="add-circle"></ion-icon>
-          </ion-button>
+          <div class="control-buttons">
+            <ion-button 
+              fill="solid" 
+              (click)="decreaseFontSize()"
+              [disabled]="fontSize <= 80"
+              aria-label="Disminuir tamaño de texto">
+              <ion-icon name="remove-circle"></ion-icon>
+            </ion-button>
+            
+            <ion-button 
+              fill="solid" 
+              (click)="increaseFontSize()"
+              [disabled]="fontSize >= 150"
+              aria-label="Aumentar tamaño de texto">
+              <ion-icon name="add-circle"></ion-icon>
+            </ion-button>
+          </div>
+          
+          <div class="text-size-preview" 
+               [style.fontSize.%]="fontSize"
+               [class.changing]="isChangingSize">
+            Aa
+          </div>
         </div>
-        <div class="text-size-value">{{fontSize}}%</div>
+        
+        <div class="text-size-value">Tamaño actual: {{fontSize}}%</div>
+        
+        <!-- Visual Feedback -->
+        <div class="visual-feedback">
+          <div class="feedback-item">
+            <div class="feedback-icon">
+              <ion-icon name="eye-outline"></ion-icon>
+            </div>
+            <span class="feedback-text">
+              El texto se ajustará en toda la aplicación
+            </span>
+          </div>
+        </div>
       </div>
       
+      <!-- FIXED: Display Options Section -->
       <div class="accessibility-section">
-        <h3>Opciones de visualización</h3>
-<ion-item>
-  <ion-label>Modo de alto contraste</ion-label>
-  <ion-toggle
-    [(ngModel)]="highContrast"
-    (ionChange)="toggleHighContrast()">
-  </ion-toggle>
-</ion-item>
-        <ion-item>
-          <ion-label>Reducción de movimiento</ion-label>
-          <ion-toggle></ion-toggle>
-        </ion-item>
-        <ion-item>
-          <ion-label>Botones más grandes</ion-label>
-          <ion-toggle></ion-toggle>
-        </ion-item>
+        <h3>Opciones de Visualización</h3>
+        <p>Configura las opciones visuales para mejorar la legibilidad</p>
+        
+        <div class="toggle-container">
+          <div class="toggle-info">
+            <h4>Modo de Alto Contraste</h4>
+            <p>Aumenta el contraste para mejor visibilidad</p>
+          </div>
+          <ion-toggle
+            [checked]="highContrast"
+            (ionChange)="onToggleChange($event)"
+            aria-label="Activar modo de alto contraste">
+          </ion-toggle>
+        </div>
+        
+        <!-- Visual Feedback for High Contrast -->
+        <div class="visual-feedback" *ngIf="highContrast">
+          <div class="feedback-item">
+            <div class="feedback-icon">
+              <ion-icon name="contrast-outline"></ion-icon>
+            </div>
+            <span class="feedback-text">
+              Modo de alto contraste activado
+            </span>
+          </div>
+        </div>
+      </div>
+    </ion-card>
+    
+    <!-- Accessibility Tips Card -->
+    <ion-card class="tips-card">
+      <div class="tips-header">
+        <ion-icon name="bulb"></ion-icon>
+        <h4>Consejos de Accesibilidad</h4>
       </div>
       
-      <div class="accessibility-section">
-        <h3>Lectura & Navegación</h3>
-        <ion-item>
-          <ion-label>Soporte de Lector de Pantalla</ion-label>
-          <ion-toggle></ion-toggle>
-        </ion-item>
-        <ion-item>
-          <ion-label>Texto a voz</ion-label>
-          <ion-toggle></ion-toggle>
-        </ion-item>
-      </div>
+      <ul class="tips-list">
+        <li>Usa el tamaño de texto que te resulte más cómodo para leer</li>
+        <li>El modo de alto contraste ayuda en condiciones de poca luz</li>
+        <li>Puedes usar gestos de zoom en cualquier pantalla</li>
+        <li>La aplicación es compatible con lectores de pantalla</li>
+        <li>Todos los botones tienen etiquetas descriptivas</li>
+      </ul>
     </ion-card>
     
     <div class="toolbar-spacer"></div>
   </div>
 </ion-content>
-

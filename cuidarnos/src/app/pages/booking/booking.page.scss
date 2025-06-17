@@ -1,6 +1,6 @@
 ion-content {
   --background: none;
-  background: linear-gradient(-50deg, #0f0f0f, #1a1a1a, #2a2a2a, #0f0f0f);
+  background: linear-gradient(-50deg, #1e3a8a, #1e40af, #3b82f6, #1e3a8a);
   background-size: 400% 400%;
   animation: gradientMove 6s ease infinite;
 }
@@ -12,24 +12,29 @@ ion-content {
 }
 
 ion-header ion-toolbar {
-  --background: #0F172A;
+  --background: #1e3a8a;
   --color: white;
 }
 
 .booking-container {
   padding: 16px;
-  padding-bottom: 80px; // Add extra padding at the bottom
+  padding-bottom: 80px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
-/* Step Indicator */
+/* Enhanced Step Indicator */
 .step-indicator {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
+  justify-content: center;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
 }
 
 .step {
@@ -37,105 +42,383 @@ ion-header ion-toolbar {
   flex-direction: column;
   align-items: center;
   z-index: 1;
+  position: relative;
 }
 
 .step-number {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background-color: #e5e7eb;
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
   color: #6b7280;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  margin-bottom: 4px;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 8px;
   transition: all 0.3s ease;
+  border: 3px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .step.active .step-number {
-  background-color: #0F172A;
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
   color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4);
+  transform: scale(1.1);
 }
 
 .step-label {
-  font-size: 0.625rem;
+  font-size: 12px;
   color: #6b7280;
+  font-weight: 500;
+  text-align: center;
   transition: all 0.3s ease;
+  max-width: 80px;
+  line-height: 1.2;
 }
 
 .step.active .step-label {
-  color: #0F172A;
-  font-weight: 500;
+  color: #1e3a8a;
+  font-weight: 600;
 }
 
 .step-line {
   flex: 1;
-  height: 2px;
-  background-color: #e5e7eb;
+  height: 3px;
+  background: linear-gradient(90deg, #e5e7eb, #d1d5db);
+  margin: 0 16px;
+  border-radius: 2px;
   transition: all 0.3s ease;
-}
-
-.step-line.active {
-  background-color: #0F172A;
-}
-
-/* Cards */
-ion-card {
-  background: rgb(255, 255, 255);
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin: 0;
+  position: relative;
   overflow: hidden;
 }
 
+.step-line.active {
+  background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.3);
+}
+
+.step-line.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Enhanced Cards */
+ion-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  margin: 0;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .info-card {
-  padding: 16px;
+  padding: 24px;
+  position: relative;
+}
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1e3a8a, #3b82f6, #60a5fa);
+  border-radius: 20px 20px 0 0;
 }
 
 .card-header {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
 }
 
 .card-header ion-icon {
-  font-size: 1.25rem;
-  margin-right: 8px;
-  color: #0F172A;
+  font-size: 24px;
+  margin-right: 12px;
+  color: #1e3a8a;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  padding: 8px;
+  border-radius: 10px;
 }
 
 .card-header h2 {
-  font-size: 1rem;
+  font-size: 18px;
   font-weight: 600;
   margin: 0;
+  color: #1e3a8a;
 }
 
-/* Step 1: Specialties */
+/* Enhanced Specialty Grid */
 .specialty-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
 }
 
 .specialty-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
-  border-radius: 10px;
-  background-color: #f9fafb;
+  padding: 20px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.specialty-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(30, 58, 138, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.specialty-item:hover::before {
+  left: 100%;
+}
+
+.specialty-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.15);
 }
 
 .specialty-item.selected {
-  background-color: #dbeafe;
-  border: 1px solid #0F172A;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-color: #1e3a8a;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.25);
 }
 
 .specialty-icon {
-  background-color: #0F172A;
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+  transition: all 0.3s ease;
+}
+
+.specialty-item:hover .specialty-icon {
+  transform: scale(1.1);
+}
+
+.specialty-icon ion-icon {
+  font-size: 28px;
+}
+
+.specialty-name {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: #1e3a8a;
+  line-height: 1.3;
+}
+
+/* Enhanced Calendar */
+.date-selector {
+  margin-bottom: 20px;
+}
+
+.month-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 12px;
+}
+
+.month-selector ion-button {
+  --background: transparent;
+  --color: #1e3a8a;
+  --border-radius: 8px;
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+.month-selector ion-button:hover {
+  --background: rgba(30, 58, 138, 0.1);
+}
+
+.current-month {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.weekday-header {
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  padding: 8px 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.calendar-day {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.calendar-day.available {
+  background: white;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.calendar-day.available:hover {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-color: #1e3a8a;
+  transform: scale(1.05);
+}
+
+.calendar-day.selected {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4);
+  transform: scale(1.05);
+}
+
+.calendar-day.other-month,
+.calendar-day.unavailable {
+  color: #d1d5db;
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.calendar-day.unavailable {
+  position: relative;
+}
+
+.calendar-day.unavailable::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: #d1d5db;
+}
+
+/* Enhanced Time Slots */
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.time-slot {
+  padding: 12px 8px;
+  text-align: center;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #374151;
+}
+
+.time-slot:hover {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-color: #1e3a8a;
+  transform: translateY(-2px);
+}
+
+.time-slot.selected {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  border-color: #1e3a8a;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+}
+
+/* Enhanced Appointment Types */
+.appointment-types {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.appointment-type {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.appointment-type:hover {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-color: #1e3a8a;
+  transform: translateY(-2px);
+}
+
+.appointment-type.selected {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-color: #1e3a8a;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+}
+
+.type-icon {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
   color: white;
   width: 48px;
   height: 48px;
@@ -143,235 +426,13 @@ ion-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
-}
-
-.specialty-icon ion-icon {
-  font-size: 1.5rem;
-}
-
-.specialty-name {
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-align: center;
-  white-space: normal;
-  word-break: break-word;
-}
-
-/* Step 2: Doctors */
-.doctors-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.doctor-item {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  border-radius: 10px;
-  background-color: #f9fafb;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.doctor-item.selected {
-  background-color: #dbeafe;
-  border: 1px solid #0F172A;
-}
-
-.doctor-avatar {
-  background-color: #0F172A;
-  color: white;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 12px;
+  margin-right: 16px;
   flex-shrink: 0;
-}
-
-.doctor-avatar ion-icon {
-  font-size: 1.5rem;
-}
-
-.doctor-info {
-  flex: 1;
-  min-width: 0; /* Prevents text overflow */
-}
-
-.doctor-name {
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin: 0 0 2px 0;
-  white-space: normal;
-  word-break: break-word;
-}
-
-.doctor-specialty {
-  font-size: 0.75rem;
-  color: #6b7280;
-  margin: 0 0 4px 0;
-}
-
-.doctor-rating {
-  display: flex;
-  align-items: center;
-}
-
-.doctor-rating ion-icon {
-  color: #d1d5db;
-  font-size: 0.875rem;
-}
-
-.doctor-rating ion-icon.filled {
-  color: #fbbf24;
-}
-
-.rating-count {
-  font-size: 0.75rem;
-  color: #6b7280;
-  margin-left: 4px;
-}
-
-.doctor-availability {
-  flex-shrink: 0;
-}
-
-.next-available {
-  font-size: 0.75rem;
-  color: #059669;
-  font-weight: 500;
-}
-
-/* Step 3: Date and Time */
-.date-selector {
-  margin-bottom: 16px;
-}
-
-.month-selector {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.current-month {
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
-
-.weekday-header {
-  text-align: center;
-  font-size: 0.75rem;
-  color: #6b7280;
-  padding: 4px 0;
-  font-weight: 500;
-}
-
-.calendar-day {
-  width: 100%;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 0.875rem;
-  cursor: pointer;
-  box-sizing: border-box;
-  user-select: none;
-  padding: 0;
-  margin: 0;
-  background-color: transparent;
-  transition: background-color 0.2s;
-}
-
-.calendar-day.other-month,
-.calendar-day.unavailable {
-  pointer-events: none;
-  color: #d1d5db;
-}
-
-.calendar-day.unavailable {
-  pointer-events: none;
-  color: #d1d5db;
-}
-
-.calendar-day.unavailable {
-  color: #d1d5db;
-  text-decoration: line-through;
-  cursor: default;
-}
-
-.calendar-day.selected {
-  background-color: #0F172A;
-  color: white;
-}
-
-.time-slots {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.time-slot {
-  padding: 8px;
-  text-align: center;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.time-slot.selected {
-  background-color: #0F172A;
-  color: white;
-}
-
-.appointment-types {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.appointment-type {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  border-radius: 10px;
-  background-color: #f9fafb;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.appointment-type.selected {
-  background-color: #dbeafe;
-  border: 1px solid #0F172A;
-}
-
-.type-icon {
-  background-color: #0F172A;
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 12px;
-  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
 }
 
 .type-icon ion-icon {
-  font-size: 1.25rem;
+  font-size: 24px;
 }
 
 .type-info {
@@ -379,98 +440,189 @@ ion-card {
 }
 
 .type-name {
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin: 0 0 2px 0;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1e3a8a;
 }
 
 .type-duration {
-  font-size: 0.75rem;
+  font-size: 14px;
   color: #6b7280;
   margin: 0;
 }
 
-/* Step 4: Confirmation */
+/* Enhanced Confirmation */
 .confirmation-details {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 16px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  padding: 20px;
+  border-radius: 12px;
 }
 
 .confirmation-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.confirmation-item:last-child {
+  border-bottom: none;
 }
 
 .confirmation-label {
-  font-size: 0.875rem;
+  font-size: 14px;
   color: #6b7280;
+  font-weight: 500;
 }
 
 .confirmation-value {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e3a8a;
   text-align: right;
   max-width: 60%;
-  white-space: normal;
-  word-break: break-word;
 }
 
 .notes-section {
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 .notes-label {
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
   margin-bottom: 8px;
   display: block;
 }
 
 .notes-input {
-  --background: #f9fafb;
-  --padding-start: 12px;
-  --padding-end: 12px;
-  --padding-top: 8px;
-  --padding-bottom: 8px;
-  border-radius: 10px;
+  --background: white;
+  --border-radius: 10px;
+  --border-color: #d1d5db;
+  --border-style: solid;
+  --border-width: 2px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
   margin-top: 4px;
 }
 
-/* Navigation Buttons */
+.notes-input:focus-within {
+  --border-color: #1e3a8a;
+}
+
+/* Enhanced Navigation Buttons */
 .navigation-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 .btn-mio {
-  --background: #0F172A;
-  --border-radius: 10px;
-  --color: #fff;
-  --padding-start: 20px;
-  --padding-end: 20px;
-  --padding-top: 10px;
-  --padding-bottom: 10px;
+  --border-radius: 12px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.btn-mio:not([disabled]) {
+  --background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  --color: white;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+}
+
+.btn-mio:not([disabled]):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
 }
 
 .btn-mio[fill="outline"] {
   --background: transparent;
-  --color: #0F172A;
-  --border-color: #0F172A;
+  --color: #1e3a8a;
+  --border-color: #1e3a8a;
+  --border-width: 2px;
+  box-shadow: none;
+}
+
+.btn-mio[fill="outline"]:hover {
+  --background: rgba(30, 58, 138, 0.1);
 }
 
 .confirm-button {
-  --background: #059669;
+  --background: linear-gradient(135deg, #059669, #10b981);
   margin-left: auto;
 }
-.toolbar-spacer {
-  height: 70px; // Adjust based on your toolbar height
+
+.confirm-button:hover {
+  --background: linear-gradient(135deg, #047857, #059669);
 }
 
+/* Responsive Design */
+@media (max-width: 480px) {
+  .booking-container {
+    padding: 12px;
+  }
+  
+  .step-indicator {
+    padding: 16px 12px;
+  }
+  
+  .step-number {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+  
+  .step-label {
+    font-size: 11px;
+    max-width: 70px;
+  }
+  
+  .step-line {
+    margin: 0 8px;
+  }
+  
+  .specialty-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .time-slots {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .navigation-buttons {
+    flex-direction: column;
+  }
+  
+  .btn-mio {
+    width: 100%;
+  }
+}
 
-.calendar-day.available:hover {
-  background-color: #dbeafe;
+/* Loading States */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Accessibility */
+.step:focus-within,
+.specialty-item:focus,
+.calendar-day:focus,
+.time-slot:focus,
+.appointment-type:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
