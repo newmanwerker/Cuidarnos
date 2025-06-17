@@ -192,6 +192,7 @@ def crear_medico(request):
                 nombre=data["nombre"],
                 apellido=data["apellido"],
                 esp_id=int(data["esp_id"]),
+                especialidad=data["especialidad"],
                 telefono=data["telefono"],
                 email=data["email"],
                 rut=data["rut"],

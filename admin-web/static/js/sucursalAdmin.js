@@ -95,22 +95,26 @@ function cerrarModalMedico() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const formMedico = document.getElementById('form-medico');
-  if (!formMedico) return;
+    const formMedico = document.getElementById('form-medico');
+    if (!formMedico) return;
 
-  // Capturar especialidad por nombre
-  const selectEspecialidad = document.getElementById('esp_id');
-  const inputEspecialidad = document.getElementById('especialidad_nombre');
+    // Capturar especialidad por nombre
+    const selectEspecialidad = document.getElementById('esp_id');
+    const inputEspecialidad = document.getElementById('especialidad_nombre');
 
-  if (selectEspecialidad && inputEspecialidad) {
-    selectEspecialidad.addEventListener('change', function () {
-      const selectedOption = selectEspecialidad.options[selectEspecialidad.selectedIndex];
-      inputEspecialidad.value = selectedOption.text;
-    });
-  }
+    if (selectEspecialidad && inputEspecialidad) {
+      selectEspecialidad.addEventListener('change', function () {
+        const selectedOption = selectEspecialidad.options[selectEspecialidad.selectedIndex];
+        inputEspecialidad.value = selectedOption.text;
+      });
+    }
 
-  formMedico.addEventListener('submit', async function (e) {
+    formMedico.addEventListener('submit', async function (e) {
     e.preventDefault();
+
+    // 🔧 Forzamos asignar nombre de especialidad antes del submit
+    const selectedOption = selectEspecialidad.options[selectEspecialidad.selectedIndex];
+    inputEspecialidad.value = selectedOption.text;
 
     const formData = new FormData(formMedico);
     const data = Object.fromEntries(formData.entries());

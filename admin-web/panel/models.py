@@ -66,7 +66,7 @@ class Medico(models.Model):
     id = models.BigAutoField(primary_key=True)
     nombre = models.TextField()
     apellido = models.TextField()
-    especialidad = models.TextField()
+    especialidad = models.CharField(max_length=255, null=True, blank=True)
     telefono = models.TextField()
     email = models.TextField()
     password = models.TextField(null=True)
