@@ -338,8 +338,14 @@ confirmAppointment() {
   };
 
   this.http.post('https://cuidarnos.up.railway.app/api/consultas', payload).subscribe({
-    next: () => {
+    next: (res: any) => {
       alert('✅ Consulta agendada exitosamente!');
+
+      // 💾 Guardar link de videollamada (paciente)
+      if (res?.link_sala) {
+        localStorage.setItem('videocallLink', res.link_sala);
+      }
+
       // 🔄 Actualizar disponibilidad
       this.loadAvailableTimeSlots(this.selectedDate!, this.selectedDoctor!);
 
@@ -362,7 +368,7 @@ confirmAppointment() {
 
       this.http.post('https://cuidarnos.up.railway.app/api/auth/login', { rut, nombre }).subscribe({
         next: (updatedData: any) => {
-          console.log('✅ Datos nuevos del paciente:', updatedData);  
+          console.log('✅ Datos nuevos del paciente:', updatedData);
           localStorage.setItem('userData', JSON.stringify(updatedData));
 
           setTimeout(() => {
@@ -390,6 +396,7 @@ confirmAppointment() {
     }
   });
 }
+
 
 
 loadAvailableTimeSlots(fecha: string, medicoId: number) {

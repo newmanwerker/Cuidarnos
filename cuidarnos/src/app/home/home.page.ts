@@ -63,18 +63,19 @@ export class HomePage implements OnInit {
     return new Date(date).getDate().toString();
   }
 
-  getFormattedHour(date: string): string {
-    return new Date(date).toLocaleTimeString('es-CL', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
-    });
-  }
+ getFormattedHour(date: string): string {
+  const original = new Date(date);
+  const adjusted = new Date(original.getTime() + 4 * 60 * 60 * 1000); // +4 horas
+  return adjusted.toLocaleTimeString('es-CL', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+}
 
-  goToCall() {
-    this.router.navigate(['/videollamada']);
-  }
-
+goToCall(link: string) {
+  this.router.navigate(['/video-call'], { queryParams: { url: link } });
+}
   goToMedicalFile() {
     this.router.navigate(['/medical-file']);
   }
@@ -92,7 +93,7 @@ export class HomePage implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
 }

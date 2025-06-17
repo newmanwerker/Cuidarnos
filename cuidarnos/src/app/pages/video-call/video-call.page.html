@@ -1,13 +1,21 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>video-call</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Consulta Médica</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <iframe
-    allow="camera; microphone; fullscreen; display-capture"
-    src="https://meet.jit.si/ConsultaMedica"
-    style="height: 100%; width: 100%; border: 0;"
-  ></iframe>
+<ion-content *ngIf="!loading && videoUrl">
+  <iframe [src]="videoUrl" width="100%" height="100%" allow="camera; microphone; fullscreen" style="border:none;"></iframe>
+</ion-content>
+
+<ion-content *ngIf="loading">
+  <ion-spinner></ion-spinner>
+  <p class="ion-text-center">Cargando videollamada...</p>
+</ion-content>
+
+<ion-content *ngIf="error && !loading">
+  <p class="ion-text-center">No tienes una consulta activa.</p>
 </ion-content>

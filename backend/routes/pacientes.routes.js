@@ -40,13 +40,14 @@ router.get('/:id/ficha-completa', async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Obtener ficha
-      const fichaResult = await pool.query(`
-        SELECT f.*, c.nombre AS nombre_centro
-        FROM ficha_paciente f
-        LEFT JOIN centro_salud c ON f.centro_salud_id = c.id
-        WHERE f.paciente_id = $1
-      `, [id]);
+    // Obtener ficha + nombre del centro
+    const fichaResult = await pool.query(`
+      SELECT f.*, c.nombre AS nombre_centro
+      FROM ficha_paciente f
+      LEFT JOIN centro_salud c ON f.centro_salud_id = c.id
+      WHERE f.paciente_id = $1
+    `, [id]);
+
     if (fichaResult.rows.length === 0) {
       return res.status(404).json({ error: 'Ficha no encontrada' });
     }
@@ -75,7 +76,7 @@ router.get('/:id/ficha-completa', async (req, res) => {
       WHERE med.paciente_id = $1
     `, [id]);
 
-    // Resultados laboratorio
+    // Resultados de laboratorio
     const examenes = await pool.query(`
       SELECT id, descripcion, fecha, archivo_pdf
       FROM resultado_laboratorio
@@ -91,28 +92,42 @@ router.get('/:id/ficha-completa', async (req, res) => {
       ORDER BY fecha_emision DESC
       LIMIT 1
     `, [id]);
+
     const receta = recetaResult.rows[0] || null;
 
     // Alergias
-      const alergias = await pool.query(`
-        SELECT id, descripcion, severidad, causa
-        FROM alergia
-        WHERE paciente_id = $1
-      `, [id]);
+    const alergias = await pool.query(`
+      SELECT id, descripcion, severidad, causa
+      FROM alergia
+      WHERE paciente_id = $1
+    `, [id]);
+
+    // Reunión pendiente más próxima
+    const reunion = await pool.query(`
+      SELECT link_sala_paciente
+      FROM consultas_telemedicina
+      WHERE paciente_id = $1 AND estado = 'pendiente'
+      ORDER BY fecha_consulta ASC
+      LIMIT 1
+    `, [id]);
+
+    const linkSalaPaciente = reunion.rows[0]?.link_sala_paciente || null;
 
     res.json({
       ficha,
       condiciones: condiciones.rows,
       medicamentos: medicamentos.rows,
       examenes: examenes.rows,
-      receta: receta,
-      alergias: alergias.rows
+      receta,
+      alergias: alergias.rows,
+      linkSalaPaciente // <--- se incluye en la respuesta
     });
   } catch (err) {
     console.error('❌ Error al obtener ficha completa:', err);
     res.status(500).json({ error: 'Error del servidor' });
   }
 });
+
 
 
 // GET /api/pacientes/centro/:centroSaludId

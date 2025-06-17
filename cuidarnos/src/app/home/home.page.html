@@ -102,9 +102,9 @@
         <h3 class="appointment-type">{{ appointment.type }}</h3>
         <span class="appointment-doctor">{{ appointment.doctor }} </span>
 
-        <button class="join-button" (click)="goToCall()">
-          Ingresar a la consulta médica
-        </button>
+        <button class="join-button" (click)="goToCall(appointment.link)">
+  Ingresar a la consulta médica
+</button>
       </div>
     </div>
   </div>

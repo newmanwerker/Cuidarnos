@@ -48,6 +48,7 @@ logout() {
   localStorage.removeItem('paciente');
   localStorage.removeItem('medico');
   localStorage.removeItem('userData');
+  localStorage.removeItem('videollamadaLink');
 }
 
   isAuthenticated(): boolean {
