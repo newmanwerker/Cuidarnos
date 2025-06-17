@@ -119,3 +119,23 @@ class Insumo(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+class FichaPaciente(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    paciente_id = models.BigIntegerField()
+    centro_salud_id = models.BigIntegerField()
+    fecha_creacion = models.DateTimeField()
+    historial_medico = models.TextField()
+    tipo_sangre = models.TextField()
+    contacto_emergencia = models.TextField()
+    activo = models.BooleanField(default=True)
+    altura = models.IntegerField()
+    peso = models.IntegerField()
+    parentesco_contacto = models.CharField(db_column="parentezco_contacto", max_length=100)
+
+    class Meta:
+        db_table = 'ficha_paciente'
+        managed = False
+
+    def __str__(self):
+        return f"Ficha {self.id} - Paciente {self.paciente_id}"
