@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from panel import views
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +29,6 @@ urlpatterns = [
     path('dashboard_admin_sucursal/', views.dashboard_admin_sucursal, name='dashboard_admin_sucursal'),
     path('crear_paciente/', views.crear_paciente, name='crear_paciente'),
     path('crear_medico/', views.crear_medico, name='crear_medico'),
+    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+
 ]

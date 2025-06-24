@@ -1,0 +1,74 @@
+<div id="modalAgregarPaciente" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-2xl shadow-xl max-w-lg sm:w-[90vw] p-6 relative flex flex-col max-h-[90vh]">
+    <h2 class="text-xl font-bold text-gray-800 mb-1">Agregar Nuevo Paciente</h2>
+    <p class="text-sm text-gray-500 mb-4">Completa los detalles para registrar al nuevo paciente</p>
+    <form id="form-paciente" class="space-y-3 overflow-y-auto flex-1 min-h-0">
+      <input type="hidden" name="id_centro_salud" value="{{ centro.id }}">
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Nombre</span>
+        <input type="text" name="nombre" class="input-modal" placeholder="Nombre" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Apellido</span>
+        <input type="text" name="apellido" class="input-modal" placeholder="Apellido" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">RUT</span>
+        <input type="text" name="rut" class="input-modal" placeholder="RUT" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Fecha de Nacimiento</span>
+        <input type="date" name="fecha_nacimiento" class="input-modal" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Género</span>
+        <select name="genero" class="input-modal" required>
+          <option value="">Seleccione género</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Dirección</span>
+        <input type="text" name="direccion" class="input-modal" placeholder="Dirección" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Teléfono</span>
+        <input type="text" name="telefono" class="input-modal" placeholder="Teléfono" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Correo electrónico</span>
+        <input type="email" name="email" class="input-modal" placeholder="Correo electrónico" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Tipo de sangre</span>
+        <input type="text" name="tipo_sangre" class="input-modal" placeholder="Ej: O+, A-, etc." required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Contacto de emergencia</span>
+        <input type="text" name="contacto_emergencia" class="input-modal" placeholder="Nombre y teléfono" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Parentesco del contacto</span>
+        <input type="text" name="parentesco_contacto" class="input-modal" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Altura (cm)</span>
+        <input type="number" name="altura" class="input-modal" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Peso (kg)</span>
+        <input type="number" name="peso" class="input-modal" required />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Historial médico</span>
+        <textarea name="historial_medico" rows="3" class="input-modal" required></textarea>
+      </label>
+      <div class="flex justify-end gap-2 mt-4">
+        <button type="button" onclick="cerrarModalPaciente()" class="btn-cancelar">Cancelar</button>
+        <button type="submit" class="btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

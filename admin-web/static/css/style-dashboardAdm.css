@@ -1,0 +1,149 @@
+#modalAgregarPaciente,
+#modalAgregarMedico {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0,0,0,0.4) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 9999 !important;
+}
+
+#modalAgregarPaciente.hidden,
+#modalAgregarMedico.hidden {
+  display: none !important;
+}
+
+#modalAgregarPaciente form,
+#modalAgregarMedico form {
+  min-height: 0;
+  flex: 1 1 0%;
+  overflow-y: auto;
+}
+#modalAgregarPaciente > div,
+#modalAgregarMedico > div {
+  max-width: 32rem;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabla-moderna {
+  width: 100%;
+  background: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  overflow: hidden;
+  font-size: 0.95rem;
+}
+
+.tabla-moderna th {
+  background: #f9fafb; /* gray-50 */
+  color: #6b7280;      /* gray-500 */
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabla-moderna td {
+  color: #374151;      /* gray-700 */
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6; /* gray-100 */
+}
+
+.tabla-moderna tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-moderna tr:hover {
+  background: #f9fafb; /* gray-50 */
+}
+
+/* Cajita flotante del menú de perfil */
+#perfilMenu {
+  position: absolute;
+  right: 0;
+  min-width: 8rem;
+  margin-top: 0.5rem;
+  width: 16rem;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 32px 0 rgba(60,72,100,0.12);
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0;
+  z-index: 1000;
+  transition: opacity 0.15s;
+}
+
+#perfilMenu a {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: #374151;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+#perfilMenu a:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+#perfilMenu .text-red-600 {
+  color: #dc2626;
+}
+
+#perfilMenu .text-red-600:hover {
+  color: #b91c1c;
+}
+
+/* Estilo para el botón de cerrar sesión en el menú de perfil */
+#perfilMenu button[type="submit"] {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1.5rem;
+  color: #dc2626;
+  font-size: 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+#perfilMenu button[type="submit"]:hover {
+  background: #f3f4f6;
+  color: #b91c1c;
+}
+
+/* Tabs estilo tarjetas */
+.tab-btn {
+  flex: 1;
+  padding: 0.35rem 0.25rem;   
+  font-size: 0.95rem;        
+  font-weight: 600;
+  text-align: center;
+  border-radius: 0.5rem;
+  background: #f3f4f6;
+  color: #6b7280;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin: 0 0.15rem;          
+}
+
+.tab-btn:hover {
+  background: #fff;
+  color: #111827;
+}
+
+.tab-btn.active {
+  background: #fff;
+  color: #111827;
+  box-shadow: 0 1px 4px 0 rgba(60,72,100,0.06);
+  border: 1px solid #e5e7eb;
+}

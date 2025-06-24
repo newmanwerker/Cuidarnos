@@ -1,0 +1,73 @@
+<div id="modalAgregarMedico" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-2xl shadow-xl max-w-lg sm:w-[90vw] p-6 relative flex flex-col max-h-[90vh]">
+    <h2 class="text-xl font-bold mb-1 text-gray-800">Agregar Nuevo Médico</h2>
+    <p class="text-sm text-gray-500 mb-4">Completa los detalles para registrar al nuevo médico</p>
+    <form id="form-medico" class="space-y-3 overflow-y-auto flex-1 min-h-0">
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Nombre</span>
+        <input type="text" name="nombre" id="nombre_medico" class="input-modal" required>
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Apellido</span>
+        <input type="text" name="apellido" id="apellido_medico" class="input-modal" required>
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Especialidad</span>
+        <select name="esp_id" id="esp_id" class="input-modal" required>
+          <option value="">Seleccione...</option>
+          <option value="1">Médico General</option>
+          <option value="2">Médico Internista</option>
+          <option value="3">Pediatra</option>
+          <option value="4">Ginecólogo / Obstetra</option>
+          <option value="5">Cardiólogo</option>
+          <option value="6">Neurólogo</option>
+          <option value="7">Psiquiatra</option>
+          <option value="8">Psicólogo Clínico</option>
+          <option value="9">Endocrinólogo</option>
+          <option value="10">Otorrinolaringólogo</option>
+          <option value="11">Oftalmólogo</option>
+          <option value="12">Odontólogo / Dentista</option>
+          <option value="13">Dermatólogo</option>
+          <option value="14">Infectólogo</option>
+          <option value="15">Inmunólogo / Alergólogo</option>
+          <option value="16">Gastroenterólogo</option>
+          <option value="17">Urólogo</option>
+          <option value="18">Traumatólogo / Ortopedista</option>
+          <option value="19">Reumatólogo</option>
+          <option value="20">Geriatra</option>
+          <option value="21">Radiólogo</option>
+          <option value="22">Laboratorista Clínico</option>
+          <option value="23">Cirujano General</option>
+          <option value="24">Cirujano Plástico</option>
+          <option value="25">Neurocirujano</option>
+          <option value="26">Médico del Deporte</option>
+          <option value="27">Médico Ocupacional</option>
+          <option value="28">Patólogo</option>
+          <option value="29">Anestesiólogo</option>
+        </select>
+        <input type="hidden" name="especialidad" id="especialidad_nombre">
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Teléfono</span>
+        <input type="text" name="telefono" id="telefono_medico" class="input-modal" required>
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Email</span>
+        <input type="email" name="email" id="email_medico" class="input-modal" required>
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">RUT</span>
+        <input type="text" name="rut" id="rut_medico" class="input-modal" required>
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Contraseña</span>
+        <input type="password" name="password" id="password_medico" class="input-modal" placeholder="Opcional">
+      </label>
+      <input type="hidden" name="id_centro_salud" value="{{ centro.id }}">
+      <div class="flex justify-end gap-2 mt-8 pb-2">
+        <button type="button" onclick="cerrarModalMedico()" class="btn-cancelar">Cancelar</button>
+        <button type="submit" class="btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
