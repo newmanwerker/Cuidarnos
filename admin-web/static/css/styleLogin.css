@@ -1,0 +1,47 @@
+/* Estilo base del botón */
+#login-btn {
+  background: #17cb96;
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  transition: background 0.3s ease;
+}
+
+/* Efecto hover */
+#login-btn:hover {
+  background-color: #13b184;
+}
+
+/* Degradado animado al validar */
+#login-btn.validating {
+  background: linear-gradient(-45deg, #17cb96, #13b184, #17cb96, #13b184);
+  background-size: 400% 400%;
+  animation: gradientMove 2s ease infinite;
+}
+
+/* Animación del degradado */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Spinner */
+#spinner {
+  height: 20px;
+  width: 20px;
+  animation: spin 1s linear infinite;
+}
+
+/* Animación de rotación */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
