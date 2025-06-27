@@ -1,20 +1,22 @@
-<header class="bg-white shadow px-6 py-4 flex justify-between items-center border-b border-gray-200 dark:bg-gray-800 dark:text-white">
+{% load static %}
+<header class="fixed top-0 w-full z-50 bg-white shadow px-6 py-4 flex justify-between items-center border-b border-gray-200 dark:bg-gray-800 dark:text-white">
   <h1 class="text-lg font-bold">Panel de Super Administrador</h1>
-  <img src="" class="rounded-full w-10 h-10" alt="User"/>
-  <button id="toggle-theme" class="text-sm flex items-center gap-2">
-    <span id="icon-moon" class="hidden">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-icon">
-        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-      </svg>
-    </span>
-    <span id="icon-sun" class="hidden">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M12 2v2"/><path d="M12 20v2"/>
-        <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
-        <path d="M2 12h2"/><path d="M20 12h2"/>
-        <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
-      </svg>
-    </span>
-  </button>
+  <div class="flex items-center gap-4">
+    <img src="{% static 'img/logo.png' %}" class="rounded-full w-10 h-10" alt="User" />
+    
+    <button id="toggle-theme" class="relative w-14 h-8 bg-gray-300 dark:bg-[#17cb96] rounded-full transition-colors duration-300 focus:outline-none">
+      <span id="toggle-thumb" class="absolute top-0.5 left-0.5 w-7 h-7 bg-white rounded-full shadow-md transition-all duration-300 flex items-center justify-center">
+        <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#17cb96]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke-width="2" />
+        </svg>
+        <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-yellow-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <circle cx="12" cy="12" r="4" stroke-width="2"/>
+          <path d="M12 2v2"/><path d="M12 20v2"/>
+          <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+          <path d="M2 12h2"/><path d="M20 12h2"/>
+          <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+        </svg>
+      </span>
+    </button>
+  </div>
 </header>

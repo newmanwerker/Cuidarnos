@@ -1,32 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const html = document.getElementById('html-root');
+  const html = document.documentElement;
   const iconMoon = document.getElementById('icon-moon');
   const iconSun = document.getElementById('icon-sun');
   const toggle = document.getElementById('toggle-theme');
+  const thumb = document.getElementById('toggle-thumb');
 
-  if (!html || !iconMoon || !iconSun || !toggle) {
-    console.warn("Faltan elementos para el toggle de tema");
+  // Debug logging
+  console.log('Theme toggle elements:', { iconMoon, iconSun, toggle, thumb });
+
+  if (!iconMoon || !iconSun || !toggle || !thumb) {
+    console.error('Some theme toggle elements are missing');
     return;
   }
 
-  // Aplicar tema guardado
+  // Check stored theme and apply it
   const storedTheme = localStorage.getItem('theme');
+  console.log('Stored theme:', storedTheme);
+  
   if (storedTheme === 'dark') {
     html.classList.add('dark');
+  } else {
+    html.classList.remove('dark');
   }
 
-  updateIcons();
+  updateToggle();
 
   toggle.addEventListener('click', () => {
+    console.log('Toggle clicked');
     html.classList.toggle('dark');
     const isDark = html.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    updateIcons();
+    const newTheme = isDark ? 'dark' : 'light';
+    localStorage.setItem('theme', newTheme);
+    console.log('Theme changed to:', newTheme);
+    updateToggle();
   });
 
-  function updateIcons() {
+  function updateToggle() {
     const isDark = html.classList.contains('dark');
-    iconMoon.classList.toggle('hidden', isDark); // ícono luna aparece en modo claro
-    iconSun.classList.toggle('hidden', !isDark); // ícono sol aparece en modo oscuro
+    console.log('Updating toggle, isDark:', isDark);
+    
+    iconMoon.classList.toggle('hidden', isDark);
+    iconSun.classList.toggle('hidden', !isDark);
+    thumb.classList.toggle('translate-x-6', isDark);
+    
+    // Force a repaint to ensure styles are applied
+    document.body.offsetHeight;
   }
 });

@@ -147,3 +147,223 @@
   box-shadow: 0 1px 4px 0 rgba(60,72,100,0.06);
   border: 1px solid #e5e7eb;
 }
+
+/* ================================ */
+/*          MODO OSCURO             */
+/* ================================ */
+
+/* Fix header spacing - remove extra padding */
+body.pt-16 {
+  padding-top: 0 !important;
+}
+
+.pt-20 {
+  padding-top: 4rem !important; /* Solo el padding necesario para el header fijo */
+}
+
+/* Ensure header is properly positioned */
+header.fixed {
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+/* Dark mode styles */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: rgb(31, 41, 55) !important; /* gray-800 */
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+}
+
+.dark header {
+  background-color: rgb(31, 41, 55) !important; /* gray-800 */
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+}
+
+.dark aside {
+  background-color: rgb(17, 24, 39) !important; /* gray-900 */
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+  border-color: rgb(55, 65, 81) !important; /* gray-700 */
+}
+
+.dark main {
+  background-color: rgb(31, 41, 55) !important; /* gray-800 */
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+}
+
+.dark .bg-white {
+  background-color: rgb(17, 24, 39) !important; /* gray-900 */
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+}
+
+.dark .text-gray-700 {
+  color: rgb(209, 213, 219) !important; /* gray-300 */
+}
+
+.dark .text-gray-500 {
+  color: rgb(156, 163, 175) !important; /* gray-400 */
+}
+
+.dark .text-gray-800 {
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+}
+
+.dark .border-gray-200 {
+  border-color: rgb(55, 65, 81) !important; /* gray-700 */
+}
+
+.dark .bg-gray-50 {
+  background-color: rgb(31, 41, 55) !important; /* gray-800 */
+}
+
+.dark button:hover {
+  color: rgb(45, 212, 191) !important; /* teal-400 */
+}
+
+.dark #toggle-theme {
+  background-color: rgb(45, 212, 191) !important; /* teal-400 */
+}
+
+/* Dark mode para tablas */
+.dark .tabla-moderna {
+  background: rgb(17, 24, 39) !important; /* gray-900 */
+  border-color: rgb(55, 65, 81) !important; /* gray-700 */
+}
+
+.dark .tabla-moderna th {
+  background: rgb(31, 41, 55) !important; /* gray-800 */
+  color: rgb(156, 163, 175) !important; /* gray-400 */
+  border-color: rgb(55, 65, 81) !important; /* gray-700 */
+}
+
+.dark .tabla-moderna td {
+  color: rgb(209, 213, 219) !important; /* gray-300 */
+  border-color: rgb(55, 65, 81) !important; /* gray-700 */
+}
+
+.dark .tabla-moderna tr:hover {
+  background: rgb(31, 41, 55) !important; /* gray-800 */
+}
+
+/* Dark mode para menú de perfil */
+.dark #perfilMenu {
+  background: rgb(17, 24, 39) !important; /* gray-900 */
+  border-color: rgb(55, 65, 81) !important; /* gray-700 */
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3) !important;
+}
+
+.dark #perfilMenu a {
+  color: rgb(209, 213, 219) !important; /* gray-300 */
+}
+
+.dark #perfilMenu a:hover {
+  background: rgb(31, 41, 55) !important; /* gray-800 */
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+}
+
+.dark #perfilMenu button[type="submit"] {
+  color: rgb(248, 113, 113) !important; /* red-400 */
+}
+
+.dark #perfilMenu button[type="submit"]:hover {
+  background: rgb(31, 41, 55) !important; /* gray-800 */
+  color: rgb(239, 68, 68) !important; /* red-500 */
+}
+
+/* Dark mode para tabs */
+.dark .tab-btn {
+  background: rgb(31, 41, 55) !important; /* gray-800 */
+  color: rgb(156, 163, 175) !important; /* gray-400 */
+}
+
+.dark .tab-btn:hover {
+  background: rgb(17, 24, 39) !important; /* gray-900 */
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+}
+
+.dark .tab-btn.active {
+  background: rgb(17, 24, 39) !important; /* gray-900 */
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+  border-color: rgb(55, 65, 81) !important; /* gray-700 */
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.2) !important;
+}
+
+/* Dark mode para modales */
+.dark #modalAgregarPaciente,
+.dark #modalAgregarMedico {
+  background: rgba(0,0,0,0.7) !important;
+}
+
+.dark #modalAgregarPaciente > div,
+.dark #modalAgregarMedico > div {
+  background: rgb(17, 24, 39) !important; /* gray-900 */
+  color: rgb(243, 244, 246) !important; /* gray-100 */
+}
+
+/* ================================ */
+/*        ICONOS SVG FIXES          */
+/* ================================ */
+
+/* Asegurar que los iconos SVG tengan el tamaño correcto */
+svg.w-6.h-6 {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  flex-shrink: 0;
+}
+
+/* Estilos para los iconos en los botones del sidebar */
+aside nav button svg {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Asegurar que los SVG no se estiren */
+svg {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+/* Corregir el tamaño de iconos específicos */
+.lucide,
+.icon-search {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+/* ================================ */
+/*        SIDEBAR FIJO              */
+/* ================================ */
+
+/* Hacer que el sidebar sea fijo y no se mueva al hacer scroll */
+aside {
+  position: fixed !important;
+  top: 4rem !important; /* Altura del header (64px) */
+  left: 0 !important;
+  height: calc(100vh - 4rem) !important; /* Altura completa menos el header */
+  overflow-y: auto !important; /* Permitir scroll interno si el sidebar es muy largo */
+  z-index: 40 !important; /* Debajo del header pero encima del contenido */
+}
+
+/* Ajustar el contenido principal para dejar espacio al sidebar fijo */
+main.flex-1 {
+  margin-left: 16rem !important; /* Ancho del sidebar (256px = 16rem) */
+  width: calc(100% - 16rem) !important;
+}
+
+/* Asegurar que el contenedor principal tenga el comportamiento correcto */
+.pt-20.flex {
+  padding-top: 4rem !important; /* Solo el padding necesario para el header */
+}
+
+/* El contenido principal debe poder hacer scroll normalmente */
+main {
+  overflow-y: auto !important;
+  max-height: calc(100vh - 4rem) !important;
+}
