@@ -29,6 +29,8 @@ urlpatterns = [
     path('dashboard_admin_sucursal/', views.dashboard_admin_sucursal, name='dashboard_admin_sucursal'),
     path('crear_paciente/', views.crear_paciente, name='crear_paciente'),
     path('crear_medico/', views.crear_medico, name='crear_medico'),
+    path('users/crear/', views.crear_usuario, name='crear_usuario'),
+    path('users/editar/', views.editar_usuario, name='editar_usuario'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
 
 ]

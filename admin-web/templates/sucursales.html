@@ -6,6 +6,7 @@
   <title>Sucursales</title>
   <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
   <link href="{% static 'css/style-dashboardAdm.css' %}" rel="stylesheet">
+  <link href="{% static 'css/styleSucursales.css' %}" rel="stylesheet">
 </head>
 <body class="bg-gray-50 text-gray-800">
   
@@ -93,11 +94,25 @@
                 </div>
               </td>
               <td>
-                <button class="btn-eliminar" title="Eliminar">
-                  <svg class="icon-trash" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                  </svg>
-                </button>
+                <div class="contenedor-opciones">
+                  <button class="btn-menu-opciones" onclick="toggleMenu(event, {{ sucursal.id }})">
+                    <span class="icon-dots">⋮</span>
+                  </button>
+                  <div id="menu-opciones-{{ sucursal.id }}" class="menu-opciones hidden">
+                    <button onclick="editarSucursal({{ sucursal.id }})" class="opcion-menu opcion-editar">
+                      <svg class="icon-edit" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                      </svg>
+                      Editar
+                    </button>
+                    <button onclick="eliminarSucursal({{ sucursal.id }})" class="opcion-menu opcion-eliminar">
+                      <svg class="icon-delete" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                      </svg>
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
               </td>
             </tr>
             {% endfor %}
@@ -179,6 +194,29 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Popup de confirmación para eliminar sucursal -->
+  <div id="popup-confirmacion" class="hidden">
+    <div class="popup-container">
+      <div class="popup-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/>
+        </svg>
+      </div>
+      <h3 class="popup-titulo">¿Eliminar sucursal?</h3>
+      <p class="popup-mensaje">
+        Esta acción no se puede deshacer. La sucursal será eliminada permanentemente del sistema.
+      </p>
+      <div class="popup-botones">
+        <button onclick="cerrarPopupConfirmacion()" class="btn-popup btn-popup-cancelar">
+          Cancelar
+        </button>
+        <button onclick="confirmarEliminacion()" class="btn-popup btn-popup-eliminar">
+          Eliminar
+        </button>
+      </div>
     </div>
   </div>
 

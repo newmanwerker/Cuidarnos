@@ -660,6 +660,24 @@ main {
   font-size: 0.875rem;
 }
 
+/* Estilos específicos para selects - REMOVER FLECHA NATIVA */
+select.input-modal {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  cursor: pointer !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+  background-position: right 0.5rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.5em 1.5em !important;
+  padding-right: 2.5rem !important;
+}
+
+/* Remover completamente cualquier icono nativo del sistema */
+select.input-modal::-ms-expand {
+  display: none !important;
+}
+
 /* Botones del modal */
 .btn-cancelar {
   padding: 0.875rem 2rem;
@@ -744,6 +762,18 @@ main {
   color: #9ca3af !important;
 }
 
+/* Dark mode - Estilos específicos para selects */
+.dark select.input-modal {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+}
+
+.dark select.input-modal::-ms-expand {
+  display: none !important;
+}
+
 .dark .btn-cancelar {
   background: #374151 !important;
   border-color: #6b7280 !important;
@@ -756,69 +786,250 @@ main {
   color: #f3f4f6 !important;
 }
 
-/* Animaciones */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/*     FORZAR VISIBILIDAD ICONOS    */
+
+/* Forzar visibilidad de todos los SVG en botones de opciones */
+.btn-menu-opciones svg,
+.btn-menu-opciones .icon-dots {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 20px !important;
+  height: 20px !important;
+  color: #6b7280 !important;
+  fill: currentColor !important;
 }
 
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+/* Asegurar que el path sea visible */
+.btn-menu-opciones svg path {
+  fill: currentColor !important;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+/* Dark mode para iconos forzados */
+.dark .btn-menu-opciones svg,
+.dark .btn-menu-opciones .icon-dots {
+  color: #9ca3af !important;
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-  #modal-sucursal > div {
-    margin: 1rem;
-    max-width: none;
-    width: calc(100% - 2rem);
-    padding: 1.5rem;
-  }
-  
-  #modal-sucursal .btn-cancelar,
-  #modal-sucursal .btn-primary {
-    padding: 0.75rem 1.5rem;
-    min-width: 100px;
-  }
+/*      MENÚ OPCIONES GENERAL       */
+
+/* Contenedor del menú de opciones */
+.contenedor-opciones {
+  position: relative;
+  display: inline-block;
 }
 
-/* Espaciado adicional para el formulario del modal */
-#form-sucursal {
-  margin-top: 0.5rem;
+/* Botón de tres puntos */
+.btn-menu-opciones {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
+.btn-menu-opciones:hover {
+  background: #f3f4f6;
 }
 
-.form-group:last-of-type {
-  margin-bottom: 0;
+.btn-menu-opciones:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
-#form-sucursal > div {
-  margin-bottom: 1.25rem;
+/* Icono de tres puntos */
+.icon-dots {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  color: #6b7280 !important;
+  flex-shrink: 0;
+  display: inline-block !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  font-weight: bold !important;
 }
 
-#form-sucursal > div:last-of-type {
-  margin-bottom: 0;
+/* SVG dentro del botón de opciones */
+.btn-menu-opciones svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  color: #6b7280 !important;
+  flex-shrink: 0;
+}
+
+/* Span dentro del botón de opciones */
+.btn-menu-opciones span {
+  color: #6b7280 !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  display: block !important;
+}
+
+/* Menú desplegable */
+.menu-opciones {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.25rem;
+  min-width: 9rem;
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 0.25rem 0;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* Opciones del menú */
+.opcion-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.opcion-menu:hover {
+  background: #f9fafb;
+}
+
+/* Iconos de las opciones */
+.icon-edit,
+.icon-delete {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+/* Colores específicos */
+.opcion-editar {
+  color: #374151;
+}
+
+.opcion-editar:hover {
+  color: #2563eb;
+}
+
+.opcion-editar .icon-edit {
+  color: #2563eb;
+}
+
+.opcion-eliminar {
+  color: #374151;
+}
+
+.opcion-eliminar:hover {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.opcion-eliminar .icon-delete {
+  color: #dc2626;
+}
+
+/* Columna de opciones en las tablas */
+.col-opciones {
+  width: 80px;
+  text-align: center;
+}
+
+/* Dark mode para menú de opciones */
+.dark .btn-menu-opciones:hover {
+  background: #374151 !important;
+}
+
+.dark .icon-dots {
+  color: #9ca3af !important;
+}
+
+.dark .btn-menu-opciones svg {
+  color: #9ca3af !important;
+}
+
+.dark .btn-menu-opciones span {
+  color: #9ca3af !important;
+}
+
+.dark .menu-opciones {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark .opcion-menu {
+  color: #d1d5db !important;
+}
+
+.dark .opcion-menu:hover {
+  background: #374151 !important;
+}
+
+.dark .opcion-editar:hover {
+  color: #60a5fa !important;
+}
+
+.dark .opcion-editar .icon-edit {
+  color: #60a5fa !important;
+}
+
+.dark .opcion-eliminar:hover {
+  color: #f87171 !important;
+  background: #374151 !important;
+}
+
+.dark .opcion-eliminar .icon-delete {
+  color: #f87171 !important;
+}
+
+.btn-menu-opciones::after {
+  content: "⋮";
+  font-size: 18px;
+  line-height: 1;
+  color: #6b7280;
+  display: none;
+}
+
+/* Mostrar el texto si el SVG no está visible */
+.btn-menu-opciones:not(:has(svg:visible))::after {
+  display: block;
+}
+
+.dark .btn-menu-opciones::after {
+  color: #9ca3af;
+}
+
+
+/*       SIDEBAR NAVIGATION         */
+
+/* Sidebar navigation buttons hover color */
+aside nav button:hover {
+  color: #2DD4BF !important;
+}
+
+/* Asegurar que los iconos cambien de color también */
+aside nav button:hover svg {
+  color: #2DD4BF !important;
+}
+
+/* Dark mode - mantener la misma consistencia */
+.dark aside nav button:hover {
+  color: #2DD4BF !important;
+}
+
+.dark aside nav button:hover svg {
+  color: #2DD4BF !important;
 }

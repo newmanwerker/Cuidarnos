@@ -9,26 +9,21 @@
     <link rel="stylesheet" href="{% static 'css/styleLogin.css' %}">
 </head>
 <body class="login">
-    <div class="login-card text-center">
-        <img src="{% static 'img/logo.png' %}" alt="Logo de la app" class="mx-auto mb-6" style="width: 150px; height: auto;">
+    <div class="login-card">
+        <img src="{% static 'img/logo.png' %}" alt="Logo de la app" style="width: 150px; height: auto;">
         <form method="post">
             {% csrf_token %}
             <label for="email">Email:</label>
-            <input type="text" name="email" required>
+            <input type="text" id="email" name="email" required>
 
             <label for="password">Contraseña:</label>
-            <input type="password" name="password" required>
+            <input type="password" id="password" name="password" required>
 
-            <button id="login-btn" type="submit"
-                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-full transition-all duration-300 flex items-center justify-center gap-2 min-h-[44px]">
-                
-                <svg id="spinner" class="hidden h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24">
+            <button id="login-btn" type="submit">
+                <svg id="spinner" class="hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                    <path class="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
                 </svg>
-
                 <span id="btn-text">Entrar</span>
             </button>
 

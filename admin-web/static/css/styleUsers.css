@@ -1,0 +1,726 @@
+/* ================================ */
+/*      ESTILOS PÁGINA USUARIOS     */
+/* ================================ */
+
+/* RESET GLOBAL PARA SELECTS - Remover iconos nativos del navegador */
+#modal-usuario select,
+#modal-editar-usuario select,
+select.input-modal {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+#modal-usuario select::-ms-expand,
+#modal-editar-usuario select::-ms-expand,
+select.input-modal::-ms-expand {
+  display: none !important;
+}
+
+/* ================== POPUP DE CONFIRMACIÓN ================== */
+#popup-confirmacion {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important;
+  animation: fadeIn 0.2s ease-out !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  inset: 0 !important;
+}
+
+#popup-confirmacion.hidden {
+  display: none !important;
+}
+
+#popup-confirmacion.mostrar {
+  display: flex !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 99999 !important;
+}
+
+.popup-container {
+  background: white !important;
+  border-radius: 16px !important;
+  padding: 32px !important;
+  width: 90% !important;
+  max-width: 420px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  animation: slideIn 0.3s ease-out !important;
+  text-align: center !important;
+  position: relative !important;
+  z-index: 100000 !important;
+  margin: auto !important;
+  transform: none !important;
+}
+
+.popup-icon {
+  width: 64px !important;
+  height: 64px !important;
+  margin: 0 auto 20px !important;
+  background: #fef2f2 !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.popup-icon svg {
+  width: 32px !important;
+  height: 32px !important;
+  color: #ef4444 !important;
+}
+
+.popup-titulo {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  margin-bottom: 12px !important;
+}
+
+.popup-mensaje {
+  color: #6b7280 !important;
+  line-height: 1.6 !important;
+  margin-bottom: 28px !important;
+  font-size: 15px !important;
+}
+
+.popup-botones {
+  display: flex !important;
+  gap: 12px !important;
+  justify-content: center !important;
+}
+
+.btn-popup {
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 100px !important;
+}
+
+.btn-popup-cancelar {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+}
+
+.btn-popup-cancelar:hover {
+  background: #e5e7eb !important;
+}
+
+.btn-popup-eliminar {
+  background: #ef4444 !important;
+  color: white !important;
+}
+
+.btn-popup-eliminar:hover {
+  background: #dc2626 !important;
+}
+
+.btn-popup:focus {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+
+/* ================== ANIMACIONES ================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ================== DARK MODE ================== */
+.dark #popup-confirmacion {
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.dark .popup-container {
+  background: #1f2937 !important;
+  border: 1px solid #374151 !important;
+}
+
+.dark .popup-icon {
+  background: #431c1c !important;
+}
+
+.dark .popup-titulo {
+  color: #f9fafb !important;
+}
+
+.dark .popup-mensaje {
+  color: #d1d5db !important;
+}
+
+.dark .btn-popup-cancelar {
+  background: #374151 !important;
+  color: #d1d5db !important;
+}
+
+.dark .btn-popup-cancelar:hover {
+  background: #4b5563 !important;
+}
+
+.dark .btn-popup-eliminar {
+  background: #dc2626 !important;
+  color: white !important;
+}
+
+.dark .btn-popup-eliminar:hover {
+  background: #b91c1c !important;
+}
+
+/* ================== RESPONSIVE ================== */
+@media (max-width: 640px) {
+  .popup-container {
+    margin: 20px !important;
+    padding: 24px !important;
+    width: calc(100% - 40px) !important;
+  }
+  
+  .popup-botones {
+    flex-direction: column !important;
+  }
+  
+  .btn-popup {
+    width: 100% !important;
+  }
+}
+
+/* ================================ */
+/*       MODAL CREAR USUARIO        */
+/* ================================ */
+
+/* Overlay del modal */
+#modal-usuario {
+  backdrop-filter: blur(4px) !important;
+  animation: fadeIn 0.2s ease-out !important;
+}
+
+#modal-usuario.hidden {
+  animation: fadeOut 0.2s ease-in !important;
+}
+
+/* Contenedor del modal */
+#modal-usuario > div {
+  background: #fff !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  border: 2px solid #e5e7eb !important;
+  max-width: 36rem !important;
+  width: 90% !important;
+  animation: slideIn 0.3s ease-out !important;
+  position: relative !important;
+  padding: 2.5rem !important;
+  margin: 2rem auto !important;
+}
+
+/* Título del modal */
+#modal-usuario h3 {
+  color: #1f2937 !important;
+  font-weight: 700 !important;
+  font-size: 1.625rem !important;
+  margin-bottom: 0.5rem !important;
+  line-height: 1.3 !important;
+}
+
+#modal-usuario p {
+  color: #6b7280 !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 2rem !important;
+  line-height: 1.5 !important;
+}
+
+/* Labels del formulario */
+#modal-usuario label {
+  color: #374151 !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  display: block !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Inputs del modal (incluye select) */
+#modal-usuario .input-modal {
+  width: 100% !important;
+  padding: 0.875rem 1rem !important;
+  border: 2px solid #d1d5db !important;
+  border-radius: 0.625rem !important;
+  font-size: 0.875rem !important;
+  background: #fff !important;
+  color: #374151 !important;
+  transition: all 0.2s ease !important;
+  margin-bottom: 1.5rem !important;
+  line-height: 1.5 !important;
+}
+
+/* Remover estilos nativos de todos los selects */
+#modal-usuario select.input-modal,
+#modal-editar-usuario select.input-modal {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+#modal-usuario .input-modal:focus,
+#modal-editar-usuario .input-modal:focus {
+  outline: none !important;
+  border-color: #2dd4bf !important;
+  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15) !important;
+  transform: translateY(-1px) !important;
+}
+
+#modal-usuario .input-modal::placeholder,
+#modal-editar-usuario .input-modal::placeholder {
+  color: #9ca3af !important;
+  font-size: 0.875rem !important;
+}
+
+/* Estilos específicos para select - MÁXIMA PRIORIDAD */
+#modal-usuario select.input-modal,
+#modal-editar-usuario select.input-modal {
+  cursor: pointer !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background: #fff !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+  background-position: right 0.5rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.5em 1.5em !important;
+  padding-right: 2.5rem !important;
+}
+
+/* Remover iconos nativos de IE/Edge */
+#modal-usuario select.input-modal::-ms-expand,
+#modal-editar-usuario select.input-modal::-ms-expand {
+  display: none !important;
+}
+
+/* Resetear cualquier pseudo-elemento que pueda agregar iconos */
+#modal-usuario select.input-modal::before,
+#modal-usuario select.input-modal::after,
+#modal-editar-usuario select.input-modal::before,
+#modal-editar-usuario select.input-modal::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Botones del modal */
+#modal-usuario .btn-cancelar {
+  padding: 0.875rem 2rem !important;
+  border-radius: 0.625rem !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  border: 2px solid #d1d5db !important;
+  background: #fff !important;
+  color: #6b7280 !important;
+  min-width: 120px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+}
+
+#modal-usuario .btn-cancelar:hover {
+  background: #f9fafb !important;
+  border-color: #9ca3af !important;
+  color: #374151 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Botón crear hereda los estilos de btn-primary */
+#modal-usuario .btn-primary {
+  margin-left: 1rem !important;
+  padding: 0.875rem 2rem !important;
+  min-width: 140px !important;
+  border-radius: 0.625rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Asegurar que el icono del botón esté alineado correctamente */
+#modal-usuario .btn-primary svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  margin-right: 0.5rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* Texto del botón */
+#modal-usuario .btn-primary span {
+  line-height: 1 !important;
+}
+
+/* ================== DARK MODE PARA MODAL USUARIO ================== */
+.dark #modal-usuario > div {
+  background: #1f2937 !important;
+  border-color: #4b5563 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark #modal-usuario h3 {
+  color: #f3f4f6 !important;
+}
+
+.dark #modal-usuario p {
+  color: #9ca3af !important;
+}
+
+.dark #modal-usuario label {
+  color: #d1d5db !important;
+}
+
+.dark #modal-usuario .input-modal {
+  background: #374151 !important;
+  border-color: #6b7280 !important;
+  color: #f3f4f6 !important;
+}
+
+.dark #modal-usuario .input-modal:focus,
+.dark #modal-editar-usuario .input-modal:focus {
+  border-color: #2dd4bf !important;
+  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.25) !important;
+}
+
+.dark #modal-usuario .input-modal::placeholder,
+.dark #modal-editar-usuario .input-modal::placeholder {
+  color: #9ca3af !important;
+}
+
+.dark #modal-usuario select.input-modal,
+.dark #modal-editar-usuario select.input-modal {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background: #374151 !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+  background-position: right 0.5rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.5em 1.5em !important;
+  padding-right: 2.5rem !important;
+}
+
+.dark #modal-usuario select.input-modal::-ms-expand,
+.dark #modal-editar-usuario select.input-modal::-ms-expand {
+  display: none !important;
+}
+
+.dark #modal-usuario select.input-modal::before,
+.dark #modal-usuario select.input-modal::after,
+.dark #modal-editar-usuario select.input-modal::before,
+.dark #modal-editar-usuario select.input-modal::after {
+  display: none !important;
+  content: none !important;
+}
+
+.dark #modal-usuario .btn-cancelar {
+  background: #374151 !important;
+  border-color: #6b7280 !important;
+  color: #d1d5db !important;
+}
+
+.dark #modal-usuario .btn-cancelar:hover {
+  background: #4b5563 !important;
+  border-color: #9ca3af !important;
+  color: #f3f4f6 !important;
+}
+
+/* ================== RESPONSIVE PARA MODAL USUARIO ================== */
+@media (max-width: 640px) {
+  #modal-usuario > div {
+    margin: 1rem !important;
+    padding: 1.5rem !important;
+    width: calc(100% - 2rem) !important;
+    max-width: none !important;
+  }
+  
+  #modal-usuario .form-group {
+    margin-bottom: 1rem !important;
+  }
+  
+  #modal-usuario .input-modal {
+    margin-bottom: 1rem !important;
+  }
+  
+  #modal-usuario .flex.justify-end {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  
+  #modal-usuario .btn-cancelar,
+  #modal-usuario .btn-primary {
+    width: 100% !important;
+    margin-left: 0 !important;
+    justify-content: center !important;
+  }
+}
+
+/* Estilos específicos para campos deshabilitados en modal de edición */
+#modal-editar-usuario select.input-modal:disabled,
+#modal-editar-usuario input.input-modal:disabled {
+  background-color: #f3f4f6 !important;
+  color: #6b7280 !important;
+  cursor: not-allowed !important;
+  opacity: 0.8 !important;
+}
+
+#modal-editar-usuario select.input-modal:disabled {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+  background-position: right 0.5rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.5em 1.5em !important;
+}
+
+/* Dark mode para campos deshabilitados */
+.dark #modal-editar-usuario select.input-modal:disabled,
+.dark #modal-editar-usuario input.input-modal:disabled {
+  background-color: #4b5563 !important;
+  color: #9ca3af !important;
+}
+
+.dark #modal-editar-usuario select.input-modal:disabled {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+}
+
+/* ================ ESTILOS MODAL EDITAR USUARIO ================ */
+
+/* Título del modal editar */
+#modal-editar-usuario h3 {
+  color: #1f2937 !important;
+  font-weight: 700 !important;
+  font-size: 1.625rem !important;
+  margin-bottom: 0.5rem !important;
+  line-height: 1.3 !important;
+}
+
+#modal-editar-usuario p {
+  color: #6b7280 !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 2rem !important;
+  line-height: 1.5 !important;
+}
+
+/* Labels del formulario editar */
+#modal-editar-usuario label {
+  color: #374151 !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  margin-bottom: 1.5rem !important;
+  line-height: 1.5 !important;
+}
+
+/* Inputs del modal editar (incluye select) */
+#modal-editar-usuario .input-modal {
+  width: 100% !important;
+  padding: 0.875rem 1rem !important;
+  border: 2px solid #d1d5db !important;
+  border-radius: 0.75rem !important;
+  font-size: 0.9rem !important;
+  color: #374151 !important;
+  background: #fff !important;
+  transition: all 0.2s ease !important;
+  margin-bottom: 1.5rem !important;
+  line-height: 1.5 !important;
+}
+
+#modal-editar-usuario .input-modal:focus {
+  outline: none !important;
+  border-color: #2dd4bf !important;
+  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15) !important;
+  transform: translateY(-1px) !important;
+}
+
+#modal-editar-usuario .input-modal::placeholder {
+  color: #9ca3af !important;
+  font-size: 0.875rem !important;
+}
+
+/* Botones del modal */
+#modal-editar-usuario .btn-cancelar {
+  background: #f3f4f6 !important;
+  border: 2px solid #d1d5db !important;
+  color: #6b7280 !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 0.75rem !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  min-width: 120px !important;
+}
+
+#modal-editar-usuario .btn-cancelar:hover {
+  background: #e5e7eb !important;
+  border-color: #9ca3af !important;
+  color: #374151 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+#modal-editar-usuario .btn-primary {
+  background: linear-gradient(135deg, #2dd4bf 0%, #0891b2 100%) !important;
+  border: 2px solid #2dd4bf !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 0.75rem !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  min-width: 140px !important;
+}
+
+#modal-editar-usuario .btn-primary svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  flex-shrink: 0 !important;
+}
+
+#modal-editar-usuario .btn-primary:hover {
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%) !important;
+  border-color: #0891b2 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 16px rgba(45, 212, 191, 0.3) !important;
+}
+
+#modal-editar-usuario .btn-primary span {
+  font-weight: 600 !important;
+}
+
+/* ================== DARK MODE PARA MODAL EDITAR USUARIO ================== */
+.dark #modal-editar-usuario > div {
+  background: #1f2937 !important;
+  border-color: #4b5563 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark #modal-editar-usuario h3 {
+  color: #f3f4f6 !important;
+}
+
+.dark #modal-editar-usuario p {
+  color: #9ca3af !important;
+}
+
+.dark #modal-editar-usuario label {
+  color: #d1d5db !important;
+}
+
+.dark #modal-editar-usuario .input-modal {
+  background: #374151 !important;
+  border-color: #6b7280 !important;
+  color: #f3f4f6 !important;
+}
+
+.dark #modal-editar-usuario .btn-cancelar {
+  background: #374151 !important;
+  border-color: #6b7280 !important;
+  color: #d1d5db !important;
+}
+
+.dark #modal-editar-usuario .btn-cancelar:hover {
+  background: #4b5563 !important;
+  border-color: #9ca3af !important;
+  color: #f3f4f6 !important;
+}
+
+/* ================== RESPONSIVE PARA MODAL EDITAR USUARIO ================== */
+@media (max-width: 640px) {
+  #modal-editar-usuario > div {
+    margin: 1rem !important;
+    padding: 1.5rem !important;
+    width: calc(100% - 2rem) !important;
+    max-width: none !important;
+  }
+  
+  #modal-editar-usuario .flex.justify-end {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  
+  #modal-editar-usuario .btn-cancelar,
+  #modal-editar-usuario .btn-primary {
+    width: 100% !important;
+    margin-left: 0 !important;
+    justify-content: center !important;
+  }
+}
+
+/* Estilos específicos para campos deshabilitados con clase personalizada */
+.input-modal-disabled {
+  background-color: #f3f4f6 !important;
+  color: #6b7280 !important;
+  cursor: not-allowed !important;
+  opacity: 0.8 !important;
+  border-color: #d1d5db !important;
+}
+
+.input-modal-disabled:focus {
+  box-shadow: none !important;
+  border-color: #d1d5db !important;
+  transform: none !important;
+}
+
+select.input-modal-disabled {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+  background-position: right 0.5rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.5em 1.5em !important;
+  padding-right: 2.5rem !important;
+}
+
+/* Dark mode para campos deshabilitados personalizados */
+.dark .input-modal-disabled {
+  background-color: #4b5563 !important;
+  color: #9ca3af !important;
+  border-color: #6b7280 !important;
+}
+
+.dark select.input-modal-disabled {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+}

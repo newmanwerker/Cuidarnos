@@ -126,7 +126,11 @@ def crear_sucursal(request):
 
 def users(request):
     usuarios = AdmUser.objects.select_related('sucursal', 'rol_id').all()
-    return render(request, 'users.html', {'usuarios': usuarios})
+    sucursales = Sucursal.objects.all()  # Agregar sucursales para el select
+    return render(request, 'users.html', {
+        'usuarios': usuarios,
+        'sucursales': sucursales
+    })
 
 @csrf_exempt
 def crear_paciente(request):
@@ -245,3 +249,163 @@ def dashboard_admin_sucursal(request):
         "insumos": insumos,
         "total_medicos": total_medicos
     })
+
+@csrf_exempt
+def crear_usuario(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            print("📦 Datos recibidos para crear usuario:", data)
+            
+            # Validar que todos los campos requeridos estén presentes
+            required_fields = ['nombre', 'apellido', 'email', 'contrasena', 'centro_salud']
+            for field in required_fields:
+                if field not in data or not data[field]:
+                    return JsonResponse({
+                        'success': False, 
+                        'error': f'El campo {field} es requerido'
+                    }, status=400)
+            
+            # Verificar que el email no esté ya registrado
+            if AdmUser.objects.filter(adm_email=data['email']).exists():
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Ya existe un usuario con este email'
+                }, status=400)
+            
+            # Verificar que la sucursal existe
+            try:
+                sucursal = Sucursal.objects.get(id=data['centro_salud'])
+            except Sucursal.DoesNotExist:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Centro de salud no encontrado'
+                }, status=400)
+            
+            # Encriptar la contraseña
+            password = data['contrasena']
+            salt = bcrypt.gensalt()
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
+            
+            # Obtener un rol por defecto - asignar rol "Administrador" (rol_id = 1)
+            try:
+                # Buscar específicamente el rol "Administrador" para admin de sucursales
+                rol = Rol.objects.filter(rol_name='Administrador').first()
+                if not rol:
+                    # Si no existe, obtener el primer rol disponible
+                    rol = Rol.objects.first()
+                print(f"🔧 Rol encontrado: ID={rol.rol_id}, Nombre={rol.rol_name}")
+            except Exception as e:
+                print(f"⚠️ Error al buscar rol: {e}")
+                rol = None  # Si hay algún error, crear usuario sin rol
+            
+            print(f"🔧 Rol asignado: {rol.rol_name if rol else 'Sin rol'}")
+            
+            # Crear el usuario
+            nuevo_usuario = AdmUser.objects.create(
+                adm_name=data['nombre'],
+                adm_last_name=data['apellido'],
+                adm_email=data['email'],
+                adm_password=hashed_password,
+                sucursal=sucursal,
+                rol_id=rol,
+                adm_create_at=timezone.now()
+            )
+            
+            # Actualizar el contador de usuarios en la sucursal
+            sucursal.usuarios = AdmUser.objects.filter(sucursal=sucursal).count()
+            sucursal.save()
+            
+            print(f"✅ Usuario creado exitosamente: {nuevo_usuario.adm_name} {nuevo_usuario.adm_last_name}")
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Usuario creado exitosamente',
+                'usuario_id': nuevo_usuario.adm_id
+            })
+            
+        except Exception as e:
+            print(f"❌ Error al crear usuario: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'error': f'Error interno del servidor: {str(e)}'
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'error': 'Método no permitido'
+    }, status=405)
+
+@csrf_exempt
+def editar_usuario(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            print("📦 Datos recibidos para editar usuario:", data)
+            
+            # Validar que el usuario_id esté presente
+            if 'usuario_id' not in data or not data['usuario_id']:
+                return JsonResponse({
+                    'success': False, 
+                    'error': 'ID de usuario requerido'
+                }, status=400)
+            
+            # Validar que los campos requeridos estén presentes
+            required_fields = ['nombre', 'apellido']
+            for field in required_fields:
+                if field not in data or not data[field]:
+                    return JsonResponse({
+                        'success': False, 
+                        'error': f'El campo {field} es requerido'
+                    }, status=400)
+            
+            # Buscar el usuario
+            try:
+                usuario = AdmUser.objects.get(adm_id=data['usuario_id'])
+            except AdmUser.DoesNotExist:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Usuario no encontrado'
+                }, status=404)
+            
+            # Actualizar los campos editables
+            usuario.adm_name = data['nombre']
+            usuario.adm_last_name = data['apellido']
+            
+            # Actualizar contraseña solo si se proporcionó
+            if 'contrasena' in data and data['contrasena']:
+                password = data['contrasena']
+                if len(password) < 6:
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'La contraseña debe tener al menos 6 caracteres'
+                    }, status=400)
+                
+                # Encriptar la nueva contraseña
+                salt = bcrypt.gensalt()
+                hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
+                usuario.adm_password = hashed_password
+                print(f"🔐 Contraseña actualizada para usuario {usuario.adm_name}")
+            
+            # Guardar los cambios
+            usuario.save()
+            
+            print(f"✅ Usuario actualizado exitosamente: {usuario.adm_name} {usuario.adm_last_name}")
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Usuario actualizado exitosamente',
+                'usuario_id': usuario.adm_id
+            })
+            
+        except Exception as e:
+            print(f"❌ Error al editar usuario: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'error': f'Error interno del servidor: {str(e)}'
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'error': 'Método no permitido'
+    }, status=405)
